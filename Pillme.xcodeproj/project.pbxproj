@@ -1,0 +1,619 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA526CF87200053A9E1 /* AppDelegate.swift */; };
+		CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */; };
+		CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA926CF87200053A9E1 /* ContentView.swift */; };
+		CEACDDAD26CF87200053A9E1 /* Pillme.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDAB26CF87200053A9E1 /* Pillme.xcdatamodeld */; };
+		CEACDDAF26CF87220053A9E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEACDDAE26CF87220053A9E1 /* Assets.xcassets */; };
+		CEACDDB226CF87220053A9E1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEACDDB126CF87220053A9E1 /* Preview Assets.xcassets */; };
+		CEACDDB526CF87220053A9E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEACDDB326CF87220053A9E1 /* LaunchScreen.storyboard */; };
+		CEACDDC026CF87220053A9E1 /* PillmeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDBF26CF87220053A9E1 /* PillmeTests.swift */; };
+		CEACDDCB26CF87220053A9E1 /* PillmeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDCA26CF87220053A9E1 /* PillmeUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CEACDDBC26CF87220053A9E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEACDD9A26CF87200053A9E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEACDDA126CF87200053A9E1;
+			remoteInfo = Pillme;
+		};
+		CEACDDC726CF87220053A9E1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEACDD9A26CF87200053A9E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEACDDA126CF87200053A9E1;
+			remoteInfo = Pillme;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CEACDDA226CF87200053A9E1 /* Pillme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillme.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEACDDA526CF87200053A9E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		CEACDDA926CF87200053A9E1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CEACDDAC26CF87200053A9E1 /* Pillme.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Pillme.xcdatamodel; sourceTree = "<group>"; };
+		CEACDDAE26CF87220053A9E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CEACDDB126CF87220053A9E1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		CEACDDB426CF87220053A9E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CEACDDB626CF87220053A9E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CEACDDBB26CF87220053A9E1 /* PillmeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PillmeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEACDDBF26CF87220053A9E1 /* PillmeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillmeTests.swift; sourceTree = "<group>"; };
+		CEACDDC126CF87220053A9E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CEACDDC626CF87220053A9E1 /* PillmeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PillmeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEACDDCA26CF87220053A9E1 /* PillmeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillmeUITests.swift; sourceTree = "<group>"; };
+		CEACDDCC26CF87220053A9E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CEACDD9F26CF87200053A9E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDB826CF87220053A9E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDC326CF87220053A9E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CEACDD9926CF87200053A9E1 = {
+			isa = PBXGroup;
+			children = (
+				CEACDDA426CF87200053A9E1 /* Pillme */,
+				CEACDDBE26CF87220053A9E1 /* PillmeTests */,
+				CEACDDC926CF87220053A9E1 /* PillmeUITests */,
+				CEACDDA326CF87200053A9E1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CEACDDA326CF87200053A9E1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDA226CF87200053A9E1 /* Pillme.app */,
+				CEACDDBB26CF87220053A9E1 /* PillmeTests.xctest */,
+				CEACDDC626CF87220053A9E1 /* PillmeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CEACDDA426CF87200053A9E1 /* Pillme */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDA526CF87200053A9E1 /* AppDelegate.swift */,
+				CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */,
+				CEACDDA926CF87200053A9E1 /* ContentView.swift */,
+				CEACDDAE26CF87220053A9E1 /* Assets.xcassets */,
+				CEACDDB326CF87220053A9E1 /* LaunchScreen.storyboard */,
+				CEACDDB626CF87220053A9E1 /* Info.plist */,
+				CEACDDAB26CF87200053A9E1 /* Pillme.xcdatamodeld */,
+				CEACDDB026CF87220053A9E1 /* Preview Content */,
+			);
+			path = Pillme;
+			sourceTree = "<group>";
+		};
+		CEACDDB026CF87220053A9E1 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDB126CF87220053A9E1 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		CEACDDBE26CF87220053A9E1 /* PillmeTests */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDBF26CF87220053A9E1 /* PillmeTests.swift */,
+				CEACDDC126CF87220053A9E1 /* Info.plist */,
+			);
+			path = PillmeTests;
+			sourceTree = "<group>";
+		};
+		CEACDDC926CF87220053A9E1 /* PillmeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDCA26CF87220053A9E1 /* PillmeUITests.swift */,
+				CEACDDCC26CF87220053A9E1 /* Info.plist */,
+			);
+			path = PillmeUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CEACDDA126CF87200053A9E1 /* Pillme */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEACDDCF26CF87220053A9E1 /* Build configuration list for PBXNativeTarget "Pillme" */;
+			buildPhases = (
+				CEACDD9E26CF87200053A9E1 /* Sources */,
+				CEACDD9F26CF87200053A9E1 /* Frameworks */,
+				CEACDDA026CF87200053A9E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Pillme;
+			productName = Pillme;
+			productReference = CEACDDA226CF87200053A9E1 /* Pillme.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CEACDDBA26CF87220053A9E1 /* PillmeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEACDDD226CF87220053A9E1 /* Build configuration list for PBXNativeTarget "PillmeTests" */;
+			buildPhases = (
+				CEACDDB726CF87220053A9E1 /* Sources */,
+				CEACDDB826CF87220053A9E1 /* Frameworks */,
+				CEACDDB926CF87220053A9E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEACDDBD26CF87220053A9E1 /* PBXTargetDependency */,
+			);
+			name = PillmeTests;
+			productName = PillmeTests;
+			productReference = CEACDDBB26CF87220053A9E1 /* PillmeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CEACDDC526CF87220053A9E1 /* PillmeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEACDDD526CF87220053A9E1 /* Build configuration list for PBXNativeTarget "PillmeUITests" */;
+			buildPhases = (
+				CEACDDC226CF87220053A9E1 /* Sources */,
+				CEACDDC326CF87220053A9E1 /* Frameworks */,
+				CEACDDC426CF87220053A9E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEACDDC826CF87220053A9E1 /* PBXTargetDependency */,
+			);
+			name = PillmeUITests;
+			productName = PillmeUITests;
+			productReference = CEACDDC626CF87220053A9E1 /* PillmeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEACDD9A26CF87200053A9E1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					CEACDDA126CF87200053A9E1 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					CEACDDBA26CF87220053A9E1 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = CEACDDA126CF87200053A9E1;
+					};
+					CEACDDC526CF87220053A9E1 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = CEACDDA126CF87200053A9E1;
+					};
+				};
+			};
+			buildConfigurationList = CEACDD9D26CF87200053A9E1 /* Build configuration list for PBXProject "Pillme" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CEACDD9926CF87200053A9E1;
+			productRefGroup = CEACDDA326CF87200053A9E1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CEACDDA126CF87200053A9E1 /* Pillme */,
+				CEACDDBA26CF87220053A9E1 /* PillmeTests */,
+				CEACDDC526CF87220053A9E1 /* PillmeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CEACDDA026CF87200053A9E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEACDDB526CF87220053A9E1 /* LaunchScreen.storyboard in Resources */,
+				CEACDDB226CF87220053A9E1 /* Preview Assets.xcassets in Resources */,
+				CEACDDAF26CF87220053A9E1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDB926CF87220053A9E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDC426CF87220053A9E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CEACDD9E26CF87200053A9E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */,
+				CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */,
+				CEACDDAD26CF87200053A9E1 /* Pillme.xcdatamodeld in Sources */,
+				CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDB726CF87220053A9E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEACDDC026CF87220053A9E1 /* PillmeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEACDDC226CF87220053A9E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEACDDCB26CF87220053A9E1 /* PillmeUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CEACDDBD26CF87220053A9E1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEACDDA126CF87200053A9E1 /* Pillme */;
+			targetProxy = CEACDDBC26CF87220053A9E1 /* PBXContainerItemProxy */;
+		};
+		CEACDDC826CF87220053A9E1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEACDDA126CF87200053A9E1 /* Pillme */;
+			targetProxy = CEACDDC726CF87220053A9E1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CEACDDB326CF87220053A9E1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CEACDDB426CF87220053A9E1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CEACDDCD26CF87220053A9E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CEACDDCE26CF87220053A9E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEACDDD026CF87220053A9E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Pillme/Preview Content\"";
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Pillme/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.Pillme;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CEACDDD126CF87220053A9E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Pillme/Preview Content\"";
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Pillme/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.Pillme;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CEACDDD326CF87220053A9E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				INFOPLIST_FILE = PillmeTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.PillmeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pillme.app/Pillme";
+			};
+			name = Debug;
+		};
+		CEACDDD426CF87220053A9E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				INFOPLIST_FILE = PillmeTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.PillmeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pillme.app/Pillme";
+			};
+			name = Release;
+		};
+		CEACDDD626CF87220053A9E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				INFOPLIST_FILE = PillmeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.PillmeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pillme;
+			};
+			name = Debug;
+		};
+		CEACDDD726CF87220053A9E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = XHSHW99SQG;
+				INFOPLIST_FILE = PillmeUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.PillmeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pillme;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CEACDD9D26CF87200053A9E1 /* Build configuration list for PBXProject "Pillme" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEACDDCD26CF87220053A9E1 /* Debug */,
+				CEACDDCE26CF87220053A9E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEACDDCF26CF87220053A9E1 /* Build configuration list for PBXNativeTarget "Pillme" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEACDDD026CF87220053A9E1 /* Debug */,
+				CEACDDD126CF87220053A9E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEACDDD226CF87220053A9E1 /* Build configuration list for PBXNativeTarget "PillmeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEACDDD326CF87220053A9E1 /* Debug */,
+				CEACDDD426CF87220053A9E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEACDDD526CF87220053A9E1 /* Build configuration list for PBXNativeTarget "PillmeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEACDDD626CF87220053A9E1 /* Debug */,
+				CEACDDD726CF87220053A9E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CEACDDAB26CF87200053A9E1 /* Pillme.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CEACDDAC26CF87200053A9E1 /* Pillme.xcdatamodel */,
+			);
+			currentVersion = CEACDDAC26CF87200053A9E1 /* Pillme.xcdatamodel */;
+			path = Pillme.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = CEACDD9A26CF87200053A9E1 /* Project object */;
+}
