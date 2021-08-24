@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE16321326D2765700CD3307 /* Color+Pillme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16321226D2765700CD3307 /* Color+Pillme.swift */; };
 		CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA526CF87200053A9E1 /* AppDelegate.swift */; };
 		CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */; };
 		CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA926CF87200053A9E1 /* ContentView.swift */; };
@@ -16,6 +17,13 @@
 		CEACDDB526CF87220053A9E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEACDDB326CF87220053A9E1 /* LaunchScreen.storyboard */; };
 		CEACDDC026CF87220053A9E1 /* PillmeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDBF26CF87220053A9E1 /* PillmeTests.swift */; };
 		CEACDDCB26CF87220053A9E1 /* PillmeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDCA26CF87220053A9E1 /* PillmeUITests.swift */; };
+		CEACDDDC26CF88380053A9E1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDDB26CF88380053A9E1 /* User.swift */; };
+		CEACDDDE26CF88530053A9E1 /* Takable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDDD26CF88530053A9E1 /* Takable.swift */; };
+		CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE026CF8A2F0053A9E1 /* Pill.xcdatamodeld */; };
+		CEACDDE426CF93480053A9E1 /* NewDoseScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE326CF93480053A9E1 /* NewDoseScheduleView.swift */; };
+		CEACDDE826CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE726CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift */; };
+		CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC726D4DD500065CB40 /* HeaderView.swift */; };
+		CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CE16321226D2765700CD3307 /* Color+Pillme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Pillme.swift"; sourceTree = "<group>"; };
 		CEACDDA226CF87200053A9E1 /* Pillme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEACDDA526CF87200053A9E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +60,13 @@
 		CEACDDC626CF87220053A9E1 /* PillmeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PillmeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEACDDCA26CF87220053A9E1 /* PillmeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillmeUITests.swift; sourceTree = "<group>"; };
 		CEACDDCC26CF87220053A9E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CEACDDDB26CF88380053A9E1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CEACDDDD26CF88530053A9E1 /* Takable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Takable.swift; sourceTree = "<group>"; };
+		CEACDDE126CF8A2F0053A9E1 /* Pill.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Pill.xcdatamodel; sourceTree = "<group>"; };
+		CEACDDE326CF93480053A9E1 /* NewDoseScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDoseScheduleView.swift; sourceTree = "<group>"; };
+		CEACDDE726CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDoseScheduleViewModel.swift; sourceTree = "<group>"; };
+		CEDA7DC726D4DD500065CB40 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakableTypeStepView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +94,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE16321126D0EC1300CD3307 /* NewDoseScheduleView */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDE726CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift */,
+				CEACDDE326CF93480053A9E1 /* NewDoseScheduleView.swift */,
+				CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */,
+			);
+			path = NewDoseScheduleView;
+			sourceTree = "<group>";
+		};
 		CEACDD9926CF87200053A9E1 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +127,9 @@
 		CEACDDA426CF87200053A9E1 /* Pillme */ = {
 			isa = PBXGroup;
 			children = (
+				CEACDDDF26CF8A1E0053A9E1 /* CoreData */,
+				CEACDDDA26CF88290053A9E1 /* Model */,
+				CEACDDD826CF87F70053A9E1 /* View */,
 				CEACDDA526CF87200053A9E1 /* AppDelegate.swift */,
 				CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */,
 				CEACDDA926CF87200053A9E1 /* ContentView.swift */,
@@ -109,6 +138,7 @@
 				CEACDDB626CF87220053A9E1 /* Info.plist */,
 				CEACDDAB26CF87200053A9E1 /* Pillme.xcdatamodeld */,
 				CEACDDB026CF87220053A9E1 /* Preview Content */,
+				CE16321226D2765700CD3307 /* Color+Pillme.swift */,
 			);
 			path = Pillme;
 			sourceTree = "<group>";
@@ -137,6 +167,32 @@
 				CEACDDCC26CF87220053A9E1 /* Info.plist */,
 			);
 			path = PillmeUITests;
+			sourceTree = "<group>";
+		};
+		CEACDDD826CF87F70053A9E1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CE16321126D0EC1300CD3307 /* NewDoseScheduleView */,
+				CEDA7DC726D4DD500065CB40 /* HeaderView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CEACDDDA26CF88290053A9E1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDDB26CF88380053A9E1 /* User.swift */,
+				CEACDDDD26CF88530053A9E1 /* Takable.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CEACDDDF26CF8A1E0053A9E1 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				CEACDDE026CF8A2F0053A9E1 /* Pill.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,9 +325,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE16321326D2765700CD3307 /* Color+Pillme.swift in Sources */,
 				CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */,
+				CEACDDE426CF93480053A9E1 /* NewDoseScheduleView.swift in Sources */,
 				CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */,
+				CEACDDDE26CF88530053A9E1 /* Takable.swift in Sources */,
+				CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */,
+				CEACDDE826CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift in Sources */,
 				CEACDDAD26CF87200053A9E1 /* Pillme.xcdatamodeld in Sources */,
+				CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */,
+				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
+				CEACDDDC26CF88380053A9E1 /* User.swift in Sources */,
 				CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -440,17 +504,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Pillme/Preview Content\"";
 				DEVELOPMENT_TEAM = XHSHW99SQG;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Pillme/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.Pillme;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -461,17 +528,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Pillme/Preview Content\"";
 				DEVELOPMENT_TEAM = XHSHW99SQG;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Pillme/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = YongtaeKwon.Pillme;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -610,6 +680,16 @@
 			);
 			currentVersion = CEACDDAC26CF87200053A9E1 /* Pillme.xcdatamodel */;
 			path = Pillme.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		CEACDDE026CF8A2F0053A9E1 /* Pill.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CEACDDE126CF8A2F0053A9E1 /* Pill.xcdatamodel */,
+			);
+			currentVersion = CEACDDE126CF8A2F0053A9E1 /* Pill.xcdatamodel */;
+			path = Pill.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
