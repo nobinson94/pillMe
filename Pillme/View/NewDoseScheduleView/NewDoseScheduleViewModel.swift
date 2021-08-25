@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-enum NewDoseScheduleStep: Int {
+enum NewDoseScheduleStep: Int, CaseIterable {
     case takableTypeStep
     case nameStep
     case startDateStep
@@ -25,4 +25,9 @@ class NewDoseScheduleViewModel: ObservableObject {
     @Published var cycle: Int = 1
     @Published var hasFixedDays: Bool = false
     @Published var numberOfOneDay: Int = 3
+}
+
+protocol StepView: View {
+    var step: Int { get }
+    var isCurrentStep: Bool { get set }
 }

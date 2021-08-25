@@ -97,7 +97,9 @@ struct ContentView: View {
                         .ignoresSafeArea()
                     }
                 }
-            }.navigationBarHidden(true)
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarHidden(true)
         }
     }
 }

@@ -22,6 +22,7 @@
 		CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE026CF8A2F0053A9E1 /* Pill.xcdatamodeld */; };
 		CEACDDE426CF93480053A9E1 /* NewDoseScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE326CF93480053A9E1 /* NewDoseScheduleView.swift */; };
 		CEACDDE826CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDE726CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift */; };
+		CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB36B0626D6803500C368C3 /* View+Extension.swift */; };
 		CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC726D4DD500065CB40 /* HeaderView.swift */; };
 		CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */; };
 /* End PBXBuildFile section */
@@ -65,6 +66,7 @@
 		CEACDDE126CF8A2F0053A9E1 /* Pill.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Pill.xcdatamodel; sourceTree = "<group>"; };
 		CEACDDE326CF93480053A9E1 /* NewDoseScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDoseScheduleView.swift; sourceTree = "<group>"; };
 		CEACDDE726CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDoseScheduleViewModel.swift; sourceTree = "<group>"; };
+		CEB36B0626D6803500C368C3 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		CEDA7DC726D4DD500065CB40 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakableTypeStepView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,6 +141,7 @@
 				CEACDDAB26CF87200053A9E1 /* Pillme.xcdatamodeld */,
 				CEACDDB026CF87220053A9E1 /* Preview Content */,
 				CE16321226D2765700CD3307 /* Color+Pillme.swift */,
+				CEB36B0626D6803500C368C3 /* View+Extension.swift */,
 			);
 			path = Pillme;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				CEACDDAD26CF87200053A9E1 /* Pillme.xcdatamodeld in Sources */,
 				CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */,
 				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
+				CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */,
 				CEACDDDC26CF88380053A9E1 /* User.swift in Sources */,
 				CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */,
 			);
