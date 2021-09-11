@@ -25,6 +25,7 @@
 		CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB36B0626D6803500C368C3 /* View+Extension.swift */; };
 		CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC726D4DD500065CB40 /* HeaderView.swift */; };
 		CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */; };
+		CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		CEB36B0626D6803500C368C3 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		CEDA7DC726D4DD500065CB40 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		CEDA7DC926D4E9020065CB40 /* TakableTypeStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakableTypeStepView.swift; sourceTree = "<group>"; };
+		CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 		CEACDDD826CF87F70053A9E1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CEDF5E5726D7928F0078F6B4 /* CalendarView */,
 				CE16321126D0EC1300CD3307 /* NewDoseScheduleView */,
 				CEDA7DC726D4DD500065CB40 /* HeaderView.swift */,
 			);
@@ -196,6 +199,14 @@
 				CEACDDE026CF8A2F0053A9E1 /* Pill.xcdatamodeld */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		CEDF5E5726D7928F0078F6B4 /* CalendarView */ = {
+			isa = PBXGroup;
+			children = (
+				CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */,
+			);
+			path = CalendarView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +347,7 @@
 				CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */,
 				CEACDDE826CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift in Sources */,
 				CEACDDAD26CF87200053A9E1 /* Pillme.xcdatamodeld in Sources */,
+				CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */,
 				CEDA7DC826D4DD500065CB40 /* HeaderView.swift in Sources */,
 				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
 				CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */,

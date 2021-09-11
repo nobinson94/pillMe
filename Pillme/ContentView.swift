@@ -39,7 +39,7 @@ struct ContentView: View {
                             
                             VStack(alignment: .leading, spacing: 0) {
                                 ZStack(alignment: .leading) {
-                                    Blur(style: .regular)
+                                    Color.white.opacity(0.1)
                                     VStack(alignment: .leading, spacing: 10) {
                                         Text("잊은 약❓").foregroundColor(.white).font(.title2).fontWeight(.bold)
                                         HStack {
@@ -49,7 +49,7 @@ struct ContentView: View {
                                 }.cornerRadius(20)
                                 Spacer(minLength: 20)
                                 ZStack(alignment: .leading) {
-                                    Blur(style: .regular)
+                                    Color.white.opacity(0.1)
                                     VStack(alignment: .leading, spacing: 10) {
                                         Text("먹은 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
                                         HStack {
@@ -62,9 +62,14 @@ struct ContentView: View {
                             }.frame(maxWidth: .infinity, alignment: .leading)
                             .padding(20)
                             
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text("달력")
-                            }
+                            ZStack {
+                                Color.white.opacity(0.1)
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("월간 복용도").foregroundColor(.white).font(.title2).fontWeight(.bold)
+                                    CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white)
+//
+                                }.padding(20)
+                            }.cornerRadius(20)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(20)
                             
@@ -78,6 +83,7 @@ struct ContentView: View {
                             VStack {
                                 HStack {
                                     Text("💊 PillMe")
+                                        .foregroundColor(.white)
                                         .font(.system(size: 23, weight: .semibold))
                                         .padding(.leading, 20)
                                     Spacer()
@@ -86,7 +92,7 @@ struct ContentView: View {
                                             .foregroundColor(.white)
                                     }.padding(.trailing, 10)
                                     Button(action: {
-                                        print("#HELLO")
+                                        print("## SOMETHING FOR SETTING LINK")
                                     }) {
                                         Image(systemName: "gearshape.fill")
                                             .foregroundColor(.white)
@@ -98,9 +104,8 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarHidden(true)
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

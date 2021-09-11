@@ -10,7 +10,7 @@ import SwiftUI
 struct NewDoseScheduleView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var viewModel: NewDoseScheduleViewModel = NewDoseScheduleViewModel()
+    @ObservedObject var viewModel: NewDoseScheduleViewModel
     
     var currentStepView: some View {
         AnyView(self.stepViews[viewModel.step])
@@ -18,8 +18,9 @@ struct NewDoseScheduleView: View {
     
     var stepViews: [NewDoseScheduleStep: AnyView] = [:]
     
-    init() {
-        stepViews = [
+    init(viewModel: NewDoseScheduleViewModel = NewDoseScheduleViewModel()) {
+        self.viewModel = viewModel
+        self.stepViews = [
             .takableTypeStep: AnyView(TakableTypeStepView(type: $viewModel.pillType)),
             .nameStep: AnyView(NameStepView(name: $viewModel.pillName)),
             .startDateStep: AnyView(StartDateStepView()),

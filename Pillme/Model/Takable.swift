@@ -36,16 +36,6 @@ struct Supplement: Takable {
     var type: TakableType { .supplement }
 }
 
-enum Day: Int {
-    case mon
-    case tue
-    case wed
-    case thu
-    case fri
-    case sat
-    case sun
-}
-
 struct DoseMethod {
     var time: Date
     var pillNum: Int
@@ -53,7 +43,7 @@ struct DoseMethod {
 
 struct DoseSchedule {
     var startDate: Date
-    var doseDays: [Day]
+    var doseDays: [WeekDay]
     var doseMethods: [DoseMethod]
 }
 
