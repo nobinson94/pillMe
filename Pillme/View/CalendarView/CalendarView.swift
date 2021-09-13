@@ -44,11 +44,8 @@ struct CalendarView: View {
             VStack {
                 HStack(alignment: .center, spacing: 0) {
                     ForEach(WeekDay.allCases, id: \.self) { weekDay in
-                        Text(weekDay.shortKor)
-                            .frame(width: width/7, height: 30, alignment: .center)
-                            .padding(0)
-                            .font(.system(size: 13, weight: .light))
-                            .foregroundColor(.gray)
+                        WeekDayNameCellView(weekday: weekDay)
+                            .frame(width: width/7, height: 25, alignment: .center)
                     }
                 }
                 ForEach(0..<6) { row in
@@ -58,7 +55,7 @@ struct CalendarView: View {
                                 DayCellView(day: nil)
                                     .frame(width: width/7, height: 45, alignment: .center)
                             } else if let day = calendarHelper.days[row*7+weekDayIndex-1] {
-                                DayCellView(day: day, weekday: WeekDay(rawValue: weekDayIndex))
+                                DayCellView(day: day, weekday: WeekDay(rawValue: weekDayIndex), isToday: calendarHelper.isToday(day: day))
                                     .frame(width: width/7, height: 45, alignment: .center)
                             } else {
                                 DayCellView(day: nil)
@@ -80,24 +77,48 @@ struct CalendarView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
+            .background(Color.black)
+    }
+}
+
+struct WeekDayNameCellView: View {
+    var weekday: WeekDay
+    var textColor: Color {
+        switch weekday {
+        case .sun: return .red.opacity(0.6)
+        case .sat: return .blue.opacity(0.6)
+        default: return .white.opacity(0.4)
+        }
+    }
+    
+    var body: some View {
+        Text(weekday.shortKor)
+            .padding(0)
+            .font(.system(size: 13, weight: .light))
+            .foregroundColor(textColor)
     }
 }
 
 struct DayCellView: View {
     var day: Int?
     var weekday: WeekDay?
+    var isToday: Bool = false
     
     var textColor: Color {
+        guard !isToday else {
+            return .tintColor
+        }
+        
         switch weekday {
-        case .sun: return .red.opacity(0.6)
-        case .sat: return .blue.opacity(0.6)
+        case .sun, .sat: return .white.opacity(0.4)
         default: return .white
         }
     }
+    
     var body: some View {
         if let day = day {
             Text(String(day))
-                .font(.system(size: 14, weight: .light))
+                .font(.system(size: 14, weight: isToday ? .bold : .light))
                 .foregroundColor(textColor)
                 .padding(0)
         } else {
@@ -202,6 +223,12 @@ class CalendarHelper: ObservableObject {
         }
 
         self.days = days
+    }
+    
+    func isToday(day: Int) -> Bool {
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = "\(year)-\(month)-\(day)"
+        return Calendar.current.isDateInToday(dateString.date)
     }
     
 }
