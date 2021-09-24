@@ -11,3 +11,9 @@ struct User {
     var name: String
     var age: Int
 }
+
+extension User {
+    static func createTest() -> User {
+        return User(name: "Yongtae", age: 28)
+    }
+}

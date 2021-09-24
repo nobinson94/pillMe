@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CDDoseRecord" representedClassName="CDDoseRecord" syncable="YES" codeGenerationType="class">
+    <entity name="CDDoseRecord" representedClassName="CDDoseRecord" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill"/>
     </entity>
-    <entity name="CDPill" representedClassName="CDPill" syncable="YES" codeGenerationType="class">
+    <entity name="CDPill" representedClassName="CDPill" syncable="YES">
+        <attribute name="cycle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="pilID" optional="YES" attributeType="String"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="weekDays" optional="YES" attributeType="Transformable" customClassName="[String]"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser"/>
     </entity>
-    <entity name="CDUser" representedClassName="CDUser" syncable="YES" codeGenerationType="class"/>
+    <entity name="CDUser" representedClassName="CDUser" syncable="YES">
+        <attribute name="gender" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
     <elements>
-        <element name="CDPill" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="88"/>
-        <element name="CDUser" positionX="-54" positionY="-9" width="128" height="43"/>
-        <element name="CDDoseRecord" positionX="-279.9491577148438" positionY="-11.9815673828125" width="128" height="73"/>
+        <element name="CDDoseRecord" positionX="-279.9491577148438" positionY="-11.9815673828125" width="128" height="59"/>
+        <element name="CDPill" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="134"/>
+        <element name="CDUser" positionX="-54" positionY="-9" width="128" height="59"/>
     </elements>
 </model>

@@ -22,4 +22,11 @@ extension View {
             .font(.system(size: 32, weight: .ultraLight))
             .padding(0)
     }
+    
+    func answerText() -> some View {
+        self
+            .foregroundColor(.white)
+            .font(.system(size: 15, weight: .ultraLight))
+            .padding(0)
+    }
 }

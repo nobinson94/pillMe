@@ -10,11 +10,25 @@ import SwiftUI
 
 struct CalendarView: View {
     
-    @ObservedObject var calendarHelper = CalendarHelper()
+    @StateObject var calendarHelper: CalendarHelper = CalendarHelper()
     
     @State var showChangeMonthButton: Bool = true
-    @State var width: CGFloat = UIScreen.main.bounds.size.width - 40
+    @State var width: CGFloat = UIScreen.main.bounds.size.width - 80
     @State var fontColor: Color = .black
+    @State var selectable: Bool = true
+    @Binding var selectedDate: Date
+    
+    init(fixMonth: Bool = false,
+         width: CGFloat = UIScreen.main.bounds.size.width - 80,
+         fontColor: Color = .white,
+         selectable: Bool = false,
+         selectedDate: Binding<Date> = .constant(Date())) {
+        self._selectedDate = selectedDate
+        self.showChangeMonthButton = !fixMonth
+        self.fontColor = fontColor
+        self.width = width
+        self.selectable = selectable
+    }
     
     var body: some View {
         VStack {
@@ -37,7 +51,9 @@ struct CalendarView: View {
                         Image(systemName: "chevron.right")
                     }).padding(.trailing, 20)
                 }
-            }.padding(.bottom, 20)
+            }
+            .foregroundColor(.white)
+            .padding(.bottom, 20)
             .padding(.top, 20)
             .frame(width: width, height: 60, alignment: .center)
             
@@ -51,11 +67,14 @@ struct CalendarView: View {
                 ForEach(0..<6) { row in
                     HStack(alignment: .center, spacing: 0) {
                         ForEach(1..<8) { weekDayIndex in
-                            if calendarHelper.days.count <= row*7+weekDayIndex-1  {
-                                DayCellView(day: nil)
-                                    .frame(width: width/7, height: 45, alignment: .center)
-                            } else if let day = calendarHelper.days[row*7+weekDayIndex-1] {
-                                DayCellView(day: day, weekday: WeekDay(rawValue: weekDayIndex), isToday: calendarHelper.isToday(day: day))
+                            if calendarHelper.days.count > row*7+weekDayIndex-1, let day = calendarHelper.days[row*7+weekDayIndex-1]  {
+                                DayCellView(day: day,
+                                            weekday: WeekDay(rawValue: weekDayIndex),
+                                            isToday: calendarHelper.isToday(day: day),
+                                            isSelected: isSelected(day: day) && selectable)
+                                    .onTapGesture() {
+                                        self.selectDate(day: day)
+                                    }
                                     .frame(width: width/7, height: 45, alignment: .center)
                             } else {
                                 DayCellView(day: nil)
@@ -71,6 +90,14 @@ struct CalendarView: View {
         }
         .cornerRadius(20)
         .foregroundColor(fontColor)
+    }
+    
+    func isSelected(day: Int) -> Bool {
+        return calendarHelper.year == selectedDate.year && calendarHelper.month == selectedDate.month && day == selectedDate.day
+    }
+    
+    func selectDate(day: Int) {
+        self.selectedDate = "\(calendarHelper.year)-\(calendarHelper.month)-\(day)".date
     }
 }
 
@@ -103,24 +130,37 @@ struct DayCellView: View {
     var day: Int?
     var weekday: WeekDay?
     var isToday: Bool = false
+    var isSelected: Bool = false
     
     var textColor: Color {
+        guard !isSelected else {
+            return .white
+        }
         guard !isToday else {
             return .tintColor
         }
-        
         switch weekday {
         case .sun, .sat: return .white.opacity(0.4)
         default: return .white
         }
     }
     
+    var backgroundColor: Color {
+        guard !isSelected else {
+            return .tintColor
+        }
+        return .clear
+    }
+    
     var body: some View {
         if let day = day {
-            Text(String(day))
-                .font(.system(size: 14, weight: isToday ? .bold : .light))
-                .foregroundColor(textColor)
-                .padding(0)
+            ZStack {
+                backgroundColor
+                Text(String(day))
+                    .font(.system(size: 14, weight: isToday ? .bold : .light))
+                    .foregroundColor(textColor)
+            }
+            .cornerRadius(15)
         } else {
             Text("")
                 .padding(0)
@@ -157,10 +197,10 @@ enum WeekDay: Int, CaseIterable {
 
 class CalendarHelper: ObservableObject {
     
-    @Published var year: Int = Date().year
-    @Published var month: Int = Date().month
     @Published var days: [Int?] = []
     
+    var year: Int = Date().year
+    var month: Int = Date().month
     let formatter = DateFormatter()
     
     var title: String {
@@ -195,7 +235,7 @@ class CalendarHelper: ObservableObject {
     }
     
     func setPrevMonth() {
-        if month == 1{
+        if month == 1 {
             month = 12
             year -= 1
         } else {
@@ -230,7 +270,6 @@ class CalendarHelper: ObservableObject {
         let dateString = "\(year)-\(month)-\(day)"
         return Calendar.current.isDateInToday(dateString.date)
     }
-    
 }
 
 extension Date {
@@ -266,6 +305,15 @@ extension Date {
         case 1, 3, 5, 7, 8, 10, 12: return 31
         default: return 30
         }
+    }
+    
+    var dateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 M월 dd일"
+        if Calendar.current.isDateInToday(self) {
+            return "오늘 \(formatter.string(from: self))"
+        }
+        return formatter.string(from: self)
     }
 }
 

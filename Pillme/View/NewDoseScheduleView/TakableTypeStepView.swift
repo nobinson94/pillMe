@@ -9,26 +9,29 @@ import Combine
 import SwiftUI
 
 struct TakableTypeStepView: StepView {
-    var step: Int { 0 }
+    var step: NewDoseScheduleStep { .takableTypeStep }
     var isCurrentStep: Bool = false
     
-    @Binding var type: TakableType?
+    @Binding var type: TakableType
     
     var body: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading) {
-                Text("약의 종류는 ") + Text(type?.name ?? "").foregroundColor(Color.tintColor).fontWeight(.semibold) + Text("이고,")
-            }.queustionText()
-            .background(Color.black)
-            .padding(.bottom, 20)
-            HStack {
-                ForEach(TakableType.allCases, id: \.self) { type in
-                    Button(type.name) {
-                        self.type = type
-                        print("####")
+            if isCurrentStep {
+                Text("약의 종류는 무엇인가요? ")
+                    .queustionText()
+                    .padding(.bottom, 20)
+                HStack {
+                    ForEach(TakableType.allCases, id: \.self) { type in
+                        Button(type.name) {
+                            self.type = type
+                        }
+                        .buttonStyle(PillTypeButtonStyle(isSelected: self.type == type))
                     }
-                    .buttonStyle(PillTypeButtonStyle(isSelected: self.type == type))
                 }
+            } else {
+                Group {
+                    Text("약의 종류는 ") + Text("\(type.name)").foregroundColor(Color.tintColor).fontWeight(.semibold) + Text("이고,")
+                }.answerText()
             }
         }
     }
@@ -36,7 +39,10 @@ struct TakableTypeStepView: StepView {
 
 struct TakableTypeStepView_Previews: PreviewProvider {
     static var previews: some View {
-        TakableTypeStepView(type: .constant(.pill))
+        ZStack {
+            Color.mainColor.ignoresSafeArea()
+            TakableTypeStepView(type: .constant(.pill))
+        }
     }
 }
 

@@ -42,7 +42,7 @@ struct ContentView: View {
                                 VStack(alignment: .leading, spacing: 0) {
                                     Text("권용태님")
                                     Text("점심 맛있게 드셨나요?")
-                                    Text("식사 후에 ") + Text("오메가3 ").foregroundColor(Color.tintColor).fontWeight(.heavy) + Text("잊지마세요!")
+                                    Text("식사 후에 ") + Text("오메가3").foregroundColor(Color.tintColor).fontWeight(.heavy) + Text(" 잊지마세요!")
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(EdgeInsets(top: Layout.headerHeight, leading: 20, bottom: 10, trailing: 20))
@@ -109,13 +109,11 @@ struct ContentView: View {
                                         .font(.system(size: 23, weight: .semibold))
                                         .padding(.leading, 20)
                                     Spacer()
-                                    NavigationLink(destination: NewDoseScheduleView()) {
+                                    NavigationLink(destination: LazyView(NewDoseScheduleView())) {
                                         Image(systemName: "plus.circle.fill")
                                             .foregroundColor(.white)
                                     }.padding(.trailing, 10)
-                                    Button(action: {
-                                        print("## SOMETHING FOR SETTING LINK")
-                                    }) {
+                                    NavigationLink(destination: LazyView(NewDoseScheduleView())) {
                                         Image(systemName: "gearshape.fill")
                                             .foregroundColor(.white)
                                     }.padding(.trailing, 20)
