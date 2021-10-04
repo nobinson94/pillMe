@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		CE16321326D2765700CD3307 /* Color+Pillme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE16321226D2765700CD3307 /* Color+Pillme.swift */; };
 		CE2B1B5926F9B77200AA962E /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B5826F9B77200AA962E /* LazyView.swift */; };
+		CE2B1B5B26FDCB2800AA962E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B5A26FDCB2800AA962E /* MainView.swift */; };
+		CE2B1B5D26FE2C0900AA962E /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */; };
+		CE2B1B5F26FE441B00AA962E /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B5E26FE441B00AA962E /* String+Extension.swift */; };
+		CE2B1B6126FE44C500AA962E /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B6026FE44C500AA962E /* Int+Extension.swift */; };
 		CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA526CF87200053A9E1 /* AppDelegate.swift */; };
 		CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */; };
 		CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA926CF87200053A9E1 /* ContentView.swift */; };
@@ -48,6 +52,10 @@
 /* Begin PBXFileReference section */
 		CE16321226D2765700CD3307 /* Color+Pillme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Pillme.swift"; sourceTree = "<group>"; };
 		CE2B1B5826F9B77200AA962E /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
+		CE2B1B5A26FDCB2800AA962E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		CE2B1B5E26FE441B00AA962E /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		CE2B1B6026FE44C500AA962E /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		CEACDDA226CF87200053A9E1 /* Pillme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEACDDA526CF87200053A9E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,7 +125,10 @@
 		CE2B1B5726F9B66700AA962E /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				CE2B1B5826F9B77200AA962E /* LazyView.swift */,
+				CE16321226D2765700CD3307 /* Color+Pillme.swift */,
+				CEB36B0626D6803500C368C3 /* View+Extension.swift */,
+				CE2B1B5E26FE441B00AA962E /* String+Extension.swift */,
+				CE2B1B6026FE44C500AA962E /* Int+Extension.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -156,8 +167,6 @@
 				CEACDDB326CF87220053A9E1 /* LaunchScreen.storyboard */,
 				CEACDDB626CF87220053A9E1 /* Info.plist */,
 				CEACDDB026CF87220053A9E1 /* Preview Content */,
-				CE16321226D2765700CD3307 /* Color+Pillme.swift */,
-				CEB36B0626D6803500C368C3 /* View+Extension.swift */,
 			);
 			path = Pillme;
 			sourceTree = "<group>";
@@ -193,6 +202,9 @@
 			children = (
 				CEDF5E5726D7928F0078F6B4 /* CalendarView */,
 				CE16321126D0EC1300CD3307 /* NewDoseScheduleView */,
+				CE2B1B5A26FDCB2800AA962E /* MainView.swift */,
+				CE2B1B5826F9B77200AA962E /* LazyView.swift */,
+				CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -362,16 +374,20 @@
 				CE16321326D2765700CD3307 /* Color+Pillme.swift in Sources */,
 				CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */,
 				CEACDDE426CF93480053A9E1 /* NewDoseScheduleView.swift in Sources */,
+				CE2B1B6126FE44C500AA962E /* Int+Extension.swift in Sources */,
+				CE2B1B5D26FE2C0900AA962E /* NavigationBar.swift in Sources */,
 				CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */,
 				CEE72BB226F0F0490051083E /* PillMeDataStore.swift in Sources */,
 				CEACDDDE26CF88530053A9E1 /* Takable.swift in Sources */,
 				CE2B1B5926F9B77200AA962E /* LazyView.swift in Sources */,
+				CE2B1B5F26FE441B00AA962E /* String+Extension.swift in Sources */,
 				CEDA7DCA26D4E9020065CB40 /* TakableTypeStepView.swift in Sources */,
 				CEACDDE826CF9CA30053A9E1 /* NewDoseScheduleViewModel.swift in Sources */,
 				CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */,
 				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
 				CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */,
 				CEACDDDC26CF88380053A9E1 /* User.swift in Sources */,
+				CE2B1B5B26FDCB2800AA962E /* MainView.swift in Sources */,
 				CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

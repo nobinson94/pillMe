@@ -11,55 +11,62 @@ struct NewDoseScheduleView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @ObservedObject var viewModel: NewDoseScheduleViewModel
-
+    @State private var showingAlert = false
+    
     init(viewModel: NewDoseScheduleViewModel = NewDoseScheduleViewModel()) {
         self.viewModel = viewModel
     }
 
     var body: some View {
         ZStack {
-            Color.mainColor.ignoresSafeArea()
-                .navigationBarItems(leading: Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Image(systemName: "chevron.backward").imageScale(.large).accentColor(.white).padding(.trailing, 20)
-                }))
-                .navigationBarBackButtonHidden(true)
-                .navigationBarTitle("새로운 약 추가하기", displayMode: .automatic)
-                
+            Color.backgroundColor.ignoresSafeArea()
+                .pillMeNavigationBar(title: "새로운 약 추가하기", backButtonAction: {
+                    showingAlert = true
+                })
+                .alert(isPresented: $showingAlert, content: {
+                    Alert(title: Text("추가를 중단하고 나가기"),
+                          message: Text("지금까지의 내용은 저장되지 않습니다. 정말 나가시겠습니까?"),
+                          primaryButton: .cancel(Text("확인"), action: {
+                            presentationMode.wrappedValue.dismiss()
+                          }),
+                          secondaryButton: .default(Text("취소")))
+                })
+        
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(NewDoseScheduleStep.allCases, id: \.self) { step in
-                        if step.rawValue < viewModel.currentStep.rawValue {
-                            getStepView(of: step)
-                        } else if step == viewModel.currentStep {
-                            getStepView(of: step).padding(.top, 30)
+                    ForEach(NewDoseScheduleQuestion.allCases, id: \.self) { question in
+                        if let currentQuestion = viewModel.currentQuestion, question == currentQuestion {
+                            getQuestionView(of: question)
+                                .padding(.top, currentQuestion == .takableType ? 0 : 15)
+                            if viewModel.canConfirm, question.showNextButton {
+                                Button {
+                                    withAnimation { self.viewModel.confirm() }
+                                } label: {
+                                    Text("확인")
+                                        .foregroundColor(.white)
+                                        .fontWeight(.bold)
+                                        .frame(width: 50, height: 70, alignment: .trailing)
+                                }
+                            }
+                        } else if question.rawValue < (viewModel.lastQuestion?.rawValue ?? NewDoseScheduleQuestion.oneDay.rawValue + 1) {
+                            HStack {
+                                getQuestionView(of: question)
+                                Spacer()
+                                Image(systemName: "pencil")
+                                    .frame(minWidth: 44, alignment: .trailing)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            self.viewModel.currentQuestion = question
+                                        }
+                                    }
+                            }
                         }
                     }
                     .background(Color.clear)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 5)
-                    HStack(alignment: .center) {
-                        Spacer()
-                        Button {
-                            withAnimation { viewModel.prev() }
-                        } label: {
-                            Text("이전")
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 70, alignment: .trailing)
-                        }
-                        if viewModel.canGoNext {
-                            Button {
-                                withAnimation { viewModel.next() }
-                            } label: {
-                                Text("다음")
-                                    .foregroundColor(.white)
-                                    .frame(width: 50, height: 70, alignment: .trailing)
-                            }
-                        }
-                    }.frame(maxWidth: .infinity)
-                    Spacer()
-                }.frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity)
                 .padding(.top, 20)
                 .padding(.leading, 20)
                 .padding(.trailing, 20)
@@ -69,45 +76,52 @@ struct NewDoseScheduleView: View {
         }
     }
     
-    func changeStep(to step: NewDoseScheduleStep) {
-        guard viewModel.currentStep != step else { return }
-        withAnimation {
-            viewModel.currentStep = step
-        }
-    }
-    
-    func getStepView(of step: NewDoseScheduleStep) -> AnyView {
+    func getQuestionView(of step: NewDoseScheduleQuestion) -> AnyView {
+        let view: AnyView
         switch step {
-        case .takableTypeStep: return AnyView(takableTypeStepView)
-        case .nameStep: return AnyView(nameStepView)
-        case .startDateStep: return AnyView(startDateStepView)
-        case .cycleStep: return AnyView(cycleStepView)
-        case .oneDayStep: return AnyView(oneDayStepView)
+        case .takableType: view = AnyView(takableTypeQuestionView)
+        case .name: view = AnyView(nameQuestionView)
+        case .startDate: view = AnyView(startDateQuestionView)
+        case .cycle: view = AnyView(cycleQuestionView)
+        case .oneDay: view = AnyView(oneDayQuestionView)
+        }
+        return view
+    }
+    
+    private var takableTypeQuestionView: some View {
+        TakableQuestionView(type: $viewModel.pillType, isCurrentQuestion: viewModel.currentQuestion == .takableType) {
+            withAnimation {
+                viewModel.confirm()
+            }
         }
     }
     
-    private var currentStepView: some View {
-        return AnyView(getStepView(of: viewModel.currentStep))
+    private var nameQuestionView: some View {
+        NameQuestionView(name: $viewModel.pillName, isCurrentQuestion: viewModel.currentQuestion == .name) {
+            withAnimation {
+                viewModel.confirm()
+            }
+        }
     }
     
-    private var takableTypeStepView: some View {
-        TakableTypeStepView(isCurrentStep: viewModel.currentStep == .takableTypeStep, type: $viewModel.pillType)
+    private var startDateQuestionView: some View {
+        StartDateQuestionView(startDate: $viewModel.startDate, isCurrentQuestion: viewModel.currentQuestion == .startDate) {
+            withAnimation {
+                viewModel.confirm()
+            }
+        }
     }
     
-    private var nameStepView: some View {
-        NameStepView(isCurrentStep: viewModel.currentStep == .nameStep, name: $viewModel.pillName)
+    private var cycleQuestionView: some View {
+        CycleQuestionView(cycle: $viewModel.cycle, hasFixedDays: $viewModel.hasFixedDays, weekDays: $viewModel.weekdays, isCurrentQuestion: viewModel.currentQuestion == .cycle) {
+            withAnimation {
+                viewModel.confirm()
+            }
+        }
     }
     
-    private var startDateStepView: some View {
-        StartDateStepView(isCurrentStep: viewModel.currentStep == .startDateStep, startDate: $viewModel.startDate)
-    }
-    
-    private var cycleStepView: some View {
-        CycleStepView(isCurrentStep: viewModel.currentStep == .cycleStep, cycle: $viewModel.cycle)
-    }
-    
-    private var oneDayStepView: some View {
-        OneDayStepView(isCurrentStep: viewModel.currentStep == .oneDayStep)
+    private var oneDayQuestionView: some View {
+        OneDayQuestionView(timesOfOneDay: $viewModel.timesOfOneDay, isCurrentQuestion: viewModel.currentQuestion == .oneDay)
     }
 }
 
@@ -117,16 +131,19 @@ struct NewDoseScheduleView_Previews: PreviewProvider {
     }
 }
 
-struct NameStepView: StepView {
-    var step: NewDoseScheduleStep { .nameStep }
-    var isCurrentStep: Bool = false
-    
+struct NameQuestionView: QuestionView {
     @Binding var name: String
     
+    var currentStep: Int = 0
+    var totalStep: Int = 1
+    var question: NewDoseScheduleQuestion { .name }
+    var isCurrentQuestion: Bool = false
+    var goNextQuestion: (() -> Void)?
+    
     var body: some View {
-        if isCurrentStep {
+        if isCurrentQuestion {
             Text("약의 이름이 무엇인가요?").queustionText()
-            TextField("", text: $name).underlineTextField().foregroundColor(.tintColor)
+            TextField("", text: $name).underlineTextField().foregroundColor(.tintColor).font(.system(size: 20))
         } else {
             Group {
                 Text("약의 이름은 ") +
@@ -139,20 +156,21 @@ struct NameStepView: StepView {
     }
 }
 
-struct StartDateStepView: StepView {
-    
-    var step: NewDoseScheduleStep { .startDateStep }
-    var isCurrentStep: Bool = false
-    var year: Int = Date().year
-    var month: Int = Date().month
-    
+struct StartDateQuestionView: QuestionView {
     @Binding var startDate: Date
     
+    var currentStep: Int = 0
+    var totalStep: Int = 1
+    var question: NewDoseScheduleQuestion { .startDate }
+    var isCurrentQuestion: Bool = false
+    var goNextQuestion: (() -> Void)?
+    var year: Int = Date().year
+    var month: Int = Date().month
     var calendarHelper: CalendarHelper = CalendarHelper()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if isCurrentStep {
+            if isCurrentQuestion {
                 Text("언제부터 복용하나요?")
                     .queustionText()
                 Group {
@@ -177,65 +195,133 @@ struct StartDateStepView: StepView {
     }
 }
 
-struct CycleStepView: StepView {
-    
-    var step: NewDoseScheduleStep { .cycleStep }
-    var isCurrentStep: Bool = false
-    
-    @State var isCycleDaily: Bool = true
+struct CycleQuestionView: QuestionView {
     @Binding var cycle: Int
+    @Binding var hasFixedDays: Bool
+    @Binding var weekDays: [WeekDay]
+    
+    @State var currentStep: Int = 0
+    
+    var totalStep: Int = 3
+    var question: NewDoseScheduleQuestion { .cycle }
+    var isCurrentQuestion: Bool = false
+    var goNextQuestion: (() -> Void)?
     
     var body: some View {
-        if isCurrentStep {
-            if isCycleDaily {
-                HStack(alignment: .center, spacing: 10) {
+        if isCurrentQuestion {
+            if currentStep == 0 {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("매일 드시나요?").queustionText()
-                    Button("네") {
-                        self.cycle = 1
-                    }.queustionText()
-                    Button("아니오") {
-                        withAnimation {
-                            isCycleDaily = false
-                        }
-                    }.queustionText()
+                    HStack(alignment: .center, spacing: 10) {
+                        Button("네") {
+                            goNextQuestion?()
+                            self.cycle = 1
+                        }.buttonStyle(PillMeButton(style: .small))
+                        Button("아니오") {
+                            self.currentStep = 1
+                        }.buttonStyle(PillMeButton(style: .small))
+                    }
                 }
-            } else {
-                Text("몇 일에 한 번 드시나요?").queustionText()
+            } else if currentStep == 1 {
+                Text("어떻게 드시나요?").queustionText()
                 HStack(alignment: .center) {
-                    Spacer()
-                    TextField("", value: $cycle, formatter: NumberFormatter())
-                        .keyboardType(.numberPad)
-                        .accentColor(.tintColor)
-                        .foregroundColor(.tintColor)
-                        .font(.system(size: 20))
-                        .frame(width: 40)
-                    Text("일 마다")
-                        .font(.system(size: 20))
-                        .padding(.trailing, 20)
-                }.animation(.easeInOut)
+                    Button("요일별로 먹어요") {
+                        self.hasFixedDays = true
+                        self.cycle = 0
+                        self.currentStep = 2
+                    }.buttonStyle(PillMeButton(style: .small))
+                    Button("주기에 따라 먹어요") {
+                        self.hasFixedDays = false
+                        self.cycle = 2
+                        self.currentStep = 2
+                    }.buttonStyle(PillMeButton(style: .small))
+                }
+            } else if currentStep == 2 {
+                if hasFixedDays {
+                    Text("무슨 요일에 드세요?").queustionText()
+                    HStack(alignment: .center) {
+                        ForEach(WeekDay.allCases, id: \.self) { weekDay in
+                            Button("\(weekDay.shortKor)") {
+                                if let index = weekDays.firstIndex(of: weekDay) {
+                                    weekDays.remove(at: index)
+                                } else {
+                                    weekDays.append(weekDay)
+                                }
+                            }.buttonStyle(PillMeButton(style: .small))
+                            .opacity(weekDays.contains(weekDay) ? 1 : 0.4)
+                        }
+                    }
+                } else {
+                    Text("몇 일에 한 번 드시나요?").queustionText()
+                    HStack(alignment: .center) {
+                        Spacer()
+                        TextField("", value: $cycle, formatter: NumberFormatter())
+                            .keyboardType(.numberPad)
+                            .accentColor(.tintColor)
+                            .foregroundColor(.tintColor)
+    //                        .frame(width: 40)
+                        Text("일 마다")
+                            .padding(.trailing, 20)
+                    }
+                    .font(.system(size: 20))
+                    .animation(.easeInOut)
+                }
             }
         } else {
             Group {
-                Text("\(cycle.cycleString)").fontWeight(.semibold).foregroundColor(.tintColor) +
-                Text(" 복용합니다.")
+                if hasFixedDays {
+                    Text(weekDays.sorted { $0.rawValue < $1.rawValue }.map { $0.shortKor }.joined(separator: ", ")).fontWeight(.semibold).foregroundColor(.tintColor) +
+                    Text(" 복용합니다.")
+                } else if let cycle = cycle {
+                    Text("\(cycle.cycleString)").fontWeight(.semibold).foregroundColor(.tintColor) +
+                    Text(" 복용합니다.")
+                }
             }.answerText()
         }
     }
 }
 
-struct OneDayStepView: StepView {
-    var step: NewDoseScheduleStep { .oneDayStep }
-    var isCurrentStep: Bool = false
+struct OneDayQuestionView: QuestionView {
+    @Binding var timesOfOneDay: [TakeTime]
+    
+    var currentStep: Int = 0
+    var totalStep: Int = 1
+    var question: NewDoseScheduleQuestion { .oneDay }
+    var isCurrentQuestion: Bool = false
+    var goNextQuestion: (() -> Void)?
+    
+    var columns: [GridItem] = [
+        GridItem(.adaptive(minimum: 50, maximum: 100), spacing: 5),
+        GridItem(.adaptive(minimum: 50, maximum: 100), spacing: 5),
+        GridItem(.adaptive(minimum: 50, maximum: 100), spacing: 5),
+        GridItem(.adaptive(minimum: 50, maximum: 100), spacing: 5)
+    ]
     
     var body: some View {
-        Text("하루 몇 번 드시나요?").queustionText()
-    }
-}
-
-extension Int {
-    var cycleString: String {
-        guard self > 0 else { return "" }
-        if self == 1 { return "매일" }
-        return "\(self)일마다"
+        Text("하루 중 복용하는 때를 선택하세요").queustionText()
+        LazyVGrid(
+            columns: columns,
+            alignment: .center,
+            spacing: 5) {
+            ForEach(TakeTime.allCases, id: \.self) { takeTime in
+                Button {
+                    if let index = self.timesOfOneDay.firstIndex(of: takeTime) {
+                        self.timesOfOneDay.remove(at: index)
+                    } else {
+                        self.timesOfOneDay.append(takeTime)
+                    }
+                } label: {
+                    Text(takeTime.title)
+                        .font(.system(size: 12))
+                        .foregroundColor(self.timesOfOneDay.contains(takeTime) ? .mainColor : .white)
+                        .padding(.trailing, 5)
+                        .padding(.leading, 5)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .frame(maxWidth: .infinity, minHeight: 100)
+                .background(self.timesOfOneDay.contains(takeTime) ? Color.tintColor : Color.mainColor)
+                .cornerRadius(5)
+            }
+        }
     }
 }

@@ -12,7 +12,8 @@ extension View {
         self
             .padding(.vertical, 10)
             .overlay(Rectangle().frame(height: 2).padding(.top, 35))
-            .foregroundColor(.white)
+            .accentColor(.tintColor)
+            .foregroundColor(.tintColor)
             .padding(10)
     }
     
@@ -26,7 +27,7 @@ extension View {
     func answerText() -> some View {
         self
             .foregroundColor(.white)
-            .font(.system(size: 15, weight: .ultraLight))
+            .font(.system(size: 17, weight: .ultraLight))
             .padding(0)
     }
 }

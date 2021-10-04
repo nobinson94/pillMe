@@ -8,53 +8,82 @@
 import Combine
 import SwiftUI
 
-struct TakableTypeStepView: StepView {
-    var step: NewDoseScheduleStep { .takableTypeStep }
-    var isCurrentStep: Bool = false
-    
-    @Binding var type: TakableType
+struct TakableQuestionView: QuestionView {
+    var currentStep: Int = 0
+    var totalStep: Int = 1
+    @Binding var type: TakableType?
+    var question: NewDoseScheduleQuestion { .takableType }
+    var isCurrentQuestion: Bool = false
+    var goNextQuestion: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading) {
-            if isCurrentStep {
+            if isCurrentQuestion {
                 Text("약의 종류는 무엇인가요? ")
                     .queustionText()
                     .padding(.bottom, 20)
-                HStack {
+                HStack(alignment: .center, spacing: 5) {
                     ForEach(TakableType.allCases, id: \.self) { type in
                         Button(type.name) {
                             self.type = type
+                            self.goNextQuestion?()
                         }
-                        .buttonStyle(PillTypeButtonStyle(isSelected: self.type == type))
+                        .buttonStyle(PillMeButton(style: .medium))
                     }
-                }
+                }.frame(maxWidth: .infinity)
             } else {
                 Group {
-                    Text("약의 종류는 ") + Text("\(type.name)").foregroundColor(Color.tintColor).fontWeight(.semibold) + Text("이고,")
+                    Text("약의 종류는 ") + Text("\(type?.name ?? "")").foregroundColor(Color.tintColor).fontWeight(.semibold) + Text("이고,")
                 }.answerText()
             }
         }
     }
 }
 
-struct TakableTypeStepView_Previews: PreviewProvider {
+struct TakableQuestionView_Previews: PreviewProvider {
     static var previews: some View {
         ZStack {
-            Color.mainColor.ignoresSafeArea()
-            TakableTypeStepView(type: .constant(.pill))
+            Color.backgroundColor.ignoresSafeArea()
+            TakableQuestionView(type: .constant(.pill), isCurrentQuestion: true)
         }
     }
 }
 
-struct PillTypeButtonStyle: ButtonStyle {
-    var isSelected: Bool
+
+enum PillMeButtonStyle {
+    case small
+    case medium
+    case large
+    
+    var height: CGFloat {
+        switch self {
+        case .small: return 45
+        case .medium: return 60
+        case .large: return 100
+        }
+    }
+    
+    var fontSize: CGFloat {
+        switch self {
+        case .small: return 14
+        case .medium: return 17
+        case .large: return 22
+        }
+    }
+}
+
+struct PillMeButton: ButtonStyle {
+    var style: PillMeButtonStyle = .medium
+    var fontSize: CGFloat { style.fontSize }
+    var height: CGFloat { style.height }
+    var color: Color = .tintColor
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-            .background(isSelected ? Color.tintColor : Color.tintColor.opacity(0.4))
-            .foregroundColor(isSelected ? Color.white : Color.white.opacity(0.4))
-            .cornerRadius(3)
-            .font(.system(size: 20))
+            .foregroundColor(.mainColor)
+            .font(.system(size: fontSize))
+            .frame(maxWidth: .infinity, minHeight: height)
+            .background(color)
+            .cornerRadius(10)
     }
 }

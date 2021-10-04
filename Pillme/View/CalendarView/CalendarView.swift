@@ -192,7 +192,6 @@ enum WeekDay: Int, CaseIterable {
         guard let firstCharacter = kor.first else { return "" }
         return String(firstCharacter)
     }
-
 }
 
 class CalendarHelper: ObservableObject {
@@ -314,13 +313,5 @@ extension Date {
             return "오늘 \(formatter.string(from: self))"
         }
         return formatter.string(from: self)
-    }
-}
-
-extension String {
-    var date: Date {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.date(from: self) ?? Date()
     }
 }

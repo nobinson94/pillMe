@@ -34,7 +34,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.mainColor.ignoresSafeArea()
+                Color.backgroundColor.ignoresSafeArea()
                 ZStack {
                     ScrollView(.vertical) {
                         ZStack {
@@ -61,7 +61,7 @@ struct ContentView: View {
                                     }.cornerRadius(20)
                                     Spacer(minLength: 20)
                                     ZStack(alignment: .leading) {
-                                        Color.white.opacity(0.1)
+                                        Color.mainColor
                                         VStack(alignment: .leading, spacing: 10) {
                                             Text("먹은 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
                                             HStack {
@@ -75,10 +75,10 @@ struct ContentView: View {
                                 .padding(20)
                                 
                                 ZStack {
-                                    Color.white.opacity(0.1)
+                                    Color.mainColor
                                     VStack(alignment: .leading, spacing: 10) {
                                         Text("월간 복용도").foregroundColor(.white).font(.title2).fontWeight(.bold)
-                                        CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white)
+                                        CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white, selectable: false)
                                     }.padding(20)
                                 }.cornerRadius(20)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,12 +112,17 @@ struct ContentView: View {
                                     NavigationLink(destination: LazyView(NewDoseScheduleView())) {
                                         Image(systemName: "plus.circle.fill")
                                             .foregroundColor(.white)
-                                    }.padding(.trailing, 10)
+                                            .frame(width: 33, height: 33)
+                                    }
+                                    .frame(width: 33, height: 33)
                                     NavigationLink(destination: LazyView(NewDoseScheduleView())) {
                                         Image(systemName: "gearshape.fill")
                                             .foregroundColor(.white)
-                                    }.padding(.trailing, 20)
+                                            .frame(width: 33, height: 33)
+                                    }
+                                    .frame(width: 33, height: 33)
                                 }.padding(.top, Layout.safeAreaTop)
+                                .padding(.trailing, 20)
                             }.padding(0)
                         }.frame(maxWidth: .infinity, maxHeight: Layout.headerHeight)
                         .ignoresSafeArea()
@@ -125,7 +130,8 @@ struct ContentView: View {
                 }
             }
             .navigationBarHidden(true)
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        .pillMeNavigationBar()
     }
 }
 
@@ -165,9 +171,11 @@ struct PillNameButtonView: View {
     
     var body: some View {
         Text(name)
-            .padding(5)
-            .foregroundColor(Color.black)
-            .background(Color.white)
+            .font(.system(size: 14))
+            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+            .frame(minHeight: 30, alignment: .center)
+            .foregroundColor(Color.mainColor)
+            .background(Color.tintColor)
             .cornerRadius(5)
     }
 }
