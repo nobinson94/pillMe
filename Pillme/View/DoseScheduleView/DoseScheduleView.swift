@@ -34,45 +34,50 @@ struct DoseScheduleView: View {
                           secondaryButton: .default(Text("취소")))
                 })
             
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(DoseScheduleQuestion.allCases, id: \.self) { question in
-                        if let currentQuestion = viewModel.currentQuestion, question == currentQuestion {
-                            getQuestionView(of: question)
-                                .padding(.top, currentQuestion == .takableType ? 0 : 15)
-                            if viewModel.canConfirm, question.showNextButton {
-                                Button {
-                                    withAnimation { self.viewModel.confirm() }
-                                } label: {
-                                    Text("확인")
-                                        .foregroundColor(.white)
-                                        .fontWeight(.bold)
-                                        .frame(width: 50, height: 70, alignment: .trailing)
+            VStack {
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(DoseScheduleQuestion.allCases, id: \.self) { question in
+                            if let currentQuestion = viewModel.currentQuestion, question == currentQuestion {
+                                getQuestionView(of: question)
+                                    .padding(.top, currentQuestion == .takableType ? 0 : 15)
+                            } else if question.rawValue < (viewModel.lastQuestion?.rawValue ?? DoseScheduleQuestion.oneDay.rawValue + 1) {
+                                HStack {
+                                    getQuestionView(of: question)
+                                    Spacer()
+                                    Image(systemName: "pencil")
+                                        .frame(minWidth: 44, alignment: .trailing)
+                                        .onTapGesture {
+                                            withAnimation {
+                                                self.viewModel.currentQuestion = question
+                                            }
+                                        }
                                 }
                             }
-                        } else if question.rawValue < (viewModel.lastQuestion?.rawValue ?? DoseScheduleQuestion.oneDay.rawValue + 1) {
-                            HStack {
-                                getQuestionView(of: question)
-                                Spacer()
-                                Image(systemName: "pencil")
-                                    .frame(minWidth: 44, alignment: .trailing)
-                                    .onTapGesture {
-                                        withAnimation {
-                                            self.viewModel.currentQuestion = question
-                                        }
-                                    }
-                            }
                         }
+                        .background(Color.clear)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, 5)
                     }
-                    .background(Color.clear)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 5)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 20)
+                    .padding(.leading, 20)
+                    .padding(.trailing, 20)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 20)
-                .padding(.leading, 20)
-                .padding(.trailing, 20)
+                
+                if viewModel.canConfirm, viewModel.currentQuestion?.showNextButton ?? false {
+                    Button {
+                        withAnimation { self.viewModel.confirm() }
+                    } label: {
+                        Text("다음")
+                            .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
+                            .background(Color.tintColor)
+                            .foregroundColor(.mainColor)
+                    }
+                }
             }
+            
         }.onAppear {
             viewModel.reset()
         }.onChange(of: viewModel.currentQuestion) { question in
