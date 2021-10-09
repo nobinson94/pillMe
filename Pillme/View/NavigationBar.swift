@@ -25,7 +25,9 @@ struct PillMeNavigationBar: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        content
+        ZStack {
+            content
+        }
     }
 }
 

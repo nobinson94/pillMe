@@ -2,7 +2,7 @@
 //  CDDoseRecord+CoreDataProperties.swift
 //  Pillme
 //
-//  Created by USER on 2021/09/15.
+//  Created by USER on 2021/10/06.
 //
 //
 
@@ -17,7 +17,7 @@ extension CDDoseRecord {
     }
 
     @NSManaged public var date: Date?
-    @NSManaged public var pill: CDPill?
+    @NSManaged public var pill: CDTakable?
 
 }
 

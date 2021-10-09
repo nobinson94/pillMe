@@ -16,16 +16,20 @@ struct ContentView: View {
             UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
         }
         static var headerHeight: CGFloat {
-            50 + safeAreaTop
+            50 // + safeAreaTop
+        }
+        static var screenWidth: CGFloat {
+            UIScreen.main.bounds.width
         }
     }
     
     var headerViewOpacity: Double {
-        switch contentOffset {
+        let offset = Layout.headerHeight + contentOffset
+        switch offset {
         case ...0:
             return 0
         case 0...100:
-            return Double(contentOffset) / 100.0
+            return Double(offset) / 100.0
         default:
             return 1
         }
@@ -33,102 +37,41 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Color.backgroundColor.ignoresSafeArea()
-                ZStack {
-                    ScrollView(.vertical) {
-                        ZStack {
-                            VStack {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text("권용태님")
-                                    Text("점심 맛있게 드셨나요?")
-                                    Text("식사 후에 ") + Text("오메가3").foregroundColor(Color.tintColor).fontWeight(.heavy) + Text(" 잊지마세요!")
-                                }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(EdgeInsets(top: Layout.headerHeight, leading: 20, bottom: 10, trailing: 20))
-                                .font(.system(size: 27, weight: .bold, design: .default))
-                                .foregroundColor(.white)
-                                
-                                VStack(alignment: .leading, spacing: 0) {
-                                    ZStack(alignment: .leading) {
-                                        Color.white.opacity(0.1)
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            Text("잊은 약❓").foregroundColor(.white).font(.title2).fontWeight(.bold)
-                                            HStack {
-                                                PillNameButtonView("아연")
-                                            }
-                                        }.padding(20)
-                                    }.cornerRadius(20)
-                                    Spacer(minLength: 20)
-                                    ZStack(alignment: .leading) {
-                                        Color.mainColor
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            Text("먹은 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
-                                            HStack {
-                                                PillNameButtonView("유산균")
-                                                PillNameButtonView("아르기닌")
-                                                PillNameButtonView("칼슘")
-                                            }
-                                        }.padding(20)
-                                    }.cornerRadius(20)
-                                }.frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(20)
-                                
-                                ZStack {
-                                    Color.mainColor
-                                    VStack(alignment: .leading, spacing: 10) {
-                                        Text("월간 복용도").foregroundColor(.white).font(.title2).fontWeight(.bold)
-                                        CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white, selectable: false)
-                                    }.padding(20)
-                                }.cornerRadius(20)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(20)
-                                
-                                Spacer()
-                            }
-                            
-                            GeometryReader { geo in
-                                let offset = geo.frame(in: .named("scroll")).minY
-                                Color.clear.preference(key: ScrollViewOffsetPreferenceKey.self, value: -offset)
-                            }
-                            
-                        }
-                    }
-                    .coordinateSpace(name: "scroll")
-                    .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
-                        self.contentOffset = value
-                    }
-                    
-                    GeometryReader { geo in
-                        ZStack {
-                            Blur(style: .dark).opacity(headerViewOpacity)
-                            VStack {
-                                HStack {
-                                    Text("💊 PillMe")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 23, weight: .semibold))
-                                        .padding(.leading, 20)
-                                    Spacer()
-                                    NavigationLink(destination: LazyView(NewDoseScheduleView())) {
-                                        Image(systemName: "plus.circle.fill")
-                                            .foregroundColor(.white)
-                                            .frame(width: 33, height: 33)
-                                    }
-                                    .frame(width: 33, height: 33)
-                                    NavigationLink(destination: LazyView(NewDoseScheduleView())) {
-                                        Image(systemName: "gearshape.fill")
-                                            .foregroundColor(.white)
-                                            .frame(width: 33, height: 33)
-                                    }
-                                    .frame(width: 33, height: 33)
-                                }.padding(.top, Layout.safeAreaTop)
-                                .padding(.trailing, 20)
-                            }.padding(0)
-                        }.frame(maxWidth: .infinity, maxHeight: Layout.headerHeight)
-                        .ignoresSafeArea()
-                    }
+            ZStack(alignment: .topLeading) {
+                ScrollView(.vertical) {
+                    Spacer(minLength: Layout.headerHeight)
+                    MainView(viewModel: MainViewModel())
                 }
+                .coordinateSpace(name: "scroll")
+                .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+                    self.contentOffset = value
+                }
+                .frame(maxHeight: .infinity)
+
+                HStack {
+                    Text("💊 PillMe")
+                        .foregroundColor(.white)
+                        .font(.system(size: 23, weight: .semibold))
+                    Spacer()
+                    NavigationLink(destination: LazyView(DoseScheduleView())) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.white)
+                            .frame(width: 33, height: 33, alignment: .trailing)
+                    }
+                    .frame(width: 33, height: 33)
+                    NavigationLink(destination: LazyView(DoseScheduleView())) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.white)
+                            .frame(width: 33, height: 33, alignment: .trailing)
+                    }
+                    .frame(width: 33, height: 33)
+                }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+                .frame(width: Layout.screenWidth, height: Layout.headerHeight)
+                .background(Blur(style: .dark).opacity(headerViewOpacity).ignoresSafeArea())
             }
+            .background(Color.backgroundColor.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .pillMeNavigationBar()
@@ -158,24 +101,5 @@ struct Blur: UIViewRepresentable {
     
     func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
         uiView.effect = UIBlurEffect(style: style)
-    }
-}
-
-
-struct PillNameButtonView: View {
-    var name: String = ""
-    
-    init(_ name: String) {
-        self.name = name
-    }
-    
-    var body: some View {
-        Text(name)
-            .font(.system(size: 14))
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-            .frame(minHeight: 30, alignment: .center)
-            .foregroundColor(Color.mainColor)
-            .background(Color.tintColor)
-            .cornerRadius(5)
     }
 }

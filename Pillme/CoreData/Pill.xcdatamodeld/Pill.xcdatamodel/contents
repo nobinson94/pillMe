@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDDoseMethod" representedClassName="CDDoseMethod" syncable="YES">
+        <attribute name="pillNum" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTakable"/>
+    </entity>
     <entity name="CDDoseRecord" representedClassName="CDDoseRecord" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill"/>
+        <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTakable"/>
     </entity>
-    <entity name="CDPill" representedClassName="CDPill" syncable="YES">
+    <entity name="CDTakable" representedClassName="CDTakable" syncable="YES">
         <attribute name="cycle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="doseDays" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
+        <attribute name="doseMethods" optional="YES" attributeType="Transformable" customClassName="[CDDoseMethod]"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="pilID" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="weekDays" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" customClassName="TakableType"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser"/>
     </entity>
     <entity name="CDUser" representedClassName="CDUser" syncable="YES">
@@ -19,7 +26,8 @@
     </entity>
     <elements>
         <element name="CDDoseRecord" positionX="-279.9491577148438" positionY="-11.9815673828125" width="128" height="59"/>
-        <element name="CDPill" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="134"/>
+        <element name="CDTakable" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="164"/>
         <element name="CDUser" positionX="-54" positionY="-9" width="128" height="59"/>
+        <element name="CDDoseMethod" positionX="-171" positionY="-135" width="128" height="74"/>
     </elements>
 </model>

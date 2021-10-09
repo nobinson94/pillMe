@@ -2,7 +2,7 @@
 //  CDUser+CoreDataProperties.swift
 //  Pillme
 //
-//  Created by USER on 2021/09/15.
+//  Created by USER on 2021/10/06.
 //
 //
 
@@ -16,8 +16,8 @@ extension CDUser {
         return NSFetchRequest<CDUser>(entityName: "CDUser")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var gender: String?
+    @NSManaged public var name: String?
 
 }
 
