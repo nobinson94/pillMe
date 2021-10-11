@@ -13,8 +13,9 @@ import CoreData
 public class CDDoseMethod: NSManagedObject {
     static func create(doseMethod: DoseMethod, in context: NSManagedObjectContext) -> CDDoseMethod {
         let cdDoseMethod = CDDoseMethod(context: context)
-        cdDoseMethod.pillNum = Int16(doseMethod.pillNum)
+        cdDoseMethod.num = Int16(doseMethod.num)
         cdDoseMethod.time = Int16(doseMethod.time.rawValue)
+//        cdDoseMethod.takable = CDTakable doseMethod.takable
         
         return cdDoseMethod
     }

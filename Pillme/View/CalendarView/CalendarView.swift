@@ -285,6 +285,14 @@ extension Date {
         return Calendar.current.component(.day, from: self)
     }
     
+    var hour: Int {
+        return Calendar.current.component(.hour, from: self)
+    }
+    
+    var minute: Int {
+        return Calendar.current.component(.minute, from: self)
+    }
+    
     var weekDay: WeekDay {
         let weekDayIndex = Calendar.current.component(.weekday, from: self)
         return WeekDay(rawValue: weekDayIndex) ?? .mon
@@ -318,6 +326,13 @@ extension Date {
         if Calendar.current.isDateInToday(self) {
             return "오늘 (\(formatter.string(from: self)))"
         }
+        
+        return formatter.string(from: self)
+    }
+    
+    var timeString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
         
         return formatter.string(from: self)
     }

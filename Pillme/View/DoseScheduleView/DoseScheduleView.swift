@@ -24,7 +24,10 @@ struct DoseScheduleView: View {
         ZStack {
             Color.backgroundColor.ignoresSafeArea()
                 .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
-                    guard isEditMode else { return }
+                    guard isEditMode else {
+                        presentationMode.wrappedValue.dismiss()
+                        return
+                    }
                     showingAlert = true
                 })
                 .alert(isPresented: $showingAlert, content: {
@@ -73,28 +76,29 @@ struct DoseScheduleView: View {
                     .padding(.trailing, 20)
                 }
                 
-                if viewModel.currentQuestion == nil && viewModel.lastQuestion == nil {
-                    Button {
-                        withAnimation { self.viewModel.save() {
-                            print("### Success")
-                            
-                        } }
-                    } label: {
-                        ZStack {
-                            Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
-                            Text("저장").foregroundColor(.mainColor)
+                if isEditMode {
+                    if viewModel.currentQuestion == nil && viewModel.lastQuestion == nil {
+                        Button {
+                            withAnimation { self.viewModel.save() {
+                                self.isEditMode = false
+                            } }
+                        } label: {
+                            ZStack {
+                                Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
+                                Text("저장").foregroundColor(.mainColor)
+                            }
+                            .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
                         }
-                        .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
-                    }
-                } else if viewModel.canConfirm {
-                    Button {
-                        withAnimation { self.viewModel.confirm() }
-                    } label: {
-                        ZStack {
-                            Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
-                            Text("다음").foregroundColor(.mainColor)
+                    } else if viewModel.canConfirm {
+                        Button {
+                            withAnimation { self.viewModel.confirm() }
+                        } label: {
+                            ZStack {
+                                Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
+                                Text("다음").foregroundColor(.mainColor)
+                            }
+                            .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
                         }
-                        .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
                     }
                 }
             }
@@ -313,15 +317,15 @@ struct DoseScheduleView: View {
                                 Text(doseMethod.time.title).font(.system(size: 17))
                                 Spacer()
                                 Button {
-                                    guard doseMethod.pillNum > 1 else { return }
-                                    doseMethod.pillNum -= 1
+                                    guard doseMethod.num > 1 else { return }
+                                    doseMethod.num -= 1
                                     self.viewModel.objectWillChange.send()
                                 } label: {
                                     Image(systemName: "minus.circle")
                                 }.frame(minWidth: 45)
-                                Text("\(doseMethod.pillNum)정").font(.system(size: 17))
+                                Text("\(doseMethod.num)정").font(.system(size: 17))
                                 Button {
-                                    doseMethod.pillNum += 1
+                                    doseMethod.num += 1
                                     self.viewModel.objectWillChange.send()
                                 } label: {
                                     Image(systemName: "plus.circle")
@@ -345,7 +349,7 @@ struct DoseScheduleView: View {
             return AnyView(AnswerView(title: "복용 방법") {
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(Array(self.viewModel.doseMethods.sorted { $0.time.rawValue < $1.time.rawValue }.enumerated()), id: \.offset) { index, doseMethod in
-                        Text("\(doseMethod.time.title) (\(doseMethod.pillNum)정)")
+                        Text("\(doseMethod.time.title) (\(doseMethod.num)정)")
                             .fontWeight(.semibold)
                             .foregroundColor(.tintColor)
                     }

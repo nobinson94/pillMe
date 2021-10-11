@@ -16,9 +16,9 @@ extension CDDoseMethod {
         return NSFetchRequest<CDDoseMethod>(entityName: "CDDoseMethod")
     }
 
-    @NSManaged public var pillNum: Int16
+    @NSManaged public var num: Int16
     @NSManaged public var time: Int16
-    @NSManaged public var pill: CDTakable?
+    @NSManaged public var takable: CDTakable
 
 }
 

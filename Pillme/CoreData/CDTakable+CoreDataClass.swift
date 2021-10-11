@@ -22,7 +22,7 @@ public class CDTakable: NSManagedObject {
         
         let cdDoseMethods = takable.doseMethods.map { doseMethod -> CDDoseMethod in
             let cdDoseMethod = CDDoseMethod.create(doseMethod: doseMethod, in: context)
-//            cdDoseMethod.pill = cdTakable // 여기가 문제
+            cdDoseMethod.takable = cdTakable
             return cdDoseMethod
         }
         cdTakable.addToDoseMethods(NSOrderedSet(array: cdDoseMethods))

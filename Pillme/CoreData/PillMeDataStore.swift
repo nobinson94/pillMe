@@ -29,7 +29,6 @@ class PillMeDataStore {
     }
     
     func fetch<T: NSManagedObject>(with request: NSFetchRequest<T> = NSFetchRequest<T>(entityName: T.description())) -> [T] {
-//        let request: NSFetchRequest = NSFetchRequest<T>(entityName: T.description())
         do {
             return try container.viewContext.fetch(request)
         } catch {
@@ -98,11 +97,24 @@ class PillMeDataManager {
     func getTakables(for date: Date? = nil) -> [Takable] {
         let request = NSFetchRequest<CDTakable>(entityName: CDTakable.description())
         
-        let takables = dataStore.fetch(with: request).map { Takable(cdTakable: $0) }
+        let takables: [Takable] = dataStore.fetch(with: request)
+            .map {
+                let takable = Takable(cdTakable: $0)
+                takable.doseMethods = self.getDoseMethods(for: $0.id)
+                return takable
+            }
+        
         if let date = date {
             return takables.filter { date.isTakeDay(of: $0) }
         }
         return takables
+    }
+    
+    func getDoseMethods(for takableId: String) -> [DoseMethod] {
+        let request = NSFetchRequest<CDDoseMethod>(entityName: CDDoseMethod.description())
+        request.predicate = NSPredicate(format: "takable.id == %@", "\(takableId)")
+        let doseMethods = dataStore.fetch(with: request).map { DoseMethod(cdDoseMethod: $0) }
+        return doseMethods
     }
 }
 

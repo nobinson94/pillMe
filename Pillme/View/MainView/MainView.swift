@@ -15,9 +15,9 @@ struct MainView: View {
         ZStack {
             VStack {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("권용태님")
-                    Text("점심 맛있게 드셨나요?")
-                    Text("식사 후에 ") + Text("오메가3").foregroundColor(Color.tintColor).fontWeight(.heavy) + Text(" 잊지마세요!")
+//                    Text("권용태님")
+                    Text("\(viewModel.currentTime.welcomeMessage)")
+                    Text("\(viewModel.currentTime.encourageMessage(takableName: "오메가3"))")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20))
@@ -26,16 +26,71 @@ struct MainView: View {
                 
                 VStack(alignment: .leading, spacing: 15) {
                     
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 20) {
                         HStack {
-                            Text("복용중인 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
+                            Text("지금 먹을 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
                             Spacer()
                             Image(systemName: "chevron.forward")
+                        }.onTapGesture {
+                            print("### TAP 지금 먹을 약")
                         }
-                        ForEach(viewModel.allTakables, id: \.id) { takable in
-                            HStack {
-                                Text("\(takable.name)")
-                                Spacer()
+                        
+                        ForEach(viewModel.todayTakables, id: \.id) { takable in
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack(spacing: 10) {
+                                    Image("pillIcon")
+                                        .resizable()
+                                        .frame(width: 26, height: 26, alignment: .center)
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text("\(takable.type.name)").foregroundColor(.gray).font(.system(size: 12))
+                                        Text("\(takable.name)").font(.system(size: 19, weight: .bold))
+                                    }
+                                    Spacer()
+                                    Button {
+                                        print("### TAP")
+                                    } label: {
+                                        
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                    .padding(20)
+                    .background(Color.mainColor)
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(20)
+                    
+                    VStack(alignment: .leading, spacing: 20) {
+                        HStack {
+                            Text("오늘 먹을 약").foregroundColor(.white).font(.title2).fontWeight(.bold)
+                            Spacer()
+                            Image(systemName: "chevron.forward")
+                        }.onTapGesture {
+                            print("### TAP 오늘 먹을 약")
+                        }
+                        if viewModel.todayTakables.isEmpty {
+                            VStack(spacing: 5){
+                                Text("오늘은 먹을 약이 없네요.\n건강을 위해 영양제를 추가해보세요!")
+                            }
+                            .lineSpacing(10)
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, minHeight: 150, alignment: .center)
+                        } else {
+                            ForEach(viewModel.todayTakables, id: \.id) { takable in
+                                VStack(alignment: .leading, spacing: 10) {
+                                    HStack(spacing: 10) {
+                                        Image("pillIcon")
+                                            .resizable()
+                                            .frame(width: 26, height: 26, alignment: .center)
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            Text("\(takable.type.name)").foregroundColor(.gray).font(.system(size: 12))
+                                            Text("\(takable.name)").font(.system(size: 19, weight: .bold))
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             }
                         }
                     }

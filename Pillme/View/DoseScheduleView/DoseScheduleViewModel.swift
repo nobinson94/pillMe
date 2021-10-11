@@ -10,35 +10,13 @@ import CoreData
 import Foundation
 import SwiftUI
 
-
 enum DoseScheduleQuestion: Int, CaseIterable {
     case takableType
     case name
     case startDate
     case cycle
     case oneDay
-    
-//    var showNextButton: Bool {
-//        switch self {
-//        case .takableType: return false
-//        default: return true
-//        }
-//    }
 }
-
-//protocol QuestionView: View {
-//    var currentStep: Int { get set }
-//    var totalStep: Int { get set }
-//    var goNextQuestion: (() -> Void)? { get set }
-//    var isCurrentQuestion: Bool { get set }
-//    var question: DoseScheduleQuestion { get }
-//}
-//
-//extension QuestionView {
-//    var currentStep: Int { 0 }
-//    var totalStep: Int { 1 }
-//    var goNextQuestion: (() -> Void)? { nil }
-//}
 
 class DoseScheduleViewModel: ObservableObject {
     @Published var currentQuestion: DoseScheduleQuestion? = .takableType
@@ -116,6 +94,7 @@ class DoseScheduleViewModel: ObservableObject {
     func save(_ completion: (() -> Void)? = nil) {
         let takable = Takable(name: name, type: type ?? .pill, startDate: startDate, cycle: cycle, doseDays: doseDays, doseMethods: doseMethods)
         PillMeDataManager.shared.add(takable) {
+            self.isNewTakable = false
             completion?()
         }
     }

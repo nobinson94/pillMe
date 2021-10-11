@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum TakeTime: Int, CaseIterable {
     case afterWakeup
@@ -63,19 +64,36 @@ enum TakeTime: Int, CaseIterable {
         case .beforeSleep: return "\(takableName) 드시고 좋은 꿈 꾸세요."
         }
     }
+    
+    func encourageMessageView(takableName: String) -> some View { // todo
+        Text(self.encourageMessage(takableName: takableName))
+    }
 }
 
 class DoseMethod {
     var time: TakeTime
-    var pillNum: Int = 1
+    var num: Int = 1
+    var takable: Takable?
     
-    init(time: TakeTime, pillNum: Int = 1) {
+    init(time: TakeTime, num: Int = 1, takable: Takable? = nil) {
         self.time = time
-        self.pillNum = pillNum
+        self.num = num
+        self.takable = takable
     }
     
     init(cdDoseMethod: CDDoseMethod) {
         self.time = TakeTime(rawValue: Int(cdDoseMethod.time)) ?? .afterWakeup
-        self.pillNum = Int(cdDoseMethod.pillNum)
+        self.num = Int(cdDoseMethod.num)
+        self.takable = Takable(cdTakable: cdDoseMethod.takable)
+    }
+}
+
+extension DoseMethod: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(takable?.id.hashValue)
+    }
+
+    static func == (lhs: DoseMethod, rhs: DoseMethod) -> Bool {
+        return lhs.time == rhs.time && lhs.takable == rhs.takable
     }
 }
