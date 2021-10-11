@@ -2,7 +2,7 @@
 //  CDDoseMethod+CoreDataProperties.swift
 //  Pillme
 //
-//  Created by USER on 2021/10/06.
+//  Created by USER on 2021/10/10.
 //
 //
 
@@ -16,8 +16,8 @@ extension CDDoseMethod {
         return NSFetchRequest<CDDoseMethod>(entityName: "CDDoseMethod")
     }
 
-    @NSManaged public var time: Int16
     @NSManaged public var pillNum: Int16
+    @NSManaged public var time: Int16
     @NSManaged public var pill: CDTakable?
 
 }

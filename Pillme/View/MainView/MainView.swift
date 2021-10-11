@@ -37,7 +37,7 @@ struct MainView: View {
                                 Text("\(takable.name)")
                                 Spacer()
                             }
-                        }//.frame(maxWidth: .infinity)
+                        }
                     }
                     .padding(20)
                     .background(Color.mainColor)

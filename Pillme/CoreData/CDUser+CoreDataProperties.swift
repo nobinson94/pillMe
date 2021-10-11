@@ -2,7 +2,7 @@
 //  CDUser+CoreDataProperties.swift
 //  Pillme
 //
-//  Created by USER on 2021/10/06.
+//  Created by USER on 2021/10/10.
 //
 //
 
@@ -18,6 +18,7 @@ extension CDUser {
 
     @NSManaged public var gender: String?
     @NSManaged public var name: String?
+    @NSManaged public var takables: CDTakable?
 
 }
 

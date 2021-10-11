@@ -17,12 +17,14 @@ struct DoseScheduleView: View {
     
     @StateObject var viewModel: DoseScheduleViewModel = DoseScheduleViewModel()
     @State private var showingAlert = false
+    @State var isEditMode: Bool = true
     @FocusState private var focusedField: Field?
-
+    
     var body: some View {
         ZStack {
             Color.backgroundColor.ignoresSafeArea()
-                .pillMeNavigationBar(title: "새로운 약 추가하기", backButtonAction: {
+                .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
+                    guard isEditMode else { return }
                     showingAlert = true
                 })
                 .alert(isPresented: $showingAlert, content: {
@@ -34,7 +36,7 @@ struct DoseScheduleView: View {
                           secondaryButton: .default(Text("취소")))
                 })
             
-            VStack {
+            VStack(spacing: 0) {
                 
                 ScrollView {
                     VStack(alignment: .leading) {
@@ -43,22 +45,27 @@ struct DoseScheduleView: View {
                                 getQuestionView(of: question)
                                     .padding(.top, currentQuestion == .takableType ? 0 : 15)
                             } else if question.rawValue < (viewModel.lastQuestion?.rawValue ?? DoseScheduleQuestion.oneDay.rawValue + 1) {
-                                HStack {
+                                HStack(spacing: 10) {
                                     getQuestionView(of: question)
-                                    Spacer()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                     Image(systemName: "pencil")
-                                        .frame(minWidth: 44, alignment: .trailing)
+                                        .frame(width: 44, alignment: .trailing)
                                         .onTapGesture {
                                             withAnimation {
                                                 self.viewModel.currentQuestion = question
                                             }
                                         }
                                 }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.mainColor)
+                                .cornerRadius(5)
+                                
                             }
                         }
                         .background(Color.clear)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.bottom, 5)
+                        Spacer(minLength: 40)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.top, 20)
@@ -66,14 +73,28 @@ struct DoseScheduleView: View {
                     .padding(.trailing, 20)
                 }
                 
-                if viewModel.canConfirm, viewModel.currentQuestion?.showNextButton ?? false {
+                if viewModel.currentQuestion == nil && viewModel.lastQuestion == nil {
+                    Button {
+                        withAnimation { self.viewModel.save() {
+                            print("### Success")
+                            
+                        } }
+                    } label: {
+                        ZStack {
+                            Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
+                            Text("저장").foregroundColor(.mainColor)
+                        }
+                        .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
+                    }
+                } else if viewModel.canConfirm {
                     Button {
                         withAnimation { self.viewModel.confirm() }
                     } label: {
-                        Text("다음")
-                            .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
-                            .background(Color.tintColor)
-                            .foregroundColor(.mainColor)
+                        ZStack {
+                            Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
+                            Text("다음").foregroundColor(.mainColor)
+                        }
+                        .frame(width: UIScreen.main.bounds.width, height: 70, alignment: .center)
                     }
                 }
             }
@@ -82,10 +103,8 @@ struct DoseScheduleView: View {
             viewModel.reset()
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
-                print("### FOCUS!!")
-                self.focusedField = .takableName
+                self.focusedField = .takableName // issue:: 두번째 변경부터는 적용되지 않는다.
             } else {
-                print("### UNFOCUS!!")
                 self.focusedField = nil
             }
         }
@@ -104,56 +123,60 @@ struct DoseScheduleView: View {
     }
     
     private var takableTypeQuestionView: some View {
-        VStack(alignment: .leading) {
-            if viewModel.currentQuestion == .takableType {
-                Text("약의 종류는 무엇인가요?")
-                    .queustionText()
-                    .padding(.bottom, 20)
+        
+        if viewModel.currentQuestion == .takableType {
+            return AnyView(QuestionView(question: "약의 종류는 무엇인가요?") {
                 HStack(alignment: .center, spacing: 5) {
                     ForEach(TakableType.allCases, id: \.self) { type in
+                        let isSelected = self.viewModel.type == type
                         Button(type.name) {
-                            self.viewModel.type = type
-                            self.viewModel.confirm()
+                            if viewModel.type == nil {
+                                withAnimation {
+                                    self.viewModel.type = type
+                                    self.viewModel.confirm()
+                                }
+                            } else {
+                                self.viewModel.type = type
+                            }
                         }
-                        .buttonStyle(PillMeButton(style: .medium))
+                        .buttonStyle(PillMeButton(style: .medium, color: isSelected ? .tintColor : .mainColor, textColor: isSelected ? .mainColor : .white))
                     }
                 }.frame(maxWidth: .infinity)
-            } else {
-                Group {
-                    Text("약의 종류는 ") +
-                    Text("\(viewModel.type.name)").foregroundColor(Color.tintColor).fontWeight(.semibold) +
-                    Text("이고,")
-                }.answerText()
-            }
+            })
+        } else if let type = viewModel.type {
+            return AnyView(AnswerView(title: "종류") {
+                Text("\(type.name)")
+                    .foregroundColor(.tintColor)
+                    .fontWeight(.semibold)
+            })
+        } else {
+            return AnyView(Spacer(minLength: 0))
         }
     }
     
     private var nameQuestionView: some View {
         
-        return VStack(alignment: .leading, spacing: 10) {
+        return VStack(alignment: .leading, spacing: 0) {
             if viewModel.currentQuestion == .name {
-                Text("약의 이름이 무엇인가요?").queustionText()
-                TextField("", text: $viewModel.name)
-                    .underlineTextField()
-                    .font(.system(size: 20))
-                    .focused($focusedField, equals: .takableName)
-            } else {
-                Group {
-                    Text("약의 이름은 ") +
-                    Text(viewModel.name).foregroundColor(.tintColor).fontWeight(.semibold) +
-                    Text("입니다.")
+                QuestionView(question: "약의 이름은 무엇인가요?") {
+                    TextField("", text: $viewModel.name)
+                        .underlineTextField()
+                        .font(.system(size: 20))
+                        .focused($focusedField, equals: .takableName)
                 }
-                .answerText()
-                .padding(.bottom, 5)
+            } else {
+                AnswerView(title: "이름") {
+                    Text(viewModel.name)
+                        .foregroundColor(.tintColor)
+                        .fontWeight(.semibold)
+                }
             }
         }
     }
     
     private var startDateQuestionView: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if viewModel.currentQuestion == .startDate {
-                Text("언제부터 복용하나요?")
-                    .queustionText()
+        if viewModel.currentQuestion == .startDate {
+            return AnyView(QuestionView(question: "언제부터 복용하나요?") {
                 Group {
                     Text(viewModel.startDate.dateString)
                         .font(.system(size: 20))
@@ -165,23 +188,22 @@ struct DoseScheduleView: View {
                         .fontWeight(.light)
                 }
                 CalendarView(fontColor: .white, selectable: true, selectedDate: $viewModel.startDate)
-                   .frame(maxWidth: .infinity)
-            } else {
-                Group {
-                    Text(viewModel.startDate.dateString)
-                        .foregroundColor(.tintColor)
-                        .fontWeight(.semibold) +
-                    Text("부터 복용할 계획입니다.")
-                }.answerText()
-            }
+                    .frame(maxWidth: .infinity)
+            })
+        } else {
+            return AnyView(AnswerView(title: "복용 시작일") {
+                Text(viewModel.startDate.dateString)
+                    .foregroundColor(.tintColor)
+                    .fontWeight(.semibold)
+            })
         }
     }
     
     private var cycleQuestionView: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if viewModel.currentQuestion == .cycle {
-                if viewModel.cycle == 0 && viewModel.doseDays.isEmpty {
-                    Text("어떻게 드시나요?").queustionText()
+        
+        if viewModel.currentQuestion == .cycle {
+            if viewModel.cycle == 0 && viewModel.doseDays.isEmpty {
+                return AnyView(QuestionView(question: "어떻게 드시나요?") {
                     HStack(alignment: .center) {
                         Button("매일매일 먹어요") {
                             self.viewModel.cycle = 1
@@ -197,8 +219,9 @@ struct DoseScheduleView: View {
                             self.viewModel.doseDays = []
                         }.buttonStyle(PillMeButton(style: .small))
                     }
-                } else if viewModel.cycle >= 1 {
-                    Text("몇 일에 한 번 드시나요?").queustionText()
+                })
+            } else if viewModel.cycle >= 1 {
+                return AnyView(QuestionView(question: "며칠에 한번 드세요?") {
                     HStack(alignment: .center) {
                         Spacer()
                         TextField("", value: self.$viewModel.cycle, formatter: NumberFormatter())
@@ -209,8 +232,9 @@ struct DoseScheduleView: View {
                             .padding(.trailing, 20)
                     }
                     .font(.system(size: 20))
-                } else if viewModel.cycle < 0 {
-                    Text("무슨 요일에 드세요?").queustionText()
+                })
+            } else if viewModel.cycle < 0 {
+                return AnyView(QuestionView(question: "무슨 요일에 드세요?") {
                     HStack(alignment: .center) {
                         ForEach(WeekDay.allCases, id: \.self) { doseDay in
                             if let index = self.viewModel.doseDays.firstIndex(of: doseDay) {
@@ -226,17 +250,25 @@ struct DoseScheduleView: View {
                             }
                         }
                     }
-                }
+                })
             } else {
-                Group {
-                    if self.viewModel.cycle < 0 {
-                        Text(self.viewModel.doseDays.sorted { $0.rawValue < $1.rawValue }.map { $0.shortKor }.joined(separator: ", ")).fontWeight(.semibold).foregroundColor(.tintColor) +
-                        Text(" 복용합니다.")
-                    } else if self.viewModel.cycle > 0 {
-                        Text("\(self.viewModel.cycle.cycleString)").fontWeight(.semibold).foregroundColor(.tintColor) +
-                        Text(" 복용합니다.")
-                    }
-                }.answerText()
+                return AnyView(Spacer(minLength: 0))
+            }
+        } else {
+            if self.viewModel.cycle < 0 {
+                return AnyView(AnswerView(title: "복용 요일") {
+                    Text(self.viewModel.doseDays.sorted { $0.rawValue < $1.rawValue }.map { $0.shortKor }.joined(separator: ", "))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.tintColor)
+                })
+            } else if self.viewModel.cycle > 0 {
+                return AnyView(AnswerView(title: "복용 주기") {
+                    Text("\(self.viewModel.cycle.cycleString)")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.tintColor)
+                })
+            } else {
+                return AnyView(Spacer(minLength: 0))
             }
         }
     }
@@ -249,44 +281,76 @@ struct DoseScheduleView: View {
             GridItem(.adaptive(minimum: 50, maximum: 100), spacing: 5)
         ]
         
-        return VStack(alignment: .leading, spacing: 5) {
-            Text("하루 중 복용하는 때를 선택하세요").queustionText()
-            LazyVGrid(
-                columns: columns,
-                alignment: .center,
-                spacing: 5) {
-                ForEach(TakeTime.allCases, id: \.self) { takeTime in
-                    if let index = self.viewModel.doseMethods.firstIndex { $0.time == takeTime } {
-                        Button {
-                            self.viewModel.doseMethods.remove(at: index)
-                        } label: {
-                            Text(takeTime.title)
-                                .font(.system(size: 12))
-                                .foregroundColor(.mainColor)
-                                .padding(.trailing, 5)
-                                .padding(.leading, 5)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        if viewModel.currentQuestion == .oneDay {
+            return AnyView(QuestionView(question: "복용법은 어떻게 되나요?") {
+                VStack(alignment: .leading, spacing: 10) {
+                    LazyVGrid(
+                        columns: columns,
+                        alignment: .center,
+                        spacing: 5) {
+                        ForEach(TakeTime.allCases, id: \.self) { takeTime in
+                            let isAdded = self.viewModel.doseMethods.contains { $0.time == takeTime }
+                            Button {
+                                self.viewModel.doseMethods.append(DoseMethod(time: takeTime))
+                            } label: {
+                                Text(takeTime.title)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.white)
+                                    .padding(.trailing, 5)
+                                    .padding(.leading, 5)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .opacity(isAdded ? 0.4 : 1)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 40)
+                            .background(Color.mainColor)
+                            .cornerRadius(5)
+                            .disabled(isAdded)
                         }
-                        .frame(maxWidth: .infinity, minHeight: 100)
-                        .background(Color.tintColor)
-                        .cornerRadius(5)
-                    } else {
-                        Button {
-                            self.viewModel.doseMethods.append(DoseMethod(time: takeTime))
-                        } label: {
-                            Text(takeTime.title)
-                                .font(.system(size: 12))
-                                .foregroundColor(.white)
-                                .padding(.trailing, 5)
-                                .padding(.leading, 5)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    VStack(alignment: .leading, spacing: 5) {
+                        ForEach(Array(self.viewModel.doseMethods.sorted { $0.time.rawValue < $1.time.rawValue }.enumerated()), id: \.offset) { index, doseMethod in
+                            HStack {
+                                Text(doseMethod.time.title).font(.system(size: 17))
+                                Spacer()
+                                Button {
+                                    guard doseMethod.pillNum > 1 else { return }
+                                    doseMethod.pillNum -= 1
+                                    self.viewModel.objectWillChange.send()
+                                } label: {
+                                    Image(systemName: "minus.circle")
+                                }.frame(minWidth: 45)
+                                Text("\(doseMethod.pillNum)정").font(.system(size: 17))
+                                Button {
+                                    doseMethod.pillNum += 1
+                                    self.viewModel.objectWillChange.send()
+                                } label: {
+                                    Image(systemName: "plus.circle")
+                                }.frame(minWidth: 45)
+                                Button {
+                                    self.viewModel.doseMethods.remove(at: index)
+                                } label: {
+                                    Image(systemName: "xmark").foregroundColor(.red)
+                                }.frame(minWidth: 45)
+                            }
+                            .padding(10)
+                            .frame(maxWidth: .infinity, minHeight: 70)
+                            .background(Color.tintColor)
+                            .foregroundColor(.mainColor)
+                            .cornerRadius(5)
                         }
-                        .frame(maxWidth: .infinity, minHeight: 100)
-                        .background(Color.mainColor)
-                        .cornerRadius(5)
                     }
                 }
-            }
+            })
+        } else {
+            return AnyView(AnswerView(title: "복용 방법") {
+                VStack(alignment: .leading, spacing: 5) {
+                    ForEach(Array(self.viewModel.doseMethods.sorted { $0.time.rawValue < $1.time.rawValue }.enumerated()), id: \.offset) { index, doseMethod in
+                        Text("\(doseMethod.time.title) (\(doseMethod.pillNum)정)")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.tintColor)
+                    }
+                }
+            })
         }
     }
 }
@@ -294,5 +358,36 @@ struct DoseScheduleView: View {
 struct DoseScheduleView_Previews: PreviewProvider {
     static var previews: some View {
         DoseScheduleView()
+    }
+}
+
+struct QuestionView<Content: View>: View {
+    var question: String
+    @ViewBuilder var content: Content
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text(question)
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 32, weight: .ultraLight))
+                .padding(0)
+                .allowsTightening(true)
+            content
+        }
+    }
+}
+
+struct AnswerView<Content: View>: View {
+    var title: String
+    @ViewBuilder var content: Content
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(.gray)
+            content
+        }
     }
 }

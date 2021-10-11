@@ -16,18 +16,4 @@ extension View {
             .foregroundColor(.tintColor)
             .padding(10)
     }
-    
-    func queustionText() -> some View {
-        self
-            .foregroundColor(.white)
-            .font(.system(size: 32, weight: .ultraLight))
-            .padding(0)
-    }
-    
-    func answerText() -> some View {
-        self
-            .foregroundColor(.white)
-            .font(.system(size: 17, weight: .ultraLight))
-            .padding(0)
-    }
 }

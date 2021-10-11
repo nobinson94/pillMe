@@ -309,10 +309,16 @@ extension Date {
     
     var dateString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 M월 dd일"
-        if Calendar.current.isDateInToday(self) {
-            return "오늘 \(formatter.string(from: self))"
+        if self.year == Date().year {
+            formatter.dateFormat = "M월 dd일"
+        } else {
+            formatter.dateFormat = "yyyy년 M월 dd일"
         }
+        
+        if Calendar.current.isDateInToday(self) {
+            return "오늘 (\(formatter.string(from: self)))"
+        }
+        
         return formatter.string(from: self)
     }
 }

@@ -2,7 +2,7 @@
 //  CDUser+CoreDataClass.swift
 //  Pillme
 //
-//  Created by USER on 2021/10/06.
+//  Created by USER on 2021/10/10.
 //
 //
 

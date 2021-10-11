@@ -56,7 +56,7 @@ class Takable {
         self.endDate = cdTakable.endDate
         self.cycle = Int(cdTakable.cycle)
         self.doseDays = cdTakable.doseDays.compactMap { WeekDay(rawValue: $0) }
-        self.doseMethods = cdTakable.doseMethods.compactMap { DoseMethod(cdDoseMethod: $0) }
+        self.doseMethods = (cdTakable.doseMethods as? [CDDoseMethod] ?? []).compactMap { DoseMethod(cdDoseMethod: $0) }
     }
 }
 
