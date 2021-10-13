@@ -33,12 +33,12 @@ struct PillMeNavigationBar: ViewModifier {
 
 extension View {
     
-    func pillMeNavigationBar(title: String = "", backButtonAction: (() -> ())? = nil) -> some View {
+    func pillMeNavigationBar(title: String = "", backButtonAction: (() -> ())? = nil, rightView: AnyView? = nil) -> some View {
         self.modifier(PillMeNavigationBar())
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: Button(action: backButtonAction ?? { }, label: {
                 Image(systemName: "chevron.backward").imageScale(.large).accentColor(.white).padding(.trailing, 20)
-            }))
+            }), trailing: rightView)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarTitle(title)
     }

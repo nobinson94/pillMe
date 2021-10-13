@@ -75,23 +75,31 @@ class PillMeDataManager {
         completion?()
     }
     
-    func delete(id: String, completion: (() -> Void)? = nil) {
-        guard let cdTakable = getTakable(id: id) else { return }
+    func deleteTakable(id: String, completion: (() -> Void)? = nil) {
+        guard let cdTakable = getCDTakable(id: id) else { return }
         dataStore.delete(object: cdTakable)
         completion?()
     }
     
-    func update(id: String, closure: @escaping (CDTakable) -> Void, completion: (() -> Void)? = nil) {
-        guard let cdTakable = getTakable(id: id) else { return }
+    func updateTakable(id: String, closure: @escaping (CDTakable) -> Void, completion: (() -> Void)? = nil) {
+        guard let cdTakable = getCDTakable(id: id) else { return }
         dataStore.update {
             closure(cdTakable)
         }
     }
     
-    private func getTakable(id: String) -> CDTakable? {
+    private func getCDTakable(id: String) -> CDTakable? {
         let request = NSFetchRequest<CDTakable>(entityName: CDTakable.description())
         request.predicate = NSPredicate(format: "id == %@", "\(id)")
         return dataStore.fetch(with: request).first
+    }
+    
+    func getTakable(id: String) -> Takable? {
+        guard let cdTakable = getCDTakable(id: id) else { return nil }
+        let takable = Takable(cdTakable: cdTakable)
+        takable.doseMethods = self.getDoseMethods(for: id)
+        
+        return takable
     }
     
     func getTakables(for date: Date? = nil) -> [Takable] {

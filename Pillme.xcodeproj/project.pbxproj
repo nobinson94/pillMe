@@ -14,7 +14,6 @@
 		CE2B1B5F26FE441B00AA962E /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B5E26FE441B00AA962E /* String+Extension.swift */; };
 		CE2B1B6126FE44C500AA962E /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B1B6026FE44C500AA962E /* Int+Extension.swift */; };
 		CE6A672B270D8C7B00C65BFF /* TakableListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A672A270D8C7B00C65BFF /* TakableListView.swift */; };
-		CE6A672E270D8E6800C65BFF /* PillNameButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A672D270D8E6800C65BFF /* PillNameButton.swift */; };
 		CE6A6730270D8EC000C65BFF /* PillMeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A672F270D8EC000C65BFF /* PillMeButton.swift */; };
 		CE6A6733270D8FEB00C65BFF /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A6732270D8FEB00C65BFF /* MainViewModel.swift */; };
 		CE6A675C27128E6C00C65BFF /* CDTakable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A675427128E6C00C65BFF /* CDTakable+CoreDataClass.swift */; };
@@ -25,6 +24,7 @@
 		CE6A676127128E6C00C65BFF /* CDDoseRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A675927128E6C00C65BFF /* CDDoseRecord+CoreDataProperties.swift */; };
 		CE6A676227128E6C00C65BFF /* CDUser+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A675A27128E6C00C65BFF /* CDUser+CoreDataClass.swift */; };
 		CE6A676327128E6C00C65BFF /* CDUser+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A675B27128E6C00C65BFF /* CDUser+CoreDataProperties.swift */; };
+		CE6A676727149F4800C65BFF /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A676627149F4800C65BFF /* SettingView.swift */; };
 		CE9D9635270CAA040061BC1A /* DoseMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9D9634270CAA040061BC1A /* DoseMethod.swift */; };
 		CEACDDA626CF87200053A9E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA526CF87200053A9E1 /* AppDelegate.swift */; };
 		CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEACDDA726CF87200053A9E1 /* SceneDelegate.swift */; };
@@ -69,7 +69,6 @@
 		CE2B1B5E26FE441B00AA962E /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		CE2B1B6026FE44C500AA962E /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		CE6A672A270D8C7B00C65BFF /* TakableListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakableListView.swift; sourceTree = "<group>"; };
-		CE6A672D270D8E6800C65BFF /* PillNameButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillNameButton.swift; sourceTree = "<group>"; };
 		CE6A672F270D8EC000C65BFF /* PillMeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillMeButton.swift; sourceTree = "<group>"; };
 		CE6A6732270D8FEB00C65BFF /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		CE6A675427128E6C00C65BFF /* CDTakable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTakable+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -80,6 +79,7 @@
 		CE6A675927128E6C00C65BFF /* CDDoseRecord+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDDoseRecord+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CE6A675A27128E6C00C65BFF /* CDUser+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDUser+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CE6A675B27128E6C00C65BFF /* CDUser+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDUser+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		CE6A676627149F4800C65BFF /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		CE9D9634270CAA040061BC1A /* DoseMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMethod.swift; sourceTree = "<group>"; };
 		CEACDDA226CF87200053A9E1 /* Pillme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pillme.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEACDDA526CF87200053A9E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -158,15 +158,6 @@
 			path = TakableListView;
 			sourceTree = "<group>";
 		};
-		CE6A672C270D8E5100C65BFF /* CustomView */ = {
-			isa = PBXGroup;
-			children = (
-				CE6A672D270D8E6800C65BFF /* PillNameButton.swift */,
-				CE6A672F270D8EC000C65BFF /* PillMeButton.swift */,
-			);
-			path = CustomView;
-			sourceTree = "<group>";
-		};
 		CE6A6731270D8FCD00C65BFF /* MainView */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +165,14 @@
 				CE6A6732270D8FEB00C65BFF /* MainViewModel.swift */,
 			);
 			path = MainView;
+			sourceTree = "<group>";
+		};
+		CE6A676527149E9B00C65BFF /* SettingView */ = {
+			isa = PBXGroup;
+			children = (
+				CE6A676627149F4800C65BFF /* SettingView.swift */,
+			);
+			path = SettingView;
 			sourceTree = "<group>";
 		};
 		CEACDD9926CF87200053A9E1 = {
@@ -243,13 +242,14 @@
 		CEACDDD826CF87F70053A9E1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CE6A676527149E9B00C65BFF /* SettingView */,
 				CE6A6731270D8FCD00C65BFF /* MainView */,
-				CE6A672C270D8E5100C65BFF /* CustomView */,
 				CE6A6729270D8C4400C65BFF /* TakableListView */,
 				CEDF5E5726D7928F0078F6B4 /* CalendarView */,
 				CE16321126D0EC1300CD3307 /* DoseScheduleView */,
 				CE2B1B5826F9B77200AA962E /* LazyView.swift */,
 				CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */,
+				CE6A672F270D8EC000C65BFF /* PillMeButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -428,7 +428,6 @@
 				CE6A676227128E6C00C65BFF /* CDUser+CoreDataClass.swift in Sources */,
 				CE2B1B5D26FE2C0900AA962E /* NavigationBar.swift in Sources */,
 				CEACDDA826CF87200053A9E1 /* SceneDelegate.swift in Sources */,
-				CE6A672E270D8E6800C65BFF /* PillNameButton.swift in Sources */,
 				CE6A675C27128E6C00C65BFF /* CDTakable+CoreDataClass.swift in Sources */,
 				CEE72BB226F0F0490051083E /* PillMeDataStore.swift in Sources */,
 				CEACDDDE26CF88530053A9E1 /* Takable.swift in Sources */,
@@ -441,6 +440,7 @@
 				CE9D9635270CAA040061BC1A /* DoseMethod.swift in Sources */,
 				CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */,
 				CE6A676327128E6C00C65BFF /* CDUser+CoreDataProperties.swift in Sources */,
+				CE6A676727149F4800C65BFF /* SettingView.swift in Sources */,
 				CE6A676127128E6C00C65BFF /* CDDoseRecord+CoreDataProperties.swift in Sources */,
 				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
 				CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */,
@@ -667,7 +667,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XHSHW99SQG;
 				INFOPLIST_FILE = PillmeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -689,7 +689,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XHSHW99SQG;
 				INFOPLIST_FILE = PillmeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -15,21 +15,31 @@ struct DoseScheduleView: View {
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @StateObject var viewModel: DoseScheduleViewModel = DoseScheduleViewModel()
+    @ObservedObject var viewModel: DoseScheduleViewModel = DoseScheduleViewModel()
     @State private var showingAlert = false
-    @State var isEditMode: Bool = true
+    @State private var isEditMode: Bool = true
     @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
             Color.backgroundColor.ignoresSafeArea()
-                .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
-                    guard isEditMode else {
-                        presentationMode.wrappedValue.dismiss()
-                        return
-                    }
-                    showingAlert = true
-                })
+                .pillMeNavigationBar(
+                    title: viewModel.title,
+                    backButtonAction: {
+                        guard isEditMode else {
+                            presentationMode.wrappedValue.dismiss()
+                            return
+                        }
+                        showingAlert = true
+                    },
+                    rightView: isEditMode ? nil : AnyView(
+                        Button(action: {
+                            isEditMode = true
+                        }, label: {
+                            Text("수정")
+                                .foregroundColor(.white)
+                        })
+                    ))
                 .alert(isPresented: $showingAlert, content: {
                     Alert(title: Text("추가를 중단하고 나가기"),
                           message: Text("지금까지의 내용은 저장되지 않습니다. 정말 나가시겠습니까?"),
@@ -42,28 +52,32 @@ struct DoseScheduleView: View {
             VStack(spacing: 0) {
                 
                 ScrollView {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 10) {
                         ForEach(DoseScheduleQuestion.allCases, id: \.self) { question in
                             if let currentQuestion = viewModel.currentQuestion, question == currentQuestion {
                                 getQuestionView(of: question)
-                                    .padding(.top, currentQuestion == .takableType ? 0 : 15)
+                                    .padding(.top, 20)
+                                    .padding(.bottom, 20)
                             } else if question.rawValue < (viewModel.lastQuestion?.rawValue ?? DoseScheduleQuestion.oneDay.rawValue + 1) {
                                 HStack(spacing: 10) {
                                     getQuestionView(of: question)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                    Image(systemName: "pencil")
-                                        .frame(width: 44, alignment: .trailing)
-                                        .onTapGesture {
-                                            withAnimation {
-                                                self.viewModel.currentQuestion = question
+                                    if isEditMode {
+                                        Image(systemName: "pencil")
+                                            .frame(width: 44, alignment: .trailing)
+                                            .onTapGesture {
+                                                withAnimation {
+                                                    self.viewModel.currentQuestion = question
+                                                }
                                             }
-                                        }
+                                    } else {
+                                        Spacer()
+                                    }
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
                                 .background(Color.mainColor)
                                 .cornerRadius(5)
-                                
                             }
                         }
                         .background(Color.clear)
@@ -104,7 +118,10 @@ struct DoseScheduleView: View {
             }
             
         }.onAppear {
-            viewModel.reset()
+            viewModel.prepare()
+            if !viewModel.isNewTakable {
+                self.isEditMode = false
+            }
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
                 self.focusedField = .takableName // issue:: 두번째 변경부터는 적용되지 않는다.
@@ -206,58 +223,59 @@ struct DoseScheduleView: View {
     private var cycleQuestionView: some View {
         
         if viewModel.currentQuestion == .cycle {
-            if viewModel.cycle == 0 && viewModel.doseDays.isEmpty {
-                return AnyView(QuestionView(question: "어떻게 드시나요?") {
+            return AnyView(VStack(alignment: .leading, spacing: 30) {
+                QuestionView(question: "어떻게 드시나요?") {
                     HStack(alignment: .center) {
                         Button("매일매일 먹어요") {
                             self.viewModel.cycle = 1
                             self.viewModel.doseDays = []
                             self.viewModel.confirm()
-                        }.buttonStyle(PillMeButton(style: .small))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == 1 ? .tintColor : .mainColor, textColor: viewModel.cycle == 1 ? .mainColor : .white))
                         Button("요일별로 먹어요") {
                             self.viewModel.cycle = -1
                             self.viewModel.doseDays = []
-                        }.buttonStyle(PillMeButton(style: .small))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == -1 ? .tintColor : .mainColor, textColor: viewModel.cycle == -1 ? .mainColor : .white))
                         Button("주기에 따라 먹어요") {
                             self.viewModel.cycle = 2
                             self.viewModel.doseDays = []
-                        }.buttonStyle(PillMeButton(style: .small))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle >= 2 ? .tintColor : .mainColor, textColor: viewModel.cycle >= 2 ? .mainColor : .white))
                     }
-                })
-            } else if viewModel.cycle >= 1 {
-                return AnyView(QuestionView(question: "며칠에 한번 드세요?") {
-                    HStack(alignment: .center) {
-                        Spacer()
-                        TextField("", value: self.$viewModel.cycle, formatter: NumberFormatter())
-                            .keyboardType(.numberPad)
-                            .accentColor(.tintColor)
-                            .foregroundColor(.tintColor)
-                        Text("일 마다")
-                            .padding(.trailing, 20)
+                }
+                if viewModel.cycle >= 1 {
+                    QuestionView(question: "며칠에 한번 드세요?") {
+                        HStack(alignment: .center) {
+                            Spacer()
+                            TextField("", value: self.$viewModel.cycle, formatter: NumberFormatter())
+                                .keyboardType(.numberPad)
+                                .accentColor(.tintColor)
+                                .foregroundColor(.tintColor)
+                            Text("일 마다")
+                                .padding(.trailing, 20)
+                        }
+                        .font(.system(size: 20))
                     }
-                    .font(.system(size: 20))
-                })
-            } else if viewModel.cycle < 0 {
-                return AnyView(QuestionView(question: "무슨 요일에 드세요?") {
-                    HStack(alignment: .center) {
-                        ForEach(WeekDay.allCases, id: \.self) { doseDay in
-                            if let index = self.viewModel.doseDays.firstIndex(of: doseDay) {
-                                Button(doseDay.shortKor) {
-                                    self.viewModel.doseDays.remove(at: index)
+                } else if viewModel.cycle < 0 {
+                    QuestionView(question: "무슨 요일에 드세요?") {
+                        HStack(alignment: .center) {
+                            ForEach(WeekDay.allCases, id: \.self) { doseDay in
+                                if let index = self.viewModel.doseDays.firstIndex(of: doseDay) {
+                                    Button(doseDay.shortKor) {
+                                        self.viewModel.doseDays.remove(at: index)
+                                    }
+                                    .buttonStyle(PillMeButton(style: .small, color: .tintColor, textColor: .mainColor))
+                                } else {
+                                    Button(doseDay.shortKor) {
+                                        self.viewModel.doseDays.append(doseDay)
+                                    }
+                                    .buttonStyle(PillMeButton(style: .small, color: .mainColor, textColor: .white))
                                 }
-                                .buttonStyle(PillMeButton(style: .small, color: .tintColor, textColor: .mainColor))
-                            } else {
-                                Button(doseDay.shortKor) {
-                                    self.viewModel.doseDays.append(doseDay)
-                                }
-                                .buttonStyle(PillMeButton(style: .small, color: .mainColor, textColor: .white))
                             }
                         }
                     }
-                })
-            } else {
-                return AnyView(Spacer(minLength: 0))
-            }
+                } else {
+                    Spacer(minLength: 0)
+                }
+            })
         } else {
             if self.viewModel.cycle < 0 {
                 return AnyView(AnswerView(title: "복용 요일") {

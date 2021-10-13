@@ -59,7 +59,7 @@ struct ContentView: View {
                             .frame(width: 33, height: 33, alignment: .trailing)
                     }
                     .frame(width: 33, height: 33)
-                    NavigationLink(destination: LazyView(DoseScheduleView())) {
+                    NavigationLink(destination: LazyView(SettingView())) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
                             .frame(width: 33, height: 33, alignment: .trailing)

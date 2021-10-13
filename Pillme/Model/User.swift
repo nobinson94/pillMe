@@ -7,29 +7,49 @@
 
 import Foundation
 
-
+enum UserInfo: String {
+    case name
+    case age
+    case wakeUpTime
+    case breakfastTime
+    case lunchTime
+    case dinnerTime
+    case sleepTime
+    
+    var title: String {
+        switch self {
+        case .name: return "이름"
+        case .age: return "나이"
+        case .wakeUpTime: return "기상 시각"
+        case .breakfastTime: return "아침식사 시각"
+        case .lunchTime: return "점심식사 시각"
+        case .dinnerTime: return "저녁식사 시각"
+        case .sleepTime: return "취침 시각"
+        }
+    }
+    
+    var value: Any? {
+        let userDefault = UserDefaults.standard
+        let key = self.rawValue
+        
+        if self == .age {
+            return userDefault.integer(forKey: key)
+        } else {
+            return userDefault.string(forKey: key)
+        }
+    }
+}
 class UserInfoManager {
     static var shared: UserInfoManager = UserInfoManager()
     
-    var name: String = ""
-    var age: Int = 0
+    var name: String { UserInfo.name.value as? String ?? "" }
+    var age: Int? { UserInfo.age.value as? Int }
     
-    var wakeUpTime: String = "07:00"
-    var breakfastTime: String = "08:30"
-    var lunchTime: String = "12:30"
-    var dinnerTime: String = "18:00"
-    var sleepTime: String = "23:00"
-    
-    private init() {
-        let userDefault = UserDefaults.standard
-        self.name = userDefault.string(forKey: "userName") ?? ""
-        self.age = userDefault.integer(forKey: "age")
-        self.wakeUpTime = userDefault.string(forKey: "wakeUpTime") ?? "07:00"
-        self.breakfastTime = userDefault.string(forKey: "breakfastTime") ?? "08:30"
-        self.lunchTime = userDefault.string(forKey: "lunchTime") ?? "12:30"
-        self.dinnerTime = userDefault.string(forKey: "dinnerTime") ?? "18:00"
-        self.sleepTime = userDefault.string(forKey: "sleepTime") ?? "23:00"
-    }
+    var wakeUpTime: String { UserInfo.wakeUpTime.value as? String ?? "07:00" }
+    var breakfastTime: String { UserInfo.breakfastTime.value as? String ?? "08:30" }
+    var lunchTime: String { UserInfo.lunchTime.value as? String ?? "12:30" }
+    var dinnerTime: String { UserInfo.dinnerTime.value as? String ?? "19:00" }
+    var sleepTime: String { UserInfo.sleepTime.value as? String ?? "23:00" }
     
     var currentTime: TakeTime {
         let current = Date()
@@ -88,6 +108,17 @@ class UserInfoManager {
         }
         
         return sum / 3
+    }
+    
+    func save(name: String, age: Int, wakeUpTime: String, breakfastTime: String, lunchTime: String, dinnerTime: String, sleepTime: String) {
+        let userDefault = UserDefaults.standard
+        userDefault.set(name, forKey: UserInfo.name.rawValue)
+        userDefault.set(age, forKey: UserInfo.age.rawValue)
+        userDefault.set(wakeUpTime, forKey: UserInfo.wakeUpTime.rawValue)
+        userDefault.set(breakfastTime, forKey: UserInfo.breakfastTime.rawValue)
+        userDefault.set(lunchTime, forKey: UserInfo.lunchTime.rawValue)
+        userDefault.set(dinnerTime, forKey: UserInfo.dinnerTime.rawValue)
+        userDefault.set(sleepTime, forKey: UserInfo.sleepTime.rawValue)
     }
 }
 

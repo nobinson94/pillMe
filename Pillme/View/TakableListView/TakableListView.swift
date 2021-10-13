@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TakableListView: View {
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     @ObservedObject var viewModel: TakableListViewModel
     
     init(viewModel: TakableListViewModel = TakableListViewModel()) {
@@ -17,8 +19,11 @@ struct TakableListView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundColor.ignoresSafeArea()
-                .pillMeNavigationBar(title: "복용 중인 약 목록")
+            Color.mainColor.ignoresSafeArea()
+                .pillMeNavigationBar(title: "복용 중인 약 목록", backButtonAction: {
+                    presentationMode.wrappedValue.dismiss()
+                })
+            
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 5) {
                     ForEach(viewModel.takables, id: \.self) { takable in
@@ -43,6 +48,6 @@ class TakableListViewModel: ObservableObject {
     @Published var takables: [Takable] = []
     
     func fetch() {
-        takables = []
+        takables = PillMeDataManager.shared.getTakables()
     }
 }
