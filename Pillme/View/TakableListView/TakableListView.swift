@@ -1,5 +1,5 @@
 //
-//  TakableListView.swift
+//  PillListView.swift
 //  Pillme
 //
 //  Created by USER on 2021/10/06.
@@ -7,27 +7,27 @@
 import Combine
 import SwiftUI
 
-struct TakableListView: View {
+struct PillListView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject var viewModel: TakableListViewModel
+    @ObservedObject var viewModel: PillListViewModel
     
-    init(viewModel: TakableListViewModel = TakableListViewModel()) {
+    init(viewModel: PillListViewModel = PillListViewModel()) {
         self.viewModel = viewModel
     }
     
     var body: some View {
         ZStack {
             Color.mainColor.ignoresSafeArea()
-                .pillMeNavigationBar(title: "복용 중인 약 목록", backButtonAction: {
+                .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
                     presentationMode.wrappedValue.dismiss()
                 })
             
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 5) {
-                    ForEach(viewModel.takables, id: \.self) { takable in
-                        Text("\(takable.name)")
+                    ForEach(viewModel.pills, id: \.self) { pill in
+                        Text(pill.name)
                     }
                 }
             }
@@ -37,17 +37,35 @@ struct TakableListView: View {
     }
 }
 
-struct TakableListView_Previews: PreviewProvider {
+struct PillListView_Previews: PreviewProvider {
     static var previews: some View {
-        TakableListView()
+        PillListView()
     }
 }
 
-class TakableListViewModel: ObservableObject {
+class PillListViewModel: ObservableObject {
     
-    @Published var takables: [Takable] = []
+    @Published var pills: [Pill] = []
+    
+    enum ListType {
+        case today
+        case all
+    }
+    
+    var listType: ListType = .all
+    var title: String {
+        switch listType {
+        case .today: return "오늘 먹을 약 목록"
+        case .all: return "전체 약 목록"
+        }
+    }
     
     func fetch() {
-        takables = PillMeDataManager.shared.getTakables()
+        switch listType {
+        case .today:
+            pills = PillMeDataManager.shared.getPills(for: Date())
+        case .all:
+            pills = PillMeDataManager.shared.getPills()
+        }
     }
 }

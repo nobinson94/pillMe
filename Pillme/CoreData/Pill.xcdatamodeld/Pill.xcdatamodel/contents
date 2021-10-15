@@ -3,13 +3,14 @@
     <entity name="CDDoseMethod" representedClassName="CDDoseMethod" syncable="YES">
         <attribute name="num" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="time" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="takable" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTakable" inverseName="doseMethods" inverseEntity="CDTakable"/>
+        <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill" inverseName="doseMethods" inverseEntity="CDPill"/>
     </entity>
     <entity name="CDDoseRecord" representedClassName="CDDoseRecord" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="takable" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTakable" inverseName="doseRecords" inverseEntity="CDTakable"/>
+        <attribute name="takeTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="pill" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill" inverseName="doseRecords" inverseEntity="CDPill"/>
     </entity>
-    <entity name="CDTakable" representedClassName="CDTakable" syncable="YES">
+    <entity name="CDPill" representedClassName="CDPill" syncable="YES">
         <attribute name="cycle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="doseDays" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -17,19 +18,19 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" customClassName="TakableType"/>
-        <relationship name="doseMethods" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDDoseMethod" inverseName="takable" inverseEntity="CDDoseMethod"/>
-        <relationship name="doseRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDDoseRecord" inverseName="takable" inverseEntity="CDDoseRecord"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="takables" inverseEntity="CDUser"/>
+        <relationship name="doseMethods" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDDoseMethod" inverseName="pill" inverseEntity="CDDoseMethod"/>
+        <relationship name="doseRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDDoseRecord" inverseName="pill" inverseEntity="CDDoseRecord"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="pills" inverseEntity="CDUser"/>
     </entity>
     <entity name="CDUser" representedClassName="CDUser" syncable="YES">
         <attribute name="gender" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="takables" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDTakable" inverseName="user" inverseEntity="CDTakable"/>
+        <relationship name="pills" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill" inverseName="user" inverseEntity="CDPill"/>
     </entity>
     <elements>
-        <element name="CDDoseMethod" positionX="-58.7081298828125" positionY="-298.4666748046875" width="128" height="88"/>
-        <element name="CDDoseRecord" positionX="-293.8610839843751" positionY="5.339599609375" width="128" height="73"/>
-        <element name="CDTakable" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="193"/>
-        <element name="CDUser" positionX="-54" positionY="-9" width="128" height="88"/>
+        <element name="CDDoseMethod" positionX="-58.7081298828125" positionY="-298.4666748046875" width="128" height="74"/>
+        <element name="CDDoseRecord" positionX="-293.8610839843751" positionY="5.339599609375" width="128" height="74"/>
+        <element name="CDPill" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="179"/>
+        <element name="CDUser" positionX="-54" positionY="-9" width="128" height="74"/>
     </elements>
 </model>

@@ -1,5 +1,5 @@
 //
-//  CDTakable+CoreDataClass.swift
+//  CDPill+CoreDataClass.swift
 //  Pillme
 //
 //  Created by USER on 2021/10/10.
@@ -9,24 +9,24 @@
 import Foundation
 import CoreData
 
-@objc(CDTakable)
-public class CDTakable: NSManagedObject {
-    static func create(takable: Takable, in context: NSManagedObjectContext) -> CDTakable {
-        let cdTakable = CDTakable(context: context)
-        cdTakable.id = takable.id
-        cdTakable.name = takable.name
-        cdTakable.startDate = takable.startDate
-        cdTakable.endDate = takable.endDate
-        cdTakable.cycle = Int16(takable.cycle)
-        cdTakable.doseDays = takable.doseDays.map { $0.rawValue }
+@objc(CDPill)
+public class CDPill: NSManagedObject {
+    static func create(pill: Pill, in context: NSManagedObjectContext) -> CDPill {
+        let cdPill = CDPill(context: context)
+        cdPill.id = pill.id
+        cdPill.name = pill.name
+        cdPill.startDate = pill.startDate
+        cdPill.endDate = pill.endDate
+        cdPill.cycle = Int16(pill.cycle)
+        cdPill.doseDays = pill.doseDays.map { $0.rawValue }
         
-        let cdDoseMethods = takable.doseMethods.map { doseMethod -> CDDoseMethod in
+        let cdDoseMethods = pill.doseMethods.map { doseMethod -> CDDoseMethod in
             let cdDoseMethod = CDDoseMethod.create(doseMethod: doseMethod, in: context)
-            cdDoseMethod.takable = cdTakable
+            cdDoseMethod.pill = cdPill
             return cdDoseMethod
         }
-        cdTakable.addToDoseMethods(NSOrderedSet(array: cdDoseMethods))
+        cdPill.addToDoseMethods(NSOrderedSet(array: cdDoseMethods))
         
-        return cdTakable
+        return cdPill
     }
 }

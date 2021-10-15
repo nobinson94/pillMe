@@ -1,5 +1,5 @@
 //
-//  Takable.swift
+//  Pill.swift
 //  Pillme
 //
 //  Created by USER on 2021/08/20.
@@ -8,24 +8,24 @@
 import Combine
 import Foundation
 
-enum TakableType: Int, CaseIterable, Identifiable {
+enum PillType: Int, CaseIterable, Identifiable {
     var id: Int { self.rawValue }
     
-    case pill
+    case medicine
     case supplement
     
     var name: String {
         switch self {
-        case .pill: return "내복약"
+        case .medicine: return "내복약"
         case .supplement: return "영양제"
         }
     }
 }
 
-class Takable {
+class Pill {
     var id: String = UUID().uuidString
     var name: String = ""
-    var type: TakableType = .pill
+    var type: PillType = .medicine
     var startDate: Date = Date()
     var endDate: Date?
     var cycle: Int = 0
@@ -33,7 +33,7 @@ class Takable {
     var doseMethods: [DoseMethod] = []
     
     init(name: String,
-         type: TakableType = .pill,
+         type: PillType = .medicine,
          startDate: Date = Date(),
          endDate: Date? = nil,
          cycle: Int = 0,
@@ -48,24 +48,24 @@ class Takable {
         self.doseMethods = doseMethods
     }
     
-    init(cdTakable: CDTakable) {
-        self.id = cdTakable.id
-        self.name = cdTakable.name
-        self.type = TakableType(rawValue: Int(cdTakable.type)) ?? .pill
-        self.startDate = cdTakable.startDate
-        self.endDate = cdTakable.endDate
-        self.cycle = Int(cdTakable.cycle)
-        self.doseDays = cdTakable.doseDays.compactMap { WeekDay(rawValue: $0) }
-        self.doseMethods = (cdTakable.doseMethods as? [CDDoseMethod] ?? []).compactMap { DoseMethod(cdDoseMethod: $0) }
+    init(cdPill: CDPill) {
+        self.id = cdPill.id
+        self.name = cdPill.name
+        self.type = PillType(rawValue: Int(cdPill.type)) ?? .medicine
+        self.startDate = cdPill.startDate
+        self.endDate = cdPill.endDate
+        self.cycle = Int(cdPill.cycle)
+        self.doseDays = cdPill.doseDays.compactMap { WeekDay(rawValue: $0) }
+        self.doseMethods = []
     }
 }
 
-extension Takable: Hashable {
+extension Pill: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id.hashValue)
     }
 
-    static func == (lhs: Takable, rhs: Takable) -> Bool {
+    static func == (lhs: Pill, rhs: Pill) -> Bool {
         return lhs.id == rhs.id
     }
 }

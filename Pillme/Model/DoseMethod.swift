@@ -50,50 +50,58 @@ enum TakeTime: Int, CaseIterable {
         }
     }
     
-    func encourageMessage(takableName: String) -> String {
+    func encourageMessage(pillName: String) -> String {
         switch self {
-        case .afterWakeup: return "\(takableName) 드시고 하루를 시작하세요!"
-        case .beforeBreakfast: return "식전에 \(takableName)도 잊지 마시구요."
-        case .afterBreakfast: return "아침 식사 후 \(takableName) 잊지 않으셨죠?"
-        case .betweenBreakfastLunch: return "\(takableName) 드실 시간입니다"
-        case .beforeLunch: return "점심 전에 \(takableName) 꼭 먹기!"
-        case .afterLunch: return "식후엔 \(takableName) 빼먹지 마세요!"
-        case .betweenLunchDinner: return "\(takableName)도 잊지 마시구요."
-        case .beforeDinner: return "\(takableName) 드시고 저녁 식사하세요!"
-        case .afterDinner: return "\(takableName) 챙기세요!"
-        case .beforeSleep: return "\(takableName) 드시고 좋은 꿈 꾸세요."
+        case .afterWakeup: return "\(pillName) 드시고 하루를 시작하세요!"
+        case .beforeBreakfast: return "식전에 \(pillName)도 잊지 마시구요."
+        case .afterBreakfast: return "아침 식사 후 \(pillName) 잊지 않으셨죠?"
+        case .betweenBreakfastLunch: return "\(pillName) 드실 시간입니다"
+        case .beforeLunch: return "점심 전에 \(pillName) 꼭 먹기!"
+        case .afterLunch: return "식후엔 \(pillName) 빼먹지 마세요!"
+        case .betweenLunchDinner: return "\(pillName)도 잊지 마시구요."
+        case .beforeDinner: return "\(pillName) 드시고 저녁 식사하세요!"
+        case .afterDinner: return "\(pillName) 챙기세요!"
+        case .beforeSleep: return "\(pillName) 드시고 좋은 꿈 꾸세요."
         }
     }
     
-    func encourageMessageView(takableName: String) -> some View { // todo
-        Text(self.encourageMessage(takableName: takableName))
+    func encourageMessageView(pillName: String) -> some View { // todo
+        Text(self.encourageMessage(pillName: pillName))
+    }
+    
+    var nextTime: TakeTime {
+        return TakeTime(rawValue: self.rawValue + 1) ?? .afterWakeup
+    }
+    
+    var prevTime: TakeTime {
+        return TakeTime(rawValue: self.rawValue - 1) ?? .beforeSleep
     }
 }
 
 class DoseMethod {
     var time: TakeTime
     var num: Int = 1
-    var takable: Takable?
+    var pill: Pill?
     
-    init(time: TakeTime, num: Int = 1, takable: Takable? = nil) {
+    init(time: TakeTime, num: Int = 1, pill: Pill? = nil) {
         self.time = time
         self.num = num
-        self.takable = takable
+        self.pill = pill
     }
     
     init(cdDoseMethod: CDDoseMethod) {
         self.time = TakeTime(rawValue: Int(cdDoseMethod.time)) ?? .afterWakeup
         self.num = Int(cdDoseMethod.num)
-        self.takable = Takable(cdTakable: cdDoseMethod.takable)
+        self.pill = Pill(cdPill: cdDoseMethod.pill)
     }
 }
 
 extension DoseMethod: Hashable {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(takable?.id.hashValue)
+        hasher.combine(pill?.id.hashValue)
     }
 
     static func == (lhs: DoseMethod, rhs: DoseMethod) -> Bool {
-        return lhs.time == rhs.time && lhs.takable == rhs.takable
+        return lhs.time == rhs.time && lhs.pill == rhs.pill
     }
 }

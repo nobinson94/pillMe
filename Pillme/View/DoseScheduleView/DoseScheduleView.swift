@@ -1,5 +1,5 @@
 //
-//  DoseScheduleView.swift
+//  PillInfoView.swift
 //  Pillme
 //
 //  Created by USER on 2021/08/20.
@@ -7,15 +7,15 @@
 import Combine
 import SwiftUI
 
-struct DoseScheduleView: View {
+struct PillInfoView: View {
     
     enum Field: Hashable {
-        case takableName
+        case pillName
     }
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject var viewModel: DoseScheduleViewModel = DoseScheduleViewModel()
+    @ObservedObject var viewModel: PillInfoViewModel = PillInfoViewModel()
     @State private var showingAlert = false
     @State private var isEditMode: Bool = true
     @FocusState private var focusedField: Field?
@@ -119,12 +119,12 @@ struct DoseScheduleView: View {
             
         }.onAppear {
             viewModel.prepare()
-            if !viewModel.isNewTakable {
+            if !viewModel.isNewpill {
                 self.isEditMode = false
             }
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
-                self.focusedField = .takableName // issue:: 두번째 변경부터는 적용되지 않는다.
+                self.focusedField = .pillName // issue:: 두번째 변경부터는 적용되지 않는다.
             } else {
                 self.focusedField = nil
             }
@@ -134,7 +134,7 @@ struct DoseScheduleView: View {
     func getQuestionView(of step: DoseScheduleQuestion) -> AnyView {
         let view: AnyView
         switch step {
-        case .takableType: view = AnyView(takableTypeQuestionView)
+        case .pillType: view = AnyView(pillTypeQuestionView)
         case .name: view = AnyView(nameQuestionView)
         case .startDate: view = AnyView(startDateQuestionView)
         case .cycle: view = AnyView(cycleQuestionView)
@@ -143,12 +143,12 @@ struct DoseScheduleView: View {
         return view
     }
     
-    private var takableTypeQuestionView: some View {
+    private var pillTypeQuestionView: some View {
         
-        if viewModel.currentQuestion == .takableType {
+        if viewModel.currentQuestion == .pillType {
             return AnyView(QuestionView(question: "약의 종류는 무엇인가요?") {
                 HStack(alignment: .center, spacing: 5) {
-                    ForEach(TakableType.allCases, id: \.self) { type in
+                    ForEach(PillType.allCases, id: \.self) { type in
                         let isSelected = self.viewModel.type == type
                         Button(type.name) {
                             if viewModel.type == nil {
@@ -183,7 +183,7 @@ struct DoseScheduleView: View {
                     TextField("", text: $viewModel.name)
                         .underlineTextField()
                         .font(.system(size: 20))
-                        .focused($focusedField, equals: .takableName)
+                        .focused($focusedField, equals: .pillName)
                 }
             } else {
                 AnswerView(title: "이름") {
@@ -377,9 +377,9 @@ struct DoseScheduleView: View {
     }
 }
 
-struct DoseScheduleView_Previews: PreviewProvider {
+struct PillInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        DoseScheduleView()
+        PillInfoView()
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  NewDoseScheduleViewModel.swift
+//  PillInfoViewModel.swift
 //  Pillme
 //
 //  Created by USER on 2021/08/20.
@@ -11,20 +11,20 @@ import Foundation
 import SwiftUI
 
 enum DoseScheduleQuestion: Int, CaseIterable {
-    case takableType
+    case pillType
     case name
     case startDate
     case cycle
     case oneDay
 }
 
-class DoseScheduleViewModel: ObservableObject {
-    @Published var currentQuestion: DoseScheduleQuestion? = .takableType
-    @Published var lastQuestion: DoseScheduleQuestion? = .takableType
+class PillInfoViewModel: ObservableObject {
+    @Published var currentQuestion: DoseScheduleQuestion? = .pillType
+    @Published var lastQuestion: DoseScheduleQuestion? = .pillType
     
     @Published var id: String = UUID().uuidString
     @Published var name: String = ""
-    @Published var type: TakableType?
+    @Published var type: PillType?
     @Published var startDate: Date = Date()
     @Published var endDate: Date?
     @Published var cycle: Int = 0
@@ -32,10 +32,10 @@ class DoseScheduleViewModel: ObservableObject {
     @Published var doseMethods: [DoseMethod] = []
     
     var bag = Set<AnyCancellable>()
-    var isNewTakable: Bool = true
+    var isNewpill: Bool = true
     
     var title: String {
-        guard !isNewTakable else {
+        guard !isNewpill else {
             return "새로운 약 추가하기"
         }
         
@@ -44,7 +44,7 @@ class DoseScheduleViewModel: ObservableObject {
     
     var canConfirm: Bool {
         switch currentQuestion {
-        case .takableType: return type != nil
+        case .pillType: return type != nil
         case .name: return !name.isEmpty
         case .cycle: return !doseDays.isEmpty || cycle > 0
         case .oneDay: return !doseMethods.isEmpty
@@ -57,21 +57,21 @@ class DoseScheduleViewModel: ObservableObject {
     }
     
     init(id: String? = nil) {
-        self.isNewTakable = id == nil
+        self.isNewpill = id == nil
         self.id = id ?? UUID().uuidString
     }
     
     func fetch(id: String) {
-        guard let takable = PillMeDataManager.shared.getTakable(id: id) else {
+        guard let pill = PillMeDataManager.shared.getPill(id: id) else {
             return
         }
-        self.name = takable.name
-        self.type = takable.type
-        self.startDate = takable.startDate
-        self.endDate = takable.endDate
-        self.cycle = takable.cycle
-        self.doseDays = takable.doseDays
-        self.doseMethods = takable.doseMethods
+        self.name = pill.name
+        self.type = pill.type
+        self.startDate = pill.startDate
+        self.endDate = pill.endDate
+        self.cycle = pill.cycle
+        self.doseDays = pill.doseDays
+        self.doseMethods = pill.doseMethods
     }
     
     func confirm() {
@@ -101,7 +101,7 @@ class DoseScheduleViewModel: ObservableObject {
     }
 
     func prepare() {
-        guard !isNewTakable else {
+        guard !isNewpill else {
             reset()
             return
         }
@@ -117,19 +117,19 @@ class DoseScheduleViewModel: ObservableObject {
     
     func save(_ completion: (() -> Void)? = nil) {
         guard let type = type else { return }
-        if isNewTakable {
-            let takable = Takable(name: name, type: type, startDate: startDate, cycle: cycle, doseDays: doseDays, doseMethods: doseMethods)
-            PillMeDataManager.shared.add(takable) {
-                self.isNewTakable = false
+        if isNewpill {
+            let pill = Pill(name: name, type: type, startDate: startDate, cycle: cycle, doseDays: doseDays, doseMethods: doseMethods)
+            PillMeDataManager.shared.add(pill) {
+                self.isNewpill = false
                 completion?()
             }
         } else {
-            PillMeDataManager.shared.updateTakable(id: id) { cdTakable in
-                cdTakable.name = self.name
-                cdTakable.type = Int16(type.rawValue)
-                cdTakable.cycle = Int16(self.cycle)
-                cdTakable.startDate = self.startDate
-                cdTakable.doseDays = self.doseDays.map { $0.rawValue }
+            PillMeDataManager.shared.updatePill(id: id) { cdpill in
+                cdpill.name = self.name
+                cdpill.type = Int16(type.rawValue)
+                cdpill.cycle = Int16(self.cycle)
+                cdpill.startDate = self.startDate
+                cdpill.doseDays = self.doseDays.map { $0.rawValue }
             } completion: {
                 completion?()
             }

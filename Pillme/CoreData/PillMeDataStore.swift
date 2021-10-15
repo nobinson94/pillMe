@@ -69,76 +69,86 @@ class PillMeDataManager {
         self.dataStore = dataStore
     }
     
-    func add(_ takable: Takable, completion: (() -> Void)? = nil) {
-        let cdTakable = CDTakable.create(takable: takable, in: dataStore.container.viewContext)
-        dataStore.add(object: cdTakable)
+    func add(_ pill: Pill, completion: (() -> Void)? = nil) {
+        let cdPill = CDPill.create(pill: pill, in: dataStore.container.viewContext)
+        dataStore.add(object: cdPill)
         completion?()
     }
     
-    func deleteTakable(id: String, completion: (() -> Void)? = nil) {
-        guard let cdTakable = getCDTakable(id: id) else { return }
-        dataStore.delete(object: cdTakable)
+    func deletePill(id: String, completion: (() -> Void)? = nil) {
+        guard let cdPill = getCDPill(id: id) else { return }
+        dataStore.delete(object: cdPill)
         completion?()
     }
     
-    func updateTakable(id: String, closure: @escaping (CDTakable) -> Void, completion: (() -> Void)? = nil) {
-        guard let cdTakable = getCDTakable(id: id) else { return }
+    func updatePill(id: String, closure: @escaping (CDPill) -> Void, completion: (() -> Void)? = nil) {
+        guard let cdPill = getCDPill(id: id) else { return }
         dataStore.update {
-            closure(cdTakable)
+            closure(cdPill)
         }
     }
     
-    private func getCDTakable(id: String) -> CDTakable? {
-        let request = NSFetchRequest<CDTakable>(entityName: CDTakable.description())
+    private func getCDPill(id: String) -> CDPill? {
+        let request = NSFetchRequest<CDPill>(entityName: CDPill.description())
         request.predicate = NSPredicate(format: "id == %@", "\(id)")
         return dataStore.fetch(with: request).first
     }
     
-    func getTakable(id: String) -> Takable? {
-        guard let cdTakable = getCDTakable(id: id) else { return nil }
-        let takable = Takable(cdTakable: cdTakable)
-        takable.doseMethods = self.getDoseMethods(for: id)
+    func getPill(id: String) -> Pill? {
+        guard let cdPill = getCDPill(id: id) else { return nil }
+        let pill = Pill(cdPill: cdPill)
+        pill.doseMethods = self.getDoseMethods(for: id)
         
-        return takable
+        return pill
     }
     
-    func getTakables(for date: Date? = nil) -> [Takable] {
-        let request = NSFetchRequest<CDTakable>(entityName: CDTakable.description())
+    func getPills(for date: Date? = nil) -> [Pill] {
+        let request = NSFetchRequest<CDPill>(entityName: CDPill.description())
         
-        let takables: [Takable] = dataStore.fetch(with: request)
+        let pills: [Pill] = dataStore.fetch(with: request)
             .map {
-                let takable = Takable(cdTakable: $0)
-                takable.doseMethods = self.getDoseMethods(for: $0.id)
-                return takable
+                let pill = Pill(cdPill: $0)
+                pill.doseMethods = self.getDoseMethods(for: $0.id)
+                return pill
             }
         
         if let date = date {
-            return takables.filter { date.isTakeDay(of: $0) }
+            return pills.filter { date.isTakeDay(of: $0) }
         }
-        return takables
+        return pills
     }
     
-    func getDoseMethods(for takableId: String) -> [DoseMethod] {
+    func getDoseMethods(for pillId: String) -> [DoseMethod] {
         let request = NSFetchRequest<CDDoseMethod>(entityName: CDDoseMethod.description())
-        request.predicate = NSPredicate(format: "takable.id == %@", "\(takableId)")
+        request.predicate = NSPredicate(format: "pill.id == %@", "\(pillId)")
         let doseMethods = dataStore.fetch(with: request).map { DoseMethod(cdDoseMethod: $0) }
         return doseMethods
+    }
+    
+    func deletePill(for pillId: String) -> Pill? {
+        guard let cdPill = getCDPill(id: pillId) else {
+            return nil
+        }
+        
+        dataStore.delete(object: cdPill)
+        
+        return Pill(cdPill: cdPill)
     }
 }
 
 
 extension Date {
-    func isTakeDay(of takable: Takable) -> Bool {
-        let startDate = Calendar.current.startOfDay(for: takable.startDate)
+    func isTakeDay(of pill: Pill) -> Bool {
+        let startDate = Calendar.current.startOfDay(for: pill.startDate)
         guard startDate < self else { return false }
         
-        if takable.cycle == 1 {
+        if pill.cycle == 1 {
             return true
-        } else if takable.cycle > 1 {
+        } else if pill.cycle > 1 {
             guard let distanceOfDay = Calendar.current.dateComponents([.day], from: startDate, to: Calendar.current.startOfDay(for: self)).day else { return false }
-            return (distanceOfDay + 1)%takable.cycle == 0
-        } else if !takable.doseDays.isEmpty {
-            return takable.doseDays.contains(self.weekDay)
+            return (distanceOfDay + 1)%pill.cycle == 0
+        } else if !pill.doseDays.isEmpty {
+            return pill.doseDays.contains(self.weekDay)
         }
         
         return false

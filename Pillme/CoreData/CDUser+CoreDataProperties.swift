@@ -18,7 +18,7 @@ extension CDUser {
 
     @NSManaged public var gender: String?
     @NSManaged public var name: String?
-    @NSManaged public var takables: CDTakable?
+    @NSManaged public var pills: CDPill?
 
 }
 

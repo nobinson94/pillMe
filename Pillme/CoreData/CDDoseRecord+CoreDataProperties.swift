@@ -16,8 +16,9 @@ extension CDDoseRecord {
         return NSFetchRequest<CDDoseRecord>(entityName: "CDDoseRecord")
     }
 
-    @NSManaged public var date: Date?
-    @NSManaged public var takable: CDTakable?
+    @NSManaged public var date: Date
+    @NSManaged public var pill: CDPill
+    @NSManaged public var takeTime: Int16
 
 }
 

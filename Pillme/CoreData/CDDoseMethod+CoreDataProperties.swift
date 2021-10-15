@@ -18,7 +18,7 @@ extension CDDoseMethod {
 
     @NSManaged public var num: Int16
     @NSManaged public var time: Int16
-    @NSManaged public var takable: CDTakable
+    @NSManaged public var pill: CDPill
 
 }
 

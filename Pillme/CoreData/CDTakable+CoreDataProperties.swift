@@ -1,5 +1,5 @@
 //
-//  CDTakable+CoreDataProperties.swift
+//  CDPill+CoreDataProperties.swift
 //  Pillme
 //
 //  Created by USER on 2021/10/10.
@@ -9,11 +9,10 @@
 import Foundation
 import CoreData
 
+extension CDPill {
 
-extension CDTakable {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<CDTakable> {
-        return NSFetchRequest<CDTakable>(entityName: "CDTakable")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CDPill> {
+        return NSFetchRequest<CDPill>(entityName: "CDPill")
     }
 
     @NSManaged public var cycle: Int16
@@ -30,7 +29,7 @@ extension CDTakable {
 }
 
 // MARK: Generated accessors for doseMethods
-extension CDTakable {
+extension CDPill {
 
     @objc(insertObject:inDoseMethodsAtIndex:)
     @NSManaged public func insertIntoDoseMethods(_ value: CDDoseMethod, at idx: Int)
@@ -65,7 +64,7 @@ extension CDTakable {
 }
 
 // MARK: Generated accessors for doseRecords
-extension CDTakable {
+extension CDPill {
 
     @objc(addDoseRecordsObject:)
     @NSManaged public func addToDoseRecords(_ value: CDDoseRecord)
@@ -81,6 +80,6 @@ extension CDTakable {
 
 }
 
-extension CDTakable : Identifiable {
+extension CDPill : Identifiable {
 
 }
