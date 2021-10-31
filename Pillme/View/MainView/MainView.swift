@@ -24,8 +24,9 @@ struct MainView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 27, weight: .bold, design: .default))
                 .foregroundColor(.white)
-                
                 SectionView(title: "지금 먹을 약", showMoreButton: true) {
+                    PillListView(viewModel: PillListViewModel(listType: .today))
+                } content: {
                     if viewModel.nowPills.isEmpty {
                         VStack(spacing: 0){
                             Text("지금은 복용하실 약이 없어요!")
@@ -116,6 +117,8 @@ struct MainView: View {
                 }
                 
                 SectionView(title: "복용 중인 약", showMoreButton: true) {
+                    PillListView(viewModel: PillListViewModel(listType: .all))
+                } content: {
                     if viewModel.allPills.isEmpty {
                         VStack(spacing: 0){
                             Text("오늘은 먹을 약이 없네요.\n건강을 위해 영양제를 추가해보세요!").lineSpacing(10)
@@ -195,13 +198,15 @@ struct SectionView<Link: View, Content: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack {
-                Text(title).foregroundColor(.white).font(.title2).fontWeight(.bold)
-                Spacer()
-                if showMoreButton {
-                    Image(systemName: "chevron.forward")
+            NavigationLink(destination: LazyView(link)) {
+                HStack {
+                    Text(title).foregroundColor(.white).font(.title2).fontWeight(.bold)
+                    Spacer()
+                    if showMoreButton {
+                        Image(systemName: "chevron.forward")
+                    }
                 }
-            }
+            }.foregroundColor(.white)
             content
         }
         .padding(20)

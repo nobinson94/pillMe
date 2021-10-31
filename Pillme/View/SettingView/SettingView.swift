@@ -25,12 +25,11 @@ struct SettingView: View {
                 .pillMeNavigationBar(
                     title: viewModel.title,
                     backButtonAction: {
-                        presentationMode.wrappedValue.dismiss() // 삭제
-//                        guard isEditMode && viewModel.isEdited else {
-//                            presentationMode.wrappedValue.dismiss()
-//                            return
-//                        }
-//                        showingAlert = true
+                        guard isEditMode && viewModel.isEdited else {
+                            presentationMode.wrappedValue.dismiss()
+                            return
+                        }
+                        showingAlert = true
                     }, rightView: isEditMode ?
                     AnyView(Button(action: {
                         viewModel.save()
@@ -71,9 +70,6 @@ struct SettingView: View {
                             TextField("나이를 입력해주세요",
                                       value: $viewModel.age,
                                       formatter: NumberFormatter())
-//                                      onCommit: {
-//                                            validate
-//                                        })
                                 .keyboardType(.asciiCapableNumberPad)
                         } else {
                             if let age = viewModel.age, age > 0 {
@@ -175,8 +171,11 @@ class SettingViewModel: ObservableObject {
     var isEdited: Bool {
         self.name == UserInfoManager.shared.name &&
         self.age == UserInfoManager.shared.age &&
-        self.wakeUpTime == UserInfoManager.shared.wakeUpTime.time &&
-        self.breakfastTime == UserInfoManager.shared.breakfastTime.time
+        self.wakeUpTime.timeString == UserInfoManager.shared.wakeUpTime &&
+        self.breakfastTime.timeString == UserInfoManager.shared.breakfastTime &&
+        self.lunchTime.timeString == UserInfoManager.shared.lunchTime &&
+        self.dinnerTime.timeString == UserInfoManager.shared.dinnerTime &&
+        self.sleepTime.timeString == UserInfoManager.shared.sleepTime
     }
     
     var bag = Set<AnyCancellable>()

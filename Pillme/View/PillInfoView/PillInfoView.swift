@@ -31,15 +31,7 @@ struct PillInfoView: View {
                             return
                         }
                         showingAlert = true
-                    },
-                    rightView: isEditMode ? nil : AnyView(
-                        Button(action: {
-                            isEditMode = true
-                        }, label: {
-                            Text("수정")
-                                .foregroundColor(.white)
-                        })
-                    ))
+                    }, rightView: navigationRightView)
                 .alert(isPresented: $showingAlert, content: {
                     Alert(title: Text("추가를 중단하고 나가기"),
                           message: Text("지금까지의 내용은 저장되지 않습니다. 정말 나가시겠습니까?"),
@@ -141,6 +133,27 @@ struct PillInfoView: View {
         case .oneDay: view = AnyView(oneDayQuestionView)
         }
         return view
+    }
+    
+    
+    private var navigationRightView: some View {
+        if !isEditMode {
+            return AnyView(Button {
+                self.isEditMode.toggle()
+            } label: {
+                Text("수정").foregroundColor(.white)
+            })
+        } else if viewModel.isNewpill {
+            return AnyView(EmptyView())
+        } else {
+            return AnyView(Button {
+                viewModel.deletePill {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            } label: {
+                Text("삭제").foregroundColor(.white)
+            })
+        }
     }
     
     private var pillTypeQuestionView: some View {

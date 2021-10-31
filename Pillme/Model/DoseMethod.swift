@@ -69,12 +69,71 @@ enum TakeTime: Int, CaseIterable {
         Text(self.encourageMessage(pillName: pillName))
     }
     
+    static var current: TakeTime {
+        let nowComponents = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        return TakeTime.allCases.min { lhs, rhs in
+            nowComponents.hourMinuteGap(with: lhs.components) < nowComponents.hourMinuteGap(with: rhs.components)
+        } ?? .afterWakeup
+    }
+    
+    static var closestNext: TakeTime {
+        let nowComponents = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        
+        return TakeTime.allCases.first { takeTime in
+            return nowComponents < takeTime.components
+        } ?? .afterWakeup
+    }
+    
+    var components: DateComponents {
+        let userInfo = UserInfoManager.shared
+        let minute = 60
+        let time: Date
+        switch self {
+        case .afterWakeup:
+            time = userInfo.wakeUpTime.time
+        case .beforeBreakfast:
+            time = userInfo.breakfastTime.time - TimeInterval(30 * minute)
+        case .afterBreakfast:
+            time = userInfo.breakfastTime.time + TimeInterval(30 * minute)
+        case .betweenBreakfastLunch:
+            let difference = userInfo.lunchTime.time.timeIntervalSince(userInfo.breakfastTime.time)
+            time = userInfo.breakfastTime.time + difference / 2
+        case .beforeLunch:
+            time = userInfo.lunchTime.time - TimeInterval(30 * minute)
+        case .afterLunch:
+            time = userInfo.lunchTime.time + TimeInterval(30 * minute)
+        case .betweenLunchDinner:
+            let difference = userInfo.dinnerTime.time.timeIntervalSince(userInfo.lunchTime.time)
+            time = userInfo.lunchTime.time + difference / 2
+        case .beforeDinner:
+            time = userInfo.dinnerTime.time - TimeInterval(30 * minute)
+        case .afterDinner:
+            time = userInfo.dinnerTime.time + TimeInterval(30 * minute)
+        case .beforeSleep:
+            time = userInfo.sleepTime.time - TimeInterval(30 * minute)
+        }
+        
+        return Calendar.current.dateComponents([.hour, .minute], from: time)
+    }
+    
     var nextTime: TakeTime {
         return TakeTime(rawValue: self.rawValue + 1) ?? .afterWakeup
     }
     
     var prevTime: TakeTime {
         return TakeTime(rawValue: self.rawValue - 1) ?? .beforeSleep
+    }
+    
+    var alertTime: DateComponents {
+        let minute = 60
+        guard let date = components.date else {
+            return DateComponents(hour: components.hour, minute: components.minute)
+        }
+        return Calendar.current.dateComponents([.hour, .minute], from: date - TimeInterval(15 * minute))
+    }
+    
+    var isLastTimeOfADay: Bool {
+        return self.nextTime.components < self.components
     }
 }
 
@@ -92,7 +151,6 @@ class DoseMethod {
     init(cdDoseMethod: CDDoseMethod) {
         self.time = TakeTime(rawValue: Int(cdDoseMethod.time)) ?? .afterWakeup
         self.num = Int(cdDoseMethod.num)
-        self.pill = Pill(cdPill: cdDoseMethod.pill)
     }
 }
 
@@ -103,5 +161,17 @@ extension DoseMethod: Hashable {
 
     static func == (lhs: DoseMethod, rhs: DoseMethod) -> Bool {
         return lhs.time == rhs.time && lhs.pill == rhs.pill
+    }
+}
+
+extension DateComponents {
+    var hourMinuteIndex: Int {
+        return (self.hour ?? 0)*60 + (self.minute ?? 0)
+    }
+    func hourMinuteGap(with other: DateComponents) -> Int {
+        guard self.hourMinuteIndex > other.hourMinuteIndex else {
+            return (24*60) - other.hourMinuteIndex + self.hourMinuteIndex
+        }
+        return self.hourMinuteIndex - other.hourMinuteIndex
     }
 }

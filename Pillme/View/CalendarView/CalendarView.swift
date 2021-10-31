@@ -322,6 +322,8 @@ extension Date {
         } else {
             formatter.dateFormat = "yyyy년 M월 dd일"
         }
+        formatter.timeZone = TimeZone.autoupdatingCurrent
+        formatter.locale = Locale.current
         
         if Calendar.current.isDateInToday(self) {
             return "오늘 (\(formatter.string(from: self)))"
@@ -333,7 +335,36 @@ extension Date {
     var timeString: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
+        formatter.timeZone = TimeZone.autoupdatingCurrent
+        formatter.locale = Locale.current
         
         return formatter.string(from: self)
     }
+    
+    func compareOnlyTime(_ other: Date) -> ComparisonResult {
+        guard self.hour != other.hour else {
+            if self.minute == other.minute {
+                return .orderedSame
+            } else if self.minute < other.minute {
+                return .orderedAscending
+            } else {
+                return .orderedDescending
+            }
+        }
+        
+        if self.hour < other.hour {
+            return .orderedAscending
+        } else {
+            return .orderedDescending
+        }
+    }
+    
+    var tommorrow: Date {
+        self.addingTimeInterval(86400)
+    }
+    
+    var yesterday: Date {
+        self.addingTimeInterval(-86400)
+    }
+    
 }

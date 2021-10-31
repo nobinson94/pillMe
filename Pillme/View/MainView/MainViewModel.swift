@@ -20,7 +20,7 @@ class MainViewModel: ObservableObject {
     }
     
     var currentTime: TakeTime {
-        UserInfoManager.shared.currentTime
+        TakeTime.current
     }
     
     var prevTime: TakeTime? {

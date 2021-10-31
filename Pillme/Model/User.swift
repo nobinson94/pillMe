@@ -39,8 +39,11 @@ enum UserInfo: String {
         }
     }
 }
+
 class UserInfoManager {
     static var shared: UserInfoManager = UserInfoManager()
+    
+    private let minute: Int = 60
     
     var name: String { UserInfo.name.value as? String ?? "" }
     var age: Int? { UserInfo.age.value as? Int }
@@ -50,65 +53,6 @@ class UserInfoManager {
     var lunchTime: String { UserInfo.lunchTime.value as? String ?? "12:30" }
     var dinnerTime: String { UserInfo.dinnerTime.value as? String ?? "19:00" }
     var sleepTime: String { UserInfo.sleepTime.value as? String ?? "23:00" }
-    
-    var currentTime: TakeTime {
-        let current = Date()
-
-        switch current.timeIndex {
-        case midTimeIndex(sleepTime.timeIndex, wakeUpTime.timeIndex)..<wakeUpTime.timeIndex:
-            return .afterWakeup
-        case wakeUpTime.timeIndex..<breakfastTime.timeIndex:
-            if (breakfastTime.timeIndex - current.timeIndex) > (current.timeIndex-wakeUpTime.timeIndex) {
-                return .beforeBreakfast
-            } else {
-                return .afterWakeup
-            }
-        case breakfastTime.timeIndex..<lunchTime.timeIndex:
-            let oneThird = oneThirdTimeIndex(breakfastTime.timeIndex, lunchTime.timeIndex)
-            if current.timeIndex < oneThird {
-                return .afterBreakfast
-            } else if current.timeIndex < 2*oneThird {
-                return .betweenBreakfastLunch
-            } else {
-                return .beforeLunch
-            }
-        case lunchTime.timeIndex..<dinnerTime.timeIndex:
-            let oneThird = oneThirdTimeIndex(lunchTime.timeIndex, dinnerTime.timeIndex)
-            if current.timeIndex < oneThird {
-                return .afterLunch
-            } else if current.timeIndex < 2*oneThird {
-                return .betweenLunchDinner
-            } else {
-                return .beforeDinner
-            }
-        case dinnerTime.timeIndex..<sleepTime.timeIndex:
-            if (sleepTime.timeIndex - current.timeIndex) > (current.timeIndex-dinnerTime.timeIndex) {
-                return .afterDinner
-            } else {
-                return .beforeSleep
-            }
-        default:
-            return .beforeSleep
-        }
-    }
-    
-    private func midTimeIndex(_ firstTimeIndex: Int, _ secondTimeIndex: Int) -> Int {
-        var sum = (firstTimeIndex + secondTimeIndex)
-        if sum > 1440 {
-            sum -= 1440 // 60*24
-        }
-        
-        return sum / 2
-    }
-    
-    private func oneThirdTimeIndex(_ firstTimeIndex: Int, _ secondTimeIndex: Int) -> Int {
-        var sum = (firstTimeIndex + secondTimeIndex)
-        if sum > 1440 {
-            sum -= 1440 // 60*24
-        }
-        
-        return sum / 3
-    }
     
     func save(name: String, age: Int, wakeUpTime: String, breakfastTime: String, lunchTime: String, dinnerTime: String, sleepTime: String) {
         let userDefault = UserDefaults.standard
@@ -134,5 +78,9 @@ private extension String {
 private extension Date {
     var timeIndex: Int {
         return self.hour*60 + self.minute
+    }
+    
+    func add(minute: Int) -> Date {
+        return Calendar.current.date(byAdding: .minute, value: minute, to: self) ?? self.addingTimeInterval(TimeInterval(60*minute))
     }
 }

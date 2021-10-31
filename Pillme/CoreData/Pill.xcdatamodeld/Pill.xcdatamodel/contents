@@ -28,8 +28,8 @@
         <relationship name="pills" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPill" inverseName="user" inverseEntity="CDPill"/>
     </entity>
     <elements>
-        <element name="CDDoseMethod" positionX="-58.7081298828125" positionY="-298.4666748046875" width="128" height="74"/>
-        <element name="CDDoseRecord" positionX="-293.8610839843751" positionY="5.339599609375" width="128" height="74"/>
+        <element name="CDDoseMethod" positionX="-58.7081298828125" positionY="-298.4666748046875" width="128" height="73"/>
+        <element name="CDDoseRecord" positionX="-293.8610839843751" positionY="5.339599609375" width="128" height="88"/>
         <element name="CDPill" positionX="-297.37548828125" positionY="-290.3774108886719" width="128" height="179"/>
         <element name="CDUser" positionX="-54" positionY="-9" width="128" height="74"/>
     </elements>

@@ -124,15 +124,28 @@ class PillInfoViewModel: ObservableObject {
                 completion?()
             }
         } else {
-            PillMeDataManager.shared.updatePill(id: id) { cdpill in
-                cdpill.name = self.name
-                cdpill.type = Int16(type.rawValue)
-                cdpill.cycle = Int16(self.cycle)
-                cdpill.startDate = self.startDate
-                cdpill.doseDays = self.doseDays.map { $0.rawValue }
-            } completion: {
+            let pill = Pill(id: self.id, name: self.name, type: type, startDate: self.startDate, endDate: self.endDate, cycle: self.cycle, doseDays: self.doseDays, doseMethods: self.doseMethods)
+            PillMeDataManager.shared.update(pill: pill) {
                 completion?()
             }
+//            PillMeDataManager.shared.updatePill(id: id) { cdpill, context in
+//                cdpill.name = self.name
+//                cdpill.type = Int16(type.rawValue)
+//                cdpill.cycle = Int16(self.cycle)
+//                cdpill.startDate = self.startDate
+//                cdpill.doseDays = self.doseDays.map { $0.rawValue }
+//                let cdDoseMethods = self.doseMethods.map { CDDoseMethod.create(doseMethod: $0, in: context) }
+//                cdpill.doseMethods = NSOrderedSet(array: cdDoseMethods)
+//            } completion: {
+//                completion?()
+//            }
+        }
+    }
+    
+    func deletePill(_ completion: (() -> Void)? = nil) {
+        guard !isNewpill else { return }
+        PillMeDataManager.shared.deletePill(id: id) {
+            completion?()
         }
     }
 }

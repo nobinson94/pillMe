@@ -15,8 +15,7 @@ public class CDDoseMethod: NSManagedObject {
         let cdDoseMethod = CDDoseMethod(context: context)
         cdDoseMethod.num = Int16(doseMethod.num)
         cdDoseMethod.time = Int16(doseMethod.time.rawValue)
-//        cdDoseMethod.pill = CDPill doseMethod.pill
-        
+
         return cdDoseMethod
     }
 }

@@ -11,10 +11,11 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
+    let notificationCenter = PillMeNotificationCenter()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        notificationCenter.userNotificationCenter.delegate = self
+        notificationCenter.requestAuthorization()
         return true
     }
 
@@ -79,3 +80,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        /// 앱에 알람이 날아올때마다 다음 타임 알람을 셋팅한다.
+        guard let pillIDs = notification.request.content.userInfo["pills"] as? [String] else {
+            return
+        }
+        
+        notificationCenter.setNextNotifications(for: pillIDs)
+        completionHandler([.badge, .sound, .banner])
+    }
+}
