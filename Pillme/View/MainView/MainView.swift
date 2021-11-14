@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var contentOffset: CGFloat = 0
     @StateObject var viewModel: MainViewModel
     
     var body: some View {
@@ -24,95 +23,28 @@ struct MainView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 27, weight: .bold, design: .default))
                 .foregroundColor(.white)
-                SectionView(title: "지금 먹을 약", showMoreButton: true) {
-                    PillListView(viewModel: PillListViewModel(listType: .today))
-                } content: {
-                    if viewModel.nowPills.isEmpty {
-                        VStack(spacing: 0){
-                            Text("지금은 복용하실 약이 없어요!")
-                        }
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, minHeight: 90, alignment: .center)
-                    } else {
+                
+                if !viewModel.nowPills.isEmpty {
+                    SectionView(title: "복용 관리", showMoreButton: true) {
+                        PillListView(viewModel: PillListViewModel(listType: .today))
+                    } content: {
                         if let prevTime = viewModel.prevTime {
                             ForEach(viewModel.prevPills, id: \.id) { pill in
-                                VStack(alignment: .leading, spacing: 10) {
-                                    HStack(spacing: 10) {
-                                        Image("pillIcon")
-                                            .resizable()
-                                            .frame(width: 26, height: 26, alignment: .center)
-                                        VStack(alignment: .leading, spacing: 5) {
-                                            Text("\(prevTime.title)").foregroundColor(.gray).font(.system(size: 12))
-                                            Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-                                        }
-                                        Spacer()
-                                        Button {
-                                            print("### TAP")
-                                        } label: {
-                                            Text("먹었어요!")
-                                                .font(.system(size: 12))
-                                                .padding()
-                                                .background(Color.backgroundColor.cornerRadius(10).opacity(0.6))
-                                                .foregroundColor(.white)
-                                        }
-
-                                    }
-                                }
+                                TakePillInfoCell(pill: pill, takeTime: prevTime)
                             }
                         }
-                        
+                            
                         ForEach(viewModel.currentPills, id: \.id) { pill in
                             VStack(alignment: .leading, spacing: 10) {
-                                HStack(spacing: 10) {
-                                    Image("pillIcon")
-                                        .resizable()
-                                        .frame(width: 26, height: 26, alignment: .center)
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text("\(viewModel.currentTime.title)").foregroundColor(.gray).font(.system(size: 12))
-                                        Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-                                    }
-                                    Spacer()
-                                    Button {
-                                        print("### TAP")
-                                    } label: {
-                                        Text("복용 전")
-                                            .font(.system(size: 12))
-                                            .padding()
-                                            .background(Color.backgroundColor.cornerRadius(10).opacity(0.6))
-                                            .foregroundColor(.white)
-                                    }
-
-                                }
+                                TakePillInfoCell(pill: pill, takeTime: viewModel.currentTime)
                             }
                         }
                         
                         if let nextTime = viewModel.nextTime {
                             ForEach(viewModel.nextPills, id: \.id) { pill in
-                                VStack(alignment: .leading, spacing: 10) {
-                                    HStack(spacing: 10) {
-                                        Image("pillIcon")
-                                            .resizable()
-                                            .frame(width: 26, height: 26, alignment: .center)
-                                        VStack(alignment: .leading, spacing: 5) {
-                                            Text("\(nextTime.title)").foregroundColor(.gray).font(.system(size: 12))
-                                            Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-                                        }
-                                        Spacer()
-                                        Button {
-                                            print("### TAP")
-                                        } label: {
-                                            Text("먹었어요!")
-                                                .font(.system(size: 12))
-                                                .padding()
-                                                .background(Color.backgroundColor.cornerRadius(10).opacity(0.6))
-                                                .foregroundColor(.white)
-                                        }
-                                    }
-                                }
+                                TakePillInfoCell(pill: pill, takeTime: nextTime)
                             }
                         }
-
                     }
                 }
                 
@@ -121,7 +53,7 @@ struct MainView: View {
                 } content: {
                     if viewModel.allPills.isEmpty {
                         VStack(spacing: 0){
-                            Text("오늘은 먹을 약이 없네요.\n건강을 위해 영양제를 추가해보세요!").lineSpacing(10)
+                            Text("복용하시는 약이 없네요.\n건강을 위해 영양제를 추가해보세요!").lineSpacing(10)
                             NavigationLink(destination: LazyView(PillInfoView())) {
                                 HStack(spacing: 10) {
                                     Image(systemName: "plus.circle.fill")
@@ -135,18 +67,7 @@ struct MainView: View {
                     } else {
                         ForEach(viewModel.allPills, id: \.id) { pill in
                             NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    HStack(spacing: 10) {
-                                        Image("pillIcon")
-                                            .resizable()
-                                            .frame(width: 26, height: 26, alignment: .center)
-                                        VStack(alignment: .leading, spacing: 5) {
-                                            Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 12))
-                                            Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-                                        }
-                                        Spacer()
-                                    }
-                                }
+                                SimplePillInfoCell(pill: pill)
                             }.foregroundColor(.white)
                         }
                     }
@@ -222,3 +143,78 @@ extension SectionView where Link == EmptyView {
     }
 }
 
+struct SimplePillInfoCell: View {
+    var pill: Pill
+    
+    var body: some View {
+        HStack(spacing: 10) {
+            Image("pillIcon")
+                .resizable()
+                .frame(width: 26, height: 26, alignment: .center)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 12))
+                Text("\(pill.name)").font(.system(size: 19, weight: .bold))
+            }
+            Spacer()
+        }
+    }
+}
+
+struct TakePillInfoCell: View {
+    var pill: Pill
+    var takeTime: TakeTime
+    var takeDate: Date
+    
+    @State private var isTaken: Bool = false
+    @State private var takeButtonDisabled: Bool = false
+    
+    init(pill: Pill, takeTime: TakeTime, takeDate: Date = Date()) {
+        self.pill = pill
+        self.takeTime = takeTime
+        self.takeDate = takeDate
+    }
+    
+    var body: some View {
+        HStack(spacing: 10) {
+            Image("pillIcon")
+                .resizable()
+                .frame(width: 26, height: 26, alignment: .center)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("\(takeTime.title)").foregroundColor(.gray).font(.system(size: 12))
+                Text("\(pill.name)").font(.system(size: 19, weight: .bold))
+            }
+            Spacer()
+            if isTaken {
+                Button {
+                    self.takeButtonDisabled = true
+                    PillMeDataManager.shared.untakePill(for: pill.id, time: takeTime, date: Date()) {
+                        self.takeButtonDisabled = false
+                        self.isTaken = false
+                    }
+                } label: {
+                    Text("복용 완료")
+                        .font(.system(size: 12))
+                        .padding()
+                        .background(Color.tintColor.cornerRadius(10))
+                        .foregroundColor(.backgroundColor)
+                }.disabled(self.takeButtonDisabled)
+            } else {
+                Button {
+                    self.takeButtonDisabled = true
+                    PillMeDataManager.shared.takePill(for: pill.id, time: takeTime, date: Date()) {
+                        self.takeButtonDisabled = false
+                        self.isTaken = true
+                    }
+                } label: {
+                    Text("복용 전")
+                        .font(.system(size: 12))
+                        .padding()
+                        .background(Color.backgroundColor.cornerRadius(10).opacity(0.6))
+                        .foregroundColor(.white)
+                }.disabled(self.takeButtonDisabled)
+            }
+        }.onAppear {
+            self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.id, takeTime: takeTime, date: takeDate)
+        }
+    }
+}

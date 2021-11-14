@@ -200,7 +200,7 @@ class PillMeDataManager {
         }
     }
     
-    func takePill(for pillID: String, time: TakeTime, date: Date = Date()) {
+    func takePill(for pillID: String, time: TakeTime, date: Date = Date(), completion: (() -> Void)? = nil) {
         guard let cdPill = getCDPill(id: pillID), let pill = getPill(id: pillID) else {
             return
         }
@@ -208,17 +208,26 @@ class PillMeDataManager {
         let cdDoseRecord = CDDoseRecord.create(doseRecord: doseRecord, in: dataStore.container.viewContext)
         cdDoseRecord.pill = cdPill
         
-        dataStore.add(object: cdDoseRecord)
+        dataStore.add(object: cdDoseRecord) {
+            completion?()
+        }
     }
     
-    func untakePill(for pillID: String, time: TakeTime, date: Date = Date()) {
+    func untakePill(for pillID: String, time: TakeTime, date: Date = Date(), completion: (() -> Void)? = nil) {
         guard let cdDoseRecord = getCDDoseRecords(pillID: pillID, takeTime: time, date: date).first else {
             return
         }
         
-        dataStore.delete(object: cdDoseRecord)
+        dataStore.delete(object: cdDoseRecord) {
+            completion?()
+        }
     }
     
+    func isTaken(pillID: String, takeTime: TakeTime, date: Date) -> Bool {
+        let doseRecords = getDoseRecords(pillID: pillID, takeTime: takeTime, date: date)
+        
+        return !doseRecords.isEmpty
+    }
     func getDoseRecords(pillID: String?, takeTime: TakeTime?, date: Date?) -> [DoseRecord] {
         let cdDoseRecords = self.getCDDoseRecords(pillID: pillID, takeTime: takeTime, date: date)
         
@@ -244,7 +253,7 @@ extension PillMeDataManager {
             predicates.append(NSPredicate(format: "pill.id = %@", "\(pillID)"))
         }
         if let takeTime = takeTime {
-            predicates.append(NSPredicate(format: "takeTime = %@", takeTime.rawValue))
+            predicates.append(NSPredicate(format: "takeTime = %@", "\(takeTime.rawValue)"))
         }
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         return dataStore.fetch(with: request)
