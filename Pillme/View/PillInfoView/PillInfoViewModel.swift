@@ -34,13 +34,7 @@ class PillInfoViewModel: ObservableObject {
     var bag = Set<AnyCancellable>()
     var isNewpill: Bool = true
     
-    var title: String {
-        guard !isNewpill else {
-            return "새로운 약 추가하기"
-        }
-        
-        return "[\(name)] 정보"
-    }
+    var title: String = ""
     
     var canConfirm: Bool {
         switch currentQuestion {
@@ -106,6 +100,7 @@ class PillInfoViewModel: ObservableObject {
             return
         }
         fetch(id: id)
+        self.setTitle(self.name)
         self.currentQuestion = nil
         self.lastQuestion = nil
     }
@@ -115,30 +110,25 @@ class PillInfoViewModel: ObservableObject {
         self.currentQuestion = firstQuestion
     }
     
+    private func setTitle(_ title: String) {
+        self.title = isNewpill ? "새로운 약 추가하기" : title
+    }
+    
     func save(_ completion: (() -> Void)? = nil) {
         guard let type = type else { return }
         if isNewpill {
             let pill = Pill(name: name, type: type, startDate: startDate, cycle: cycle, doseDays: doseDays, doseMethods: doseMethods)
             PillMeDataManager.shared.add(pill) {
                 self.isNewpill = false
+                self.setTitle(self.name)
                 completion?()
             }
         } else {
             let pill = Pill(id: self.id, name: self.name, type: type, startDate: self.startDate, endDate: self.endDate, cycle: self.cycle, doseDays: self.doseDays, doseMethods: self.doseMethods)
             PillMeDataManager.shared.update(pill: pill) {
+                self.setTitle(self.name)
                 completion?()
             }
-//            PillMeDataManager.shared.updatePill(id: id) { cdpill, context in
-//                cdpill.name = self.name
-//                cdpill.type = Int16(type.rawValue)
-//                cdpill.cycle = Int16(self.cycle)
-//                cdpill.startDate = self.startDate
-//                cdpill.doseDays = self.doseDays.map { $0.rawValue }
-//                let cdDoseMethods = self.doseMethods.map { CDDoseMethod.create(doseMethod: $0, in: context) }
-//                cdpill.doseMethods = NSOrderedSet(array: cdDoseMethods)
-//            } completion: {
-//                completion?()
-//            }
         }
     }
     
