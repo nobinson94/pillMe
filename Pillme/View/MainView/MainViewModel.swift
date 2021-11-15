@@ -60,6 +60,7 @@ class MainViewModel: ObservableObject {
             prevSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: prevTime)
                 .map { DoseSchedule(pill: $0, date: today, takeTime: prevTime) }
         }
+        
         allPills = PillMeDataManager.shared.getPills()
     }
 }

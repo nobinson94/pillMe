@@ -11,6 +11,22 @@ struct TakePillInfoCell: View {
     var pill: Pill
     var takeTime: TakeTime
     var takeDate: Date
+    var doseMethod: DoseMethod?
+    
+    var subTitle: String {
+        if let doseMethod = doseMethod {
+            return "\(doseMethod.time.title) (\(doseMethod.num)정)"
+        }
+        return "\(takeTime.title)"
+    }
+    
+    var title: String {
+        guard let doseMethod = doseMethod else {
+            return pill.name
+        }
+
+        return showSubTitle ? pill.name : "\(pill.name) (\(doseMethod.num)정)"
+    }
     
     private var showSubTitle: Bool = true
     
@@ -21,6 +37,7 @@ struct TakePillInfoCell: View {
     init(pill: Pill, takeTime: TakeTime, takeDate: Date = Date(), showSubTitle: Bool = true) {
         self.pill = pill
         self.takeTime = takeTime
+        self.doseMethod = self.pill.doseMethods.first(where: { $0.time == takeTime })
         self.takeDate = takeDate
         self.showSubTitle = showSubTitle
     }
@@ -32,9 +49,10 @@ struct TakePillInfoCell: View {
                 .frame(width: 26, height: 26, alignment: .center)
             VStack(alignment: .leading, spacing: 5) {
                 if showSubTitle {
-                    Text("\(takeTime.title)").foregroundColor(.gray).font(.system(size: 14))
+                    Text(subTitle)
+                        .foregroundColor(.gray).font(.system(size: 14))
                 }
-                Text("\(pill.name)").font(.system(size: 20, weight: .bold))
+                Text(title).font(.system(size: 20, weight: .bold))
             }
             Spacer()
             if isTaken {
