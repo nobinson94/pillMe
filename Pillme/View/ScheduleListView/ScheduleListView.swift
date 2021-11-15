@@ -24,19 +24,27 @@ struct ScheduleListView: View {
                 })
             
             ScrollView {
-                VStack(spacing: 30) {
+                VStack(spacing: 0) {
+                    Text(viewModel.date.dateString)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 28, weight: .bold))
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
                     ForEach(viewModel.schedules, id: \.header) { section in
-                        Section(header: HStack {
-                            Text(section.header)
-                                .foregroundColor(Color.gray)
-                                .font(.system(size: 15, weight: .semibold))
-                            Spacer()
-                        }) {
+                        Section(header:
+                            HStack {
+                                Text(section.header)
+                                    .foregroundColor(Color.gray)
+                                    .font(.system(size: 15, weight: .semibold))
+                                Spacer()
+                            }.frame(height: 50)
+                        ) {
                             VStack(spacing: 20) {
                                 ForEach(section.items, id: \.self) { schedule in
                                     TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, showSubTitle: false)
                                 }
                             }
+                            .padding(.bottom, 20)
                         }
                     }
                 }

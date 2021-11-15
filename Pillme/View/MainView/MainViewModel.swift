@@ -23,6 +23,11 @@ class MainViewModel: ObservableObject {
         TakeTime.current
     }
     
+    var encourageMessage: String? {
+        guard let currentScheudle = randomCurrentSchedule else { return nil }
+        return currentTime.encourageMessage(pillName: currentScheudle.pill.name)
+    }
+    
     var prevTime: TakeTime? {
         if currentTime.prevTime == .beforeSleep { return nil }
         return currentTime.prevTime
@@ -33,7 +38,7 @@ class MainViewModel: ObservableObject {
         return currentTime.nextTime
     }
     
-    var randomCurrentPill: DoseSchedule? {
+    var randomCurrentSchedule: DoseSchedule? {
         if currentSchedules.count > 0 {
             let randomIndex = Int.random(in: 0..<currentSchedules.count)
             return currentSchedules[randomIndex]

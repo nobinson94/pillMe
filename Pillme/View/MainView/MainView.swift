@@ -16,7 +16,9 @@ struct MainView: View {
                 VStack(alignment: .leading, spacing: 5) {
 //                    Text("권용태님") // environmentobject 활용 가능할듯
                     Text("\(viewModel.currentTime.welcomeMessage)")
-                    Text("\(viewModel.currentTime.encourageMessage(pillName: "오메가3"))")
+                    if let encourageMessage = viewModel.encourageMessage {
+                        Text(encourageMessage)
+                    }
                 }
                 .padding(.leading, 5)
                 .padding(.bottom, 20)
