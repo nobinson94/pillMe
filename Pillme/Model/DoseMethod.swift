@@ -135,6 +135,13 @@ enum TakeTime: Int, CaseIterable {
     var isLastTimeOfADay: Bool {
         return self.nextTime.components < self.components
     }
+    
+    var isOverNight: Bool {
+        guard let lastTimeOfADay = TakeTime.allCases.first(where: { $0.isLastTimeOfADay }) else {
+            return false
+        }
+        return self.components < lastTimeOfADay.components && self.rawValue > lastTimeOfADay.rawValue
+    }
 }
 
 class DoseMethod {
@@ -169,9 +176,7 @@ extension DateComponents {
         return (self.hour ?? 0)*60 + (self.minute ?? 0)
     }
     func hourMinuteGap(with other: DateComponents) -> Int {
-        guard self.hourMinuteIndex > other.hourMinuteIndex else {
-            return (24*60) - other.hourMinuteIndex + self.hourMinuteIndex
-        }
-        return self.hourMinuteIndex - other.hourMinuteIndex
+        let difference = abs(self.hourMinuteIndex - other.hourMinuteIndex)
+        return min((24*60)-difference, difference)
     }
 }

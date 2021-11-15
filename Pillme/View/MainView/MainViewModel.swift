@@ -11,12 +11,12 @@ import SwiftUI
 
 class MainViewModel: ObservableObject {
     @Published var allPills: [Pill] = []
-    @Published var currentPills: [Pill] = []
-    @Published var prevPills: [Pill] = []
-    @Published var nextPills: [Pill] = []
+    @Published var currentSchedules: [DoseSchedule] = []
+    @Published var prevSchedules: [DoseSchedule] = []
+    @Published var nextSchedules: [DoseSchedule] = []
     
-    var nowPills: [Pill] {
-        currentPills + prevPills + nextPills
+    var schedules: [DoseSchedule] {
+        currentSchedules + prevSchedules + nextSchedules
     }
     
     var currentTime: TakeTime {
@@ -33,36 +33,28 @@ class MainViewModel: ObservableObject {
         return currentTime.nextTime
     }
     
-    var randomCurrentPill: Pill? {
-        if currentPills.count > 0 {
-            let randomIndex = Int.random(in: 0..<currentPills.count)
-            return currentPills[randomIndex]
-        } else if nextPills.count > 0 {
-            let randomIndex = Int.random(in: 0..<nextPills.count)
-            return nextPills[randomIndex]
+    var randomCurrentPill: DoseSchedule? {
+        if currentSchedules.count > 0 {
+            let randomIndex = Int.random(in: 0..<currentSchedules.count)
+            return currentSchedules[randomIndex]
         }
         return nil
     }
     
     func fetch() {
-        let todayPills = PillMeDataManager.shared.getPills(for: Date())
+        let today = Calendar.current.startOfDay(for: Date())
         
-        currentPills = todayPills.filter { $0.doseMethods.contains { $0.time == currentTime }}
+        self.currentSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: currentTime)
+            .map { DoseSchedule(pill: $0, date: today, takeTime: currentTime) }
         
-        if prevTime == .beforeSleep {
-            let yesterdayPills = PillMeDataManager.shared.getPills(for: Date())
-            prevPills = yesterdayPills.filter { $0.doseMethods.contains { $0.time == prevTime }}
-        } else {
-            prevPills = todayPills.filter { $0.doseMethods.contains { $0.time == prevTime }}
+        if let nextTime = nextTime {
+            nextSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: nextTime)
+                .map { DoseSchedule(pill: $0, date: today, takeTime: nextTime) }
         }
-        
-        if prevTime == .beforeSleep {
-            let tommorrowPills = PillMeDataManager.shared.getPills(for: Date())
-            nextPills = tommorrowPills.filter { $0.doseMethods.contains { $0.time == nextTime }}
-        } else {
-            nextPills = todayPills.filter { $0.doseMethods.contains { $0.time == nextTime }}
+        if let prevTime = prevTime {
+            prevSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: prevTime)
+                .map { DoseSchedule(pill: $0, date: today, takeTime: prevTime) }
         }
-        
         allPills = PillMeDataManager.shared.getPills()
     }
 }

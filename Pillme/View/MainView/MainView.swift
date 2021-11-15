@@ -14,7 +14,7 @@ struct MainView: View {
         ZStack {
             VStack(alignment: .leading, spacing: 15) {
                 VStack(alignment: .leading, spacing: 5) {
-//                    Text("권용태님")
+//                    Text("권용태님") // environmentobject 활용 가능할듯
                     Text("\(viewModel.currentTime.welcomeMessage)")
                     Text("\(viewModel.currentTime.encourageMessage(pillName: "오메가3"))")
                 }
@@ -24,32 +24,24 @@ struct MainView: View {
                 .font(.system(size: 27, weight: .bold, design: .default))
                 .foregroundColor(.white)
                 
-                if !viewModel.nowPills.isEmpty {
+                if !viewModel.schedules.isEmpty {
                     SectionView(title: "복용 관리", showMoreButton: true) {
-                        PillListView(viewModel: PillListViewModel(listType: .today))
+                        ScheduleListView()
                     } content: {
-                        if let prevTime = viewModel.prevTime {
-                            ForEach(viewModel.prevPills, id: \.id) { pill in
-                                TakePillInfoCell(pill: pill, takeTime: prevTime)
-                            }
+                        ForEach(viewModel.prevSchedules, id: \.pill.id) { schedule in
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
-                            
-                        ForEach(viewModel.currentPills, id: \.id) { pill in
-                            VStack(alignment: .leading, spacing: 10) {
-                                TakePillInfoCell(pill: pill, takeTime: viewModel.currentTime)
-                            }
+                        ForEach(viewModel.currentSchedules, id: \.pill.id) { schedule in
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
-                        
-                        if let nextTime = viewModel.nextTime {
-                            ForEach(viewModel.nextPills, id: \.id) { pill in
-                                TakePillInfoCell(pill: pill, takeTime: nextTime)
-                            }
+                        ForEach(viewModel.nextSchedules, id: \.pill.id) { schedule in
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
                     }
                 }
                 
                 SectionView(title: "복용 중인 약", showMoreButton: true) {
-                    PillListView(viewModel: PillListViewModel(listType: .all))
+                    PillListView()
                 } content: {
                     if viewModel.allPills.isEmpty {
                         VStack(spacing: 0){
@@ -66,9 +58,7 @@ struct MainView: View {
                         .frame(maxWidth: .infinity, minHeight: 150, alignment: .center)
                     } else {
                         ForEach(viewModel.allPills, id: \.id) { pill in
-                            NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
-                                SimplePillInfoCell(pill: pill)
-                            }.foregroundColor(.white)
+                            PillInfoCell(pill: pill)
                         }
                     }
                 }
@@ -140,81 +130,5 @@ struct SectionView<Link: View, Content: View>: View {
 extension SectionView where Link == EmptyView {
     init(title: String = "", showMoreButton: Bool = false, @ViewBuilder content: () -> Content) {
         self.init(title: title, showMoreButton: showMoreButton, link: { EmptyView() }, content: content)
-    }
-}
-
-struct SimplePillInfoCell: View {
-    var pill: Pill
-    
-    var body: some View {
-        HStack(spacing: 10) {
-            Image("pillIcon")
-                .resizable()
-                .frame(width: 26, height: 26, alignment: .center)
-            VStack(alignment: .leading, spacing: 5) {
-                Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 12))
-                Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-            }
-            Spacer()
-        }
-    }
-}
-
-struct TakePillInfoCell: View {
-    var pill: Pill
-    var takeTime: TakeTime
-    var takeDate: Date
-    
-    @State private var isTaken: Bool = false
-    @State private var takeButtonDisabled: Bool = false
-    
-    init(pill: Pill, takeTime: TakeTime, takeDate: Date = Date()) {
-        self.pill = pill
-        self.takeTime = takeTime
-        self.takeDate = takeDate
-    }
-    
-    var body: some View {
-        HStack(spacing: 10) {
-            Image("pillIcon")
-                .resizable()
-                .frame(width: 26, height: 26, alignment: .center)
-            VStack(alignment: .leading, spacing: 5) {
-                Text("\(takeTime.title)").foregroundColor(.gray).font(.system(size: 12))
-                Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-            }
-            Spacer()
-            if isTaken {
-                Button {
-                    self.takeButtonDisabled = true
-                    PillMeDataManager.shared.untakePill(for: pill.id, time: takeTime, date: Date()) {
-                        self.takeButtonDisabled = false
-                        self.isTaken = false
-                    }
-                } label: {
-                    Text("복용 완료")
-                        .font(.system(size: 12))
-                        .padding()
-                        .background(Color.tintColor.cornerRadius(10))
-                        .foregroundColor(.backgroundColor)
-                }.disabled(self.takeButtonDisabled)
-            } else {
-                Button {
-                    self.takeButtonDisabled = true
-                    PillMeDataManager.shared.takePill(for: pill.id, time: takeTime, date: Date()) {
-                        self.takeButtonDisabled = false
-                        self.isTaken = true
-                    }
-                } label: {
-                    Text("복용 전")
-                        .font(.system(size: 12))
-                        .padding()
-                        .background(Color.backgroundColor.cornerRadius(10).opacity(0.6))
-                        .foregroundColor(.white)
-                }.disabled(self.takeButtonDisabled)
-            }
-        }.onAppear {
-            self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.id, takeTime: takeTime, date: takeDate)
-        }
     }
 }

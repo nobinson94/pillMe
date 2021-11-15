@@ -25,24 +25,12 @@ struct PillListView: View {
                 })
             
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 5) {
+                VStack(spacing: 20) {
                     ForEach(viewModel.pills, id: \.self) { pill in
-                        NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                HStack(spacing: 10) {
-                                    Image("pillIcon")
-                                        .resizable()
-                                        .frame(width: 26, height: 26, alignment: .center)
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 12))
-                                        Text("\(pill.name)").font(.system(size: 19, weight: .bold))
-                                    }
-                                    Spacer()
-                                }
-                            }
-                        }.foregroundColor(.white)
+                        PillInfoCell(pill: pill)
                     }
-                }.padding(20)
+                }
+                .padding(20)
             }
         }.onAppear {
             viewModel.fetch()
@@ -60,29 +48,9 @@ class PillListViewModel: ObservableObject {
     
     @Published var pills: [Pill] = []
     
-    enum ListType {
-        case today
-        case all
-    }
-    
-    var listType: ListType = .all
-    var title: String {
-        switch listType {
-        case .today: return "오늘 먹을 약 목록"
-        case .all: return "전체 약 목록"
-        }
-    }
-    
-    init(listType: ListType = .all) {
-        self.listType = listType
-    }
-    
+    var title: String { "복용 중인 약" }
+
     func fetch() {
-        switch listType {
-        case .today:
-            pills = PillMeDataManager.shared.getPills(for: Date())
-        case .all:
-            pills = PillMeDataManager.shared.getPills()
-        }
+        self.pills = PillMeDataManager.shared.getPills()
     }
 }

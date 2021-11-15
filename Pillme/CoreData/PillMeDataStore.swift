@@ -161,6 +161,10 @@ class PillMeDataManager {
     }
     
     func getPills(for date: Date, takeTime: TakeTime) -> [Pill] {
+        var date = date
+        if takeTime.isOverNight {
+            date = date.yesterday
+        }
         let pills = getPills(for: date)
 
         return pills.filter { pill in
