@@ -47,8 +47,10 @@ class MainViewModel: ObservableObject {
     }
     
     func fetch() {
-        let today = Calendar.current.startOfDay(for: Date())
-        
+        var today = Calendar.current.startOfDay(for: Date())
+        if currentTime.isOverNight {
+            today = today.yesterday
+        }
         self.currentSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: currentTime)
             .map { DoseSchedule(pill: $0, date: today, takeTime: currentTime) }
         

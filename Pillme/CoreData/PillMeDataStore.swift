@@ -150,6 +150,15 @@ class PillMeDataManager {
         return pill
     }
     
+    func getPill(name: String) -> Pill? {
+        guard let cdPill = getCDPill(name: name) else { return nil }
+        
+        let pill = Pill(cdPill: cdPill)
+        pill.doseMethods = self.getDoseMethods(for: cdPill.id)
+        
+        return pill
+    }
+    
     func getPills(for date: Date? = nil) -> [Pill] {
         let request = NSFetchRequest<CDPill>(entityName: CDPill.description())
         let pills: [Pill] = dataStore.fetch(with: request).map { Pill(cdPill: $0) }
@@ -161,10 +170,6 @@ class PillMeDataManager {
     }
     
     func getPills(for date: Date, takeTime: TakeTime) -> [Pill] {
-        var date = date
-        if takeTime.isOverNight {
-            date = date.yesterday
-        }
         let pills = getPills(for: date)
 
         return pills.filter { pill in
@@ -232,6 +237,7 @@ class PillMeDataManager {
         
         return !doseRecords.isEmpty
     }
+
     func getDoseRecords(pillID: String?, takeTime: TakeTime?, date: Date?) -> [DoseRecord] {
         let cdDoseRecords = self.getCDDoseRecords(pillID: pillID, takeTime: takeTime, date: date)
         
@@ -243,6 +249,12 @@ extension PillMeDataManager {
     private func getCDPill(id: String) -> CDPill? {
         let request = NSFetchRequest<CDPill>(entityName: CDPill.description())
         request.predicate = NSPredicate(format: "id == %@", "\(id)")
+        return dataStore.fetch(with: request).first
+    }
+    
+    private func getCDPill(name: String) -> CDPill? {
+        let request = NSFetchRequest<CDPill>(entityName: CDPill.description())
+        request.predicate = NSPredicate(format: "name == %@", "\(name)")
         return dataStore.fetch(with: request).first
     }
     

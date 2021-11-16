@@ -17,7 +17,7 @@ struct PillInfoView: View {
     
     @ObservedObject var viewModel: PillInfoViewModel = PillInfoViewModel()
     @State private var showingAlert = false
-    @State private var isEditMode: Bool = true
+//    @State private var isEditMode: Bool = true
     @FocusState private var focusedField: Field?
     
     var body: some View {
@@ -26,7 +26,7 @@ struct PillInfoView: View {
                 .pillMeNavigationBar(
                     title: viewModel.title,
                     backButtonAction: {
-                        guard isEditMode else {
+                        guard viewModel.isEditMode else {
                             presentationMode.wrappedValue.dismiss()
                             return
                         }
@@ -54,7 +54,7 @@ struct PillInfoView: View {
                                 HStack(spacing: 10) {
                                     getQuestionView(of: question)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                    if isEditMode {
+                                    if viewModel.isEditMode {
                                         Image(systemName: "pencil")
                                             .frame(width: 44, alignment: .trailing)
                                             .onTapGesture {
@@ -82,12 +82,10 @@ struct PillInfoView: View {
                     .padding(.trailing, 20)
                 }
                 
-                if isEditMode {
+                if viewModel.isEditMode {
                     if viewModel.currentQuestion == nil && viewModel.lastQuestion == nil {
                         Button {
-                            withAnimation { self.viewModel.save() {
-                                self.isEditMode = false
-                            } }
+                            withAnimation { self.viewModel.save() }
                         } label: {
                             ZStack {
                                 Color.tintColor.shadow(radius: 5).edgesIgnoringSafeArea(.bottom)
@@ -111,9 +109,6 @@ struct PillInfoView: View {
             
         }.onAppear {
             viewModel.prepare()
-            if !viewModel.isNewpill {
-                self.isEditMode = false
-            }
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
                 self.focusedField = .pillName // issue:: 두번째 변경부터는 적용되지 않는다.
@@ -137,9 +132,9 @@ struct PillInfoView: View {
     
     
     private var navigationRightView: some View {
-        if !isEditMode {
+        if !viewModel.isEditMode {
             return AnyView(Button {
-                self.isEditMode.toggle()
+                self.viewModel.setEditMode(true)
             } label: {
                 Text("수정").foregroundColor(.white)
             })
@@ -175,7 +170,9 @@ struct PillInfoView: View {
                         }
                         .buttonStyle(PillMeButton(style: .medium, color: isSelected ? .tintColor : .mainColor, textColor: isSelected ? .mainColor : .white))
                     }
-                }.frame(maxWidth: .infinity)
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity)
             })
         } else if let type = viewModel.type {
             return AnyView(AnswerView(title: "종류") {
@@ -194,9 +191,13 @@ struct PillInfoView: View {
             if viewModel.currentQuestion == .name {
                 QuestionView(question: "약의 이름은 무엇인가요?") {
                     TextField("", text: $viewModel.name)
-                        .underlineTextField()
+                        .underlineTextField(color: viewModel.nameDuplicated ? .red : .tintColor)
                         .font(.system(size: 20))
                         .focused($focusedField, equals: .pillName)
+                    if viewModel.nameDuplicated {
+                        Text("이미 존재하는 약의 이름입니다.").foregroundColor(.red)
+                            .padding(.leading, 10)
+                    }
                 }
             } else {
                 AnswerView(title: "이름") {
@@ -220,7 +221,7 @@ struct PillInfoView: View {
                         .font(.system(size: 20))
                         .foregroundColor(.white)
                         .fontWeight(.light)
-                }
+                }.padding(10)
                 CalendarView(fontColor: .white, selectable: true, selectedDate: $viewModel.startDate)
                     .frame(maxWidth: .infinity)
             })
@@ -239,20 +240,20 @@ struct PillInfoView: View {
             return AnyView(VStack(alignment: .leading, spacing: 30) {
                 QuestionView(question: "어떻게 드시나요?") {
                     HStack(alignment: .center) {
-                        Button("매일매일 먹어요") {
+                        Button("매일매일") {
                             self.viewModel.cycle = 1
                             self.viewModel.doseDays = []
                             self.viewModel.confirm()
                         }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == 1 ? .tintColor : .mainColor, textColor: viewModel.cycle == 1 ? .mainColor : .white))
-                        Button("요일별로 먹어요") {
+                        Button("요일별로") {
                             self.viewModel.cycle = -1
                             self.viewModel.doseDays = []
                         }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == -1 ? .tintColor : .mainColor, textColor: viewModel.cycle == -1 ? .mainColor : .white))
-                        Button("주기에 따라 먹어요") {
+                        Button("주기에 따라") {
                             self.viewModel.cycle = 2
                             self.viewModel.doseDays = []
                         }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle >= 2 ? .tintColor : .mainColor, textColor: viewModel.cycle >= 2 ? .mainColor : .white))
-                    }
+                    }.padding(10)
                 }
                 if viewModel.cycle >= 1 {
                     QuestionView(question: "며칠에 한번 드세요?") {
@@ -283,7 +284,7 @@ struct PillInfoView: View {
                                     .buttonStyle(PillMeButton(style: .small, color: .mainColor, textColor: .white))
                                 }
                             }
-                        }
+                        }.padding(10)
                     }
                 } else {
                     Spacer(minLength: 0)
@@ -292,9 +293,15 @@ struct PillInfoView: View {
         } else {
             if self.viewModel.cycle < 0 {
                 return AnyView(AnswerView(title: "복용 요일") {
-                    Text(self.viewModel.doseDays.sorted { $0.rawValue < $1.rawValue }.map { $0.shortKor }.joined(separator: ", "))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.tintColor)
+                    if viewModel.doseDays.count == 7 {
+                        Text("\(1.cycleString)")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.tintColor)
+                    } else {
+                        Text(self.viewModel.doseDays.sorted { $0.rawValue < $1.rawValue }.map { $0.shortKor }.joined(separator: ", "))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.tintColor)
+                    }
                 })
             } else if self.viewModel.cycle > 0 {
                 return AnyView(AnswerView(title: "복용 주기") {
@@ -401,13 +408,15 @@ struct QuestionView<Content: View>: View {
     @ViewBuilder var content: Content
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 0) {
             Text(question)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 32, weight: .ultraLight))
-                .padding(0)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
                 .allowsTightening(true)
+            Spacer(minLength: 40)
             content
         }
     }

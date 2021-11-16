@@ -65,10 +65,6 @@ enum TakeTime: Int, CaseIterable {
         }
     }
     
-    func encourageMessageView(pillName: String) -> some View { // todo
-        Text(self.encourageMessage(pillName: pillName))
-    }
-    
     static var current: TakeTime {
         let nowComponents = Calendar.current.dateComponents([.hour, .minute], from: Date())
         return TakeTime.allCases.min { lhs, rhs in

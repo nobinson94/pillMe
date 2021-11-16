@@ -34,12 +34,15 @@ class PillInfoViewModel: ObservableObject {
     var bag = Set<AnyCancellable>()
     var isNewpill: Bool = true
     
-    var title: String = ""
+    @Published var isEditMode: Bool = true
+    @Published var nameDuplicated: Bool = false
     
+    var title: String = ""
+
     var canConfirm: Bool {
         switch currentQuestion {
         case .pillType: return type != nil
-        case .name: return !name.isEmpty
+        case .name: return !name.isEmpty && !nameDuplicated
         case .cycle: return !doseDays.isEmpty || cycle > 0
         case .oneDay: return !doseMethods.isEmpty
         default: return true
@@ -53,6 +56,17 @@ class PillInfoViewModel: ObservableObject {
     init(id: String? = nil) {
         self.isNewpill = id == nil
         self.id = id ?? UUID().uuidString
+        
+        $name
+            .filter { _ in self.isEditMode }
+            .sink { [weak self] name in
+                guard let pill = PillMeDataManager.shared.getPill(name: name) else {
+                    self?.nameDuplicated = false
+                    return
+                }
+                self?.nameDuplicated = pill.id != self?.id
+            }
+            .store(in: &bag)
     }
     
     func fetch(id: String) {
@@ -66,6 +80,13 @@ class PillInfoViewModel: ObservableObject {
         self.cycle = pill.cycle
         self.doseDays = pill.doseDays
         self.doseMethods = pill.doseMethods
+    }
+    
+    func setEditMode(_ editing: Bool) {
+        self.isEditMode = editing
+        if !editing {
+            self.nameDuplicated = false
+        }
     }
     
     func confirm() {
@@ -96,10 +117,12 @@ class PillInfoViewModel: ObservableObject {
 
     func prepare() {
         guard !isNewpill else {
+            self.setTitle("새로운 약 추가하기")
             reset()
             return
         }
         fetch(id: id)
+        self.isEditMode = false
         self.setTitle(self.name)
         self.currentQuestion = nil
         self.lastQuestion = nil
@@ -111,22 +134,24 @@ class PillInfoViewModel: ObservableObject {
     }
     
     private func setTitle(_ title: String) {
-        self.title = isNewpill ? "새로운 약 추가하기" : title
+        self.title = title
     }
     
     func save(_ completion: (() -> Void)? = nil) {
-        guard let type = type else { return }
+        guard let type = type, isEditMode else { return }
         if isNewpill {
             let pill = Pill(name: name, type: type, startDate: startDate, cycle: cycle, doseDays: doseDays, doseMethods: doseMethods)
             PillMeDataManager.shared.add(pill) {
                 self.isNewpill = false
                 self.setTitle(self.name)
+                self.setEditMode(false)
                 completion?()
             }
         } else {
             let pill = Pill(id: self.id, name: self.name, type: type, startDate: self.startDate, endDate: self.endDate, cycle: self.cycle, doseDays: self.doseDays, doseMethods: self.doseMethods)
             PillMeDataManager.shared.update(pill: pill) {
                 self.setTitle(self.name)
+                self.setEditMode(false)
                 completion?()
             }
         }

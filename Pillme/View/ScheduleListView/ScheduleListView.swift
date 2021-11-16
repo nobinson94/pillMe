@@ -25,11 +25,16 @@ struct ScheduleListView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    Text(viewModel.date.dateString)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.system(size: 28, weight: .bold))
-                        .padding(.top, 20)
-                        .padding(.bottom, 40)
+                    Button {
+                        print("### TAP")
+                    } label: {
+                        Text(viewModel.date.dateString)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                            .padding(.bottom, 40)
+                    }
                     ForEach(viewModel.schedules, id: \.header) { section in
                         Section(header:
                             HStack {
@@ -70,6 +75,7 @@ class ScheduleListViewModel: ObservableObject {
     init() {
         let currentTime = TakeTime.current
         if currentTime.isOverNight {
+            print("#### isOvernight")
             date = date.yesterday
         }
     }
