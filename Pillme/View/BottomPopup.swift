@@ -48,10 +48,10 @@ struct OverlayModifier<OverlayView: View>: ViewModifier {
 extension View {
     func popup<OverlayView: View>(isPresented: Binding<Bool>,
                                   blurRadius: CGFloat = 3,
-                                  blurAnimation: Animation? = .easeInOut,
+                                  blurAnimation: Animation? = .linear,
                                   @ViewBuilder overlayView: @escaping () -> OverlayView) -> some View {
         return blur(radius: isPresented.wrappedValue ? blurRadius : 0)
-            .animation(blurAnimation) //, value: <#T##Equatable#>)
+            .animation(blurAnimation, value: isPresented.wrappedValue)
             .allowsHitTesting(!isPresented.wrappedValue)
             .modifier(OverlayModifier(isPresented: isPresented, overlayView: overlayView))
     }

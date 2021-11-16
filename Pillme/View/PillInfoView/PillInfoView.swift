@@ -125,6 +125,7 @@ struct PillInfoView: View {
                             self.showingAlert = false
                         }.buttonStyle(PillMeButton(style: .medium, color: .backgroundColor, textColor: .white))
                         Button("나가기") {
+                            self.showingAlert = false
                             self.presentationMode.wrappedValue.dismiss()
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
 
