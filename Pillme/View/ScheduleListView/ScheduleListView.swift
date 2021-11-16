@@ -73,9 +73,7 @@ class ScheduleListViewModel: ObservableObject {
     var date: Date = Date()
     
     init() {
-        let currentTime = TakeTime.current
-        if currentTime.isOverNight {
-            print("#### isOvernight")
+        if TakeTime.isOverNight {
             date = date.yesterday
         }
     }

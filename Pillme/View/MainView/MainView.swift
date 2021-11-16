@@ -31,13 +31,13 @@ struct MainView: View {
                         ScheduleListView()
                     } content: {
                         ForEach($viewModel.prevSchedules, id: \.pill.id) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
                         ForEach($viewModel.currentSchedules, id: \.pill.id) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
                         ForEach($viewModel.nextSchedules, id: \.pill.id) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
                     }
                 }

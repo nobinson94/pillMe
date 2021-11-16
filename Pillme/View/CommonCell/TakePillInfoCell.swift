@@ -11,6 +11,7 @@ struct TakePillInfoCell: View {
     @Binding var pill: Pill
     @Binding var takeTime: TakeTime
     @Binding var takeDate: Date
+    
     var doseMethod: DoseMethod? {
         self.pill.doseMethods.first(where: { $0.time == takeTime })
     }
@@ -39,7 +40,6 @@ struct TakePillInfoCell: View {
     init(pill: Binding<Pill>, takeTime: Binding<TakeTime>, takeDate: Binding<Date> = .constant(Date()), showSubTitle: Bool = true) {
         self._pill = pill
         self._takeTime = takeTime
-//        self.doseMethod = self.pill.doseMethods.first(where: { $0.time == takeTime })
         self._takeDate = takeDate
         self.showSubTitle = showSubTitle
     }

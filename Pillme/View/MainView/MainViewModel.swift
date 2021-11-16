@@ -15,6 +15,14 @@ class MainViewModel: ObservableObject {
     @Published var prevSchedules: [DoseSchedule] = []
     @Published var nextSchedules: [DoseSchedule] = []
     
+    var date: Date {
+        let today = Calendar.current.startOfDay(for: Date())
+        if TakeTime.isOverNight {
+            return today.yesterday
+        }
+        return today
+    }
+    
     var schedules: [DoseSchedule] {
         currentSchedules + prevSchedules + nextSchedules
     }
@@ -47,20 +55,16 @@ class MainViewModel: ObservableObject {
     }
     
     func fetch() {
-        var today = Calendar.current.startOfDay(for: Date())
-        if currentTime.isOverNight {
-            today = today.yesterday
-        }
-        self.currentSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: currentTime)
-            .map { DoseSchedule(pill: $0, date: today, takeTime: currentTime) }
+        self.currentSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: currentTime)
+            .map { DoseSchedule(pill: $0, date: date, takeTime: currentTime) }
         
         if let nextTime = nextTime {
-            nextSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: nextTime)
-                .map { DoseSchedule(pill: $0, date: today, takeTime: nextTime) }
+            nextSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: nextTime)
+                .map { DoseSchedule(pill: $0, date: date, takeTime: nextTime) }
         }
         if let prevTime = prevTime {
-            prevSchedules = PillMeDataManager.shared.getPills(for: today, takeTime: prevTime)
-                .map { DoseSchedule(pill: $0, date: today, takeTime: prevTime) }
+            prevSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: prevTime)
+                .map { DoseSchedule(pill: $0, date: date, takeTime: prevTime) }
         }
         
         allPills = PillMeDataManager.shared.getPills()

@@ -72,6 +72,15 @@ enum TakeTime: Int, CaseIterable {
         } ?? .afterWakeup
     }
     
+    static var isOverNight: Bool {
+        guard let lastTimeOfADay = TakeTime.allCases.first(where: { $0.isLastTimeOfADay }) else {
+            return false
+        }
+
+        let nowComponents = Calendar.current.dateComponents([.hour, .minute], from: Date())
+        return nowComponents < lastTimeOfADay.components && current.rawValue >= lastTimeOfADay.rawValue
+    }
+    
     static var closestNext: TakeTime {
         let nowComponents = Calendar.current.dateComponents([.hour, .minute], from: Date())
         
@@ -130,13 +139,6 @@ enum TakeTime: Int, CaseIterable {
     
     var isLastTimeOfADay: Bool {
         return self.nextTime.components < self.components
-    }
-    
-    var isOverNight: Bool {
-        guard let lastTimeOfADay = TakeTime.allCases.first(where: { $0.isLastTimeOfADay }) else {
-            return false
-        }
-        return self.components < lastTimeOfADay.components && self.rawValue > lastTimeOfADay.rawValue
     }
 }
 
