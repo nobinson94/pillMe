@@ -60,7 +60,7 @@ struct TakePillInfoCell: View {
             if isTaken {
                 Button {
                     self.takeButtonDisabled = true
-                    PillMeDataManager.shared.untakePill(for: pill.id, time: takeTime, date: Date()) {
+                    PillMeDataManager.shared.untakePill(for: pill.id, time: takeTime, date: takeDate) {
                         self.takeButtonDisabled = false
                         self.isTaken = false
                     }
@@ -74,7 +74,7 @@ struct TakePillInfoCell: View {
             } else {
                 Button {
                     self.takeButtonDisabled = true
-                    PillMeDataManager.shared.takePill(for: pill.id, time: takeTime, date: Date()) {
+                    PillMeDataManager.shared.takePill(for: pill.id, time: takeTime, date: takeDate) {
                         self.takeButtonDisabled = false
                         self.isTaken = true
                     }
