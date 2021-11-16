@@ -35,10 +35,10 @@ struct ScheduleListView: View {
                             .padding(.top, 20)
                             .padding(.bottom, 40)
                     }
-                    ForEach(viewModel.schedules, id: \.header) { section in
+                    ForEach($viewModel.schedules, id: \.header) { section in
                         Section(header:
                             HStack {
-                                Text(section.header)
+                                Text(section.header.wrappedValue)
                                     .foregroundColor(Color.gray)
                                     .font(.system(size: 15, weight: .semibold))
                                 Spacer()

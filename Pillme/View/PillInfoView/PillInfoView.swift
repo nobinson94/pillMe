@@ -17,32 +17,13 @@ struct PillInfoView: View {
     
     @ObservedObject var viewModel: PillInfoViewModel = PillInfoViewModel()
     @State private var showingAlert = false
-//    @State private var isEditMode: Bool = true
     @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
             Color.backgroundColor.ignoresSafeArea()
-                .pillMeNavigationBar(
-                    title: viewModel.title,
-                    backButtonAction: {
-                        guard viewModel.isEditMode else {
-                            presentationMode.wrappedValue.dismiss()
-                            return
-                        }
-                        showingAlert = true
-                    }, rightView: navigationRightView)
-                .alert(isPresented: $showingAlert, content: {
-                    Alert(title: Text("추가를 중단하고 나가기"),
-                          message: Text("지금까지의 내용은 저장되지 않습니다. 정말 나가시겠습니까?"),
-                          primaryButton: .cancel(Text("확인"), action: {
-                            presentationMode.wrappedValue.dismiss()
-                          }),
-                          secondaryButton: .default(Text("취소")))
-                })
             
             VStack(spacing: 0) {
-                
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
                         ForEach(DoseScheduleQuestion.allCases, id: \.self) { question in
@@ -111,9 +92,44 @@ struct PillInfoView: View {
             viewModel.prepare()
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
+                print("####FOCUS")
                 self.focusedField = .pillName // issue:: 두번째 변경부터는 적용되지 않는다.
             } else {
                 self.focusedField = nil
+            }
+        }
+        .pillMeNavigationBar(
+            title: viewModel.title,
+            backButtonAction: {
+                guard viewModel.isEditMode else {
+                    presentationMode.wrappedValue.dismiss()
+                    return
+                }
+                showingAlert = true
+            }, rightView: navigationRightView)
+        .popup(isPresented: $showingAlert) {
+            BottomPopup {
+                VStack(alignment: .leading, spacing: 15) {
+                    HStack {
+                        Text("\(viewModel.isNewpill ? "추가를" : "변경을") 중단하고 나가기")
+                            .font(.system(size: 22, weight: .bold))
+                        Spacer()
+                    }
+                    HStack {
+                        Text("지금까지의 변경사항은 저장되지 않습니다. 정말 나가시겠습니까?")
+                            .font(.system(size: 16, weight: .bold))
+                        Spacer()
+                    }
+                    HStack(spacing: 10) {
+                        Button("취소") {
+                            self.showingAlert = false
+                        }.buttonStyle(PillMeButton(style: .medium, color: .backgroundColor, textColor: .white))
+                        Button("나가기") {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
+
+                    }
+                }.padding()
             }
         }
     }

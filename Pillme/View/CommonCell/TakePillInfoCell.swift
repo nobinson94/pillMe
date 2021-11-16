@@ -4,14 +4,16 @@
 //
 //  Created by USER on 2021/11/15.
 //
-
+import Combine
 import SwiftUI
 
 struct TakePillInfoCell: View {
-    var pill: Pill
-    var takeTime: TakeTime
-    var takeDate: Date
-    var doseMethod: DoseMethod?
+    @Binding var pill: Pill
+    @Binding var takeTime: TakeTime
+    @Binding var takeDate: Date
+    var doseMethod: DoseMethod? {
+        self.pill.doseMethods.first(where: { $0.time == takeTime })
+    }
     
     var subTitle: String {
         if let doseMethod = doseMethod {
@@ -34,11 +36,11 @@ struct TakePillInfoCell: View {
     @State private var takeButtonDisabled: Bool = false
     
     
-    init(pill: Pill, takeTime: TakeTime, takeDate: Date = Date(), showSubTitle: Bool = true) {
-        self.pill = pill
-        self.takeTime = takeTime
-        self.doseMethod = self.pill.doseMethods.first(where: { $0.time == takeTime })
-        self.takeDate = takeDate
+    init(pill: Binding<Pill>, takeTime: Binding<TakeTime>, takeDate: Binding<Date> = .constant(Date()), showSubTitle: Bool = true) {
+        self._pill = pill
+        self._takeTime = takeTime
+//        self.doseMethod = self.pill.doseMethods.first(where: { $0.time == takeTime })
+        self._takeDate = takeDate
         self.showSubTitle = showSubTitle
     }
     

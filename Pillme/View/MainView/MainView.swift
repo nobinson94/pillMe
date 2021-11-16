@@ -30,13 +30,13 @@ struct MainView: View {
                     SectionView(title: "복용 관리", showMoreButton: true) {
                         ScheduleListView()
                     } content: {
-                        ForEach(viewModel.prevSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.prevSchedules, id: \.pill.id) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
-                        ForEach(viewModel.currentSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.currentSchedules, id: \.pill.id) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
-                        ForEach(viewModel.nextSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.nextSchedules, id: \.pill.id) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime)
                         }
                     }
@@ -59,7 +59,7 @@ struct MainView: View {
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, minHeight: 150, alignment: .center)
                     } else {
-                        ForEach(viewModel.allPills, id: \.id) { pill in
+                        ForEach($viewModel.allPills, id: \.id) { pill in
                             PillInfoCell(pill: pill)
                         }
                     }

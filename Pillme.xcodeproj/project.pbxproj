@@ -46,6 +46,7 @@
 		CED458EA27423CFD0042B3AB /* TakePillInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458E927423CFD0042B3AB /* TakePillInfoCell.swift */; };
 		CED458EC274260580042B3AB /* DoseSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458EB274260580042B3AB /* DoseSchedule.swift */; };
 		CED458EF2742B13B0042B3AB /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458EE2742B13B0042B3AB /* ScheduleListView.swift */; };
+		CED458F12743AC8A0042B3AB /* BottomPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458F02743AC8A0042B3AB /* BottomPopup.swift */; };
 		CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */; };
 		CEE72BB226F0F0490051083E /* PillMeDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE72BB126F0F0490051083E /* PillMeDataStore.swift */; };
 /* End PBXBuildFile section */
@@ -113,6 +114,7 @@
 		CED458E927423CFD0042B3AB /* TakePillInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePillInfoCell.swift; sourceTree = "<group>"; };
 		CED458EB274260580042B3AB /* DoseSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseSchedule.swift; sourceTree = "<group>"; };
 		CED458EE2742B13B0042B3AB /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
+		CED458F02743AC8A0042B3AB /* BottomPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPopup.swift; sourceTree = "<group>"; };
 		CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		CEE72BB126F0F0490051083E /* PillMeDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillMeDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -265,6 +267,7 @@
 				CE2B1B5826F9B77200AA962E /* LazyView.swift */,
 				CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */,
 				CE6A672F270D8EC000C65BFF /* PillMeButton.swift */,
+				CED458F02743AC8A0042B3AB /* BottomPopup.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -485,6 +488,7 @@
 				CEACDDE226CF8A2F0053A9E1 /* Pill.xcdatamodeld in Sources */,
 				CEB36B0726D6803500C368C3 /* View+Extension.swift in Sources */,
 				CEACDDDC26CF88380053A9E1 /* User.swift in Sources */,
+				CED458F12743AC8A0042B3AB /* BottomPopup.swift in Sources */,
 				CE2B1B5B26FDCB2800AA962E /* MainView.swift in Sources */,
 				CEACDDAA26CF87200053A9E1 /* ContentView.swift in Sources */,
 				CE6A675F27128E6C00C65BFF /* CDDoseMethod+CoreDataProperties.swift in Sources */,

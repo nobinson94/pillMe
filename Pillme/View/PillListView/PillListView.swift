@@ -26,7 +26,7 @@ struct PillListView: View {
             
             ScrollView {
                 VStack(spacing: 20) {
-                    ForEach(viewModel.pills, id: \.self) { pill in
+                    ForEach($viewModel.pills, id: \.self) { pill in
                         PillInfoCell(pill: pill)
                     }
                 }

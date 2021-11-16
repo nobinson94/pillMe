@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PillInfoCell: View {
-    var pill: Pill
+    @Binding var pill: Pill
     
     var body: some View {
         NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
