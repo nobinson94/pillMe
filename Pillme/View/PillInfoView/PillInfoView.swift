@@ -39,9 +39,7 @@ struct PillInfoView: View {
                                         Image(systemName: "pencil")
                                             .frame(width: 44, alignment: .trailing)
                                             .onTapGesture {
-                                                withAnimation {
-                                                    self.viewModel.currentQuestion = question
-                                                }
+                                                self.viewModel.currentQuestion = question
                                             }
                                     } else {
                                         Spacer()
@@ -92,7 +90,6 @@ struct PillInfoView: View {
             viewModel.prepare()
         }.onChange(of: viewModel.currentQuestion) { question in
             if question == .name {
-                print("####FOCUS")
                 self.focusedField = .pillName // issue:: 두번째 변경부터는 적용되지 않는다.
             } else {
                 self.focusedField = nil
@@ -169,7 +166,6 @@ struct PillInfoView: View {
     }
     
     private var pillTypeQuestionView: some View {
-        
         if viewModel.currentQuestion == .pillType {
             return AnyView(QuestionView(question: "약의 종류는 무엇인가요?") {
                 HStack(alignment: .center, spacing: 5) {

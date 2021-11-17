@@ -79,7 +79,7 @@ struct TakePillInfoCell: View {
                         self.isTaken = true
                     }
                 } label: {
-                    Text("복용 전")
+                    Text("복용 하기")
                         .font(.system(size: 13, weight: .semibold))
                         .frame(width: 70, height: 30)
                         .background(Color.backgroundColor.cornerRadius(5).opacity(0.6))

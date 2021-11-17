@@ -5,6 +5,7 @@
 //  Created by USER on 2021/11/16.
 //
 
+import Combine
 import SwiftUI
 
 struct ScheduleListView: View {
@@ -19,21 +20,41 @@ struct ScheduleListView: View {
     var body: some View {
         ZStack {
             Color.mainColor.ignoresSafeArea()
-                .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
-                    presentationMode.wrappedValue.dismiss()
-                })
             
             ScrollView {
                 VStack(spacing: 0) {
-                    Button {
-                        print("### TAP")
-                    } label: {
-                        Text(viewModel.date.dateString)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text("\(viewModel.currentDateTitle) \(viewModel.currentDateString)")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.white)
-                            .padding(.top, 20)
-                            .padding(.bottom, 40)
+                        Spacer()
+                        Button {
+                            viewModel.switchDate()
+                        } label: {
+                            HStack {
+                                Text(viewModel.otherDateTitle)
+                                Image(systemName: "chevron.right")
+                            }
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(.tintColor)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 20)
+                    .padding(.bottom, 10)
+                    Text("하루가 더 지난 경우 복용기록을 수정할 수 없어요!")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 20)
+                        .padding(.bottom, 40)
+                    
+                    if viewModel.schedules.isEmpty {
+                        VStack {
+                            Text("복용할 약이 없습니다")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
                     }
                     ForEach($viewModel.schedules, id: \.header) { section in
                         Section(header:
@@ -46,7 +67,7 @@ struct ScheduleListView: View {
                         ) {
                             VStack(spacing: 20) {
                                 ForEach(section.items, id: \.self) { schedule in
-                                    TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, showSubTitle: false)
+                                    TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, showSubTitle: false)
                                 }
                             }
                             .padding(.bottom, 20)
@@ -55,9 +76,14 @@ struct ScheduleListView: View {
                 }
                 .padding(20)
             }
-        }.onAppear {
+        }
+        .onAppear {
             viewModel.fetch()
         }
+        .pillMeNavigationBar(title: viewModel.title, backButtonAction: {
+            presentationMode.wrappedValue.dismiss()
+        })
+        
     }
 }
 
@@ -68,23 +94,65 @@ struct ScheduleListView_Previews: PreviewProvider {
 }
 
 class ScheduleListViewModel: ObservableObject {
-    @Published var schedules: [SectionModel<DoseSchedule>] = []
+    
     var title: String { "복용 관리" }
-    var date: Date = Date()
+    private var bag = Set<AnyCancellable>()
+    private var today: Date = Calendar.current.startOfDay(for: Date())
+    @Published var schedules: [SectionModel<DoseSchedule>] = []
+    @Published var currentDate: Date = Calendar.current.startOfDay(for: Date())
+    @Published var otherDate: Date = Calendar.current.startOfDay(for: Date())
+    
+    var currentDateString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M월 dd일 (EE)"
+
+        formatter.timeZone = TimeZone.autoupdatingCurrent
+        formatter.locale = Locale(identifier: "ko")
+        
+        return formatter.string(from: currentDate)
+    }
+    
+    var currentDateTitle: String {
+        if currentDate == today {
+            return "오늘"
+        } else if currentDate == today.yesterday {
+            return "어제"
+        }
+        return ""
+    }
+    
+    var otherDateTitle: String {
+        if otherDate == today {
+            return "오늘"
+        } else if otherDate == today.yesterday {
+            return "어제"
+        }
+        return ""
+    }
     
     init() {
         if TakeTime.isOverNight {
-            date = date.yesterday
+            currentDate = currentDate.yesterday
+            otherDate = today
+        } else {
+            otherDate = currentDate.yesterday
         }
     }
     
     func fetch() {
-        let pills = PillMeDataManager.shared.getPills(for: date)
+        let pills = PillMeDataManager.shared.getPills(for: currentDate)
         schedules = TakeTime.allCases.compactMap { takeTime in
-            let schedules = pills.filter { $0.doseMethods.contains(where: { $0.time == takeTime }) }.map { DoseSchedule(pill: $0, date: date, takeTime: takeTime) }
+            let schedules = pills.filter { $0.doseMethods.contains(where: { $0.time == takeTime }) }.map { DoseSchedule(pill: $0, date: currentDate, takeTime: takeTime) }
             if schedules.isEmpty { return nil }
             return SectionModel(header: takeTime.title, items: schedules)
         }
+    }
+    
+    func switchDate() {
+        let tempCurrentDate = currentDate
+        self.currentDate = otherDate
+        self.otherDate = tempCurrentDate
+        self.fetch()
     }
 }
 

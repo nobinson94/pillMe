@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct BottomPopup<Content: View>: View {
+    var backgroundColor: Color
     let content: Content
     
-    init(@ViewBuilder content: () -> Content) {
+    init(backgroundColor: Color = .mainColor, @ViewBuilder content: () -> Content) {
+        self.backgroundColor = backgroundColor
         self.content = content()
     }
     
@@ -20,12 +22,12 @@ struct BottomPopup<Content: View>: View {
                 Spacer()
                 content
                     .padding(.bottom, geometry.safeAreaInsets.bottom)
-                    .background(Color.mainColor)
+                    .background(backgroundColor)
                     .cornerRadius(radius: 16, corners: [.topLeft, .topRight])
             }
             .edgesIgnoringSafeArea([.bottom])
         }
-        .animation(.easeOut)
+        //.animation(.easeOut)
         .transition(.move(edge: .bottom))
     }
 }

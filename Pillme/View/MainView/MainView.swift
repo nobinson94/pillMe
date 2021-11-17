@@ -30,13 +30,13 @@ struct MainView: View {
                     SectionView(title: "복용 관리", showMoreButton: true) {
                         ScheduleListView()
                     } content: {
-                        ForEach($viewModel.prevSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.prevSchedules, id: \.self) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
-                        ForEach($viewModel.currentSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.currentSchedules, id: \.self) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
-                        ForEach($viewModel.nextSchedules, id: \.pill.id) { schedule in
+                        ForEach($viewModel.nextSchedules, id: \.self) { schedule in
                             TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
                         }
                     }
@@ -65,8 +65,8 @@ struct MainView: View {
                     }
                 }
                 
-                SectionView(title: "월간 복용도", showMoreButton: false) {
-                    CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white, selectable: false)
+                SectionView(title: "\(viewModel.date.month)월 복용도", showMoreButton: false) {
+                    CalendarView(width: UIScreen.main.bounds.size.width - 80, fontColor: .white, selectable: false, showHeader: false)
                 }
                 
                 Spacer()

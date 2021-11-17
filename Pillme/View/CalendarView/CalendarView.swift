@@ -10,52 +10,58 @@ import SwiftUI
 
 struct CalendarView: View {
     
-    @StateObject var calendarHelper: CalendarHelper = CalendarHelper()
+    @ObservedObject var calendarHelper: CalendarHelper
     
-    @State var showChangeMonthButton: Bool = true
-    @State var width: CGFloat = UIScreen.main.bounds.size.width - 80
-    @State var fontColor: Color = .black
-    @State var selectable: Bool = true
+    var showChangeMonthButton: Bool = true
+    var width: CGFloat = UIScreen.main.bounds.size.width - 80
+    var fontColor: Color = .black
+    var selectable: Bool = false
+    var showHeader: Bool = true
     @Binding var selectedDate: Date
     
     init(fixMonth: Bool = false,
          width: CGFloat = UIScreen.main.bounds.size.width - 80,
          fontColor: Color = .white,
          selectable: Bool = false,
+         showHeader: Bool = true,
          selectedDate: Binding<Date> = .constant(Date())) {
         self._selectedDate = selectedDate
         self.showChangeMonthButton = !fixMonth
         self.fontColor = fontColor
         self.width = width
         self.selectable = selectable
+        self.showHeader = showHeader
+        self.calendarHelper = CalendarHelper(date: selectedDate.wrappedValue)
     }
     
     var body: some View {
         VStack {
-            
-            HStack {
-                if showChangeMonthButton {
-                    Button(action: {
-                        calendarHelper.setPrevMonth()
-                    }, label: {
-                        Image(systemName: "chevron.left")
-                    }).padding(.leading, 20)
+            if showHeader {
+                HStack {
+                    if showChangeMonthButton {
+                        Button(action: {
+                            calendarHelper.setPrevMonth()
+                        }, label: {
+                            Image(systemName: "chevron.left")
+                        }).padding(.leading, 20)
+                    }
+                    Spacer()
+                    Text(calendarHelper.title).fontWeight(.medium)
+                    Spacer()
+                    if showChangeMonthButton {
+                        Button(action: {
+                            calendarHelper.setNextMonth()
+                        }, label: {
+                            Image(systemName: "chevron.right")
+                        }).padding(.trailing, 20)
+                    }
                 }
-                Spacer()
-                Text(calendarHelper.title).fontWeight(.medium)
-                Spacer()
-                if showChangeMonthButton {
-                    Button(action: {
-                        calendarHelper.setNextMonth()
-                    }, label: {
-                        Image(systemName: "chevron.right")
-                    }).padding(.trailing, 20)
-                }
+                .foregroundColor(.white)
+                .padding(.bottom, 20)
+                .padding(.top, 20)
+            } else {
+                Spacer(minLength: 20)
             }
-            .foregroundColor(.white)
-            .padding(.bottom, 20)
-            .padding(.top, 20)
-            .frame(width: width, height: 60, alignment: .center)
             
             VStack {
                 HStack(alignment: .center, spacing: 0) {
@@ -84,11 +90,8 @@ struct CalendarView: View {
                     }
                 }
             }
-            .padding(.trailing, 5)
-            .padding(.leading, 5)
             
         }
-        .cornerRadius(20)
         .foregroundColor(fontColor)
     }
     
@@ -199,8 +202,8 @@ class CalendarHelper: ObservableObject {
     
     @Published var days: [Int?] = []
     
-    var year: Int = Date().year
-    var month: Int = Date().month
+    var year: Int
+    var month: Int
     let formatter = DateFormatter()
     
     var title: String {
@@ -220,7 +223,10 @@ class CalendarHelper: ObservableObject {
         firstDateOfThisMonth.weekDay
     }
     
-    init() {
+    init(date: Date? = nil) {
+        let today = Date()
+        self.year = date?.year ?? today.year
+        self.month = date?.month ?? today.month
         setDays()
     }
     
