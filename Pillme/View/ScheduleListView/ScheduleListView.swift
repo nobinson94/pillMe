@@ -23,10 +23,12 @@ struct ScheduleListView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
+                    Spacer(minLength: 20)
                     HStack {
                         Text("\(viewModel.currentDateTitle) \(viewModel.currentDateString)")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.white)
+                            .padding(.leading, 20)
                         Spacer()
                         Button {
                             viewModel.switchDate()
@@ -34,20 +36,21 @@ struct ScheduleListView: View {
                             HStack {
                                 Text(viewModel.otherDateTitle)
                                 Image(systemName: "chevron.right")
+                                    .padding(.trailing, 20)
                             }
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(.tintColor)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, 20)
-                    .padding(.bottom, 10)
+                    
                     Text("하루가 더 지난 경우 복용기록을 수정할 수 없어요!")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 20)
-                        .padding(.bottom, 40)
+                        .padding(20)
+                        
+                    Spacer(minLength: 20)
                     
                     if viewModel.schedules.isEmpty {
                         VStack {
@@ -62,6 +65,7 @@ struct ScheduleListView: View {
                                 Text(section.header.wrappedValue)
                                     .foregroundColor(Color.gray)
                                     .font(.system(size: 15, weight: .semibold))
+                                    .padding(.leading, 20)
                                 Spacer()
                             }.frame(height: 50)
                         ) {
@@ -74,7 +78,6 @@ struct ScheduleListView: View {
                         }
                     }
                 }
-                .padding(20)
             }
         }
         .onAppear {

@@ -42,6 +42,7 @@ struct PillMeButton: ButtonStyle {
             .font(.system(size: fontSize))
             .frame(maxWidth: .infinity, minHeight: height)
             .background(color)
+            .opacity(configuration.isPressed ? 0.7 : 1)
             .cornerRadius(10)
     }
 }

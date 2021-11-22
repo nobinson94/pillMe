@@ -27,8 +27,8 @@ struct BottomPopup<Content: View>: View {
             }
             .edgesIgnoringSafeArea([.bottom])
         }
-        //.animation(.easeOut)
         .transition(.move(edge: .bottom))
+        .animation(.easeOut)
     }
 }
 
@@ -43,7 +43,18 @@ struct OverlayModifier<OverlayView: View>: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        content.overlay(isPresented ? overlayView : nil)
+        ZStack {
+            content
+            if isPresented {
+                Blur(style: .dark)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isPresented = false
+                    }
+                    .transition(.opacity.animation(.linear))
+                overlayView
+            }
+        }
     }
 }
 
@@ -52,9 +63,8 @@ extension View {
                                   blurRadius: CGFloat = 3,
                                   blurAnimation: Animation? = .linear,
                                   @ViewBuilder overlayView: @escaping () -> OverlayView) -> some View {
-        return blur(radius: isPresented.wrappedValue ? blurRadius : 0)
-            .animation(blurAnimation, value: isPresented.wrappedValue)
-            .allowsHitTesting(!isPresented.wrappedValue)
+        return navigationBarHidden(isPresented.wrappedValue)
             .modifier(OverlayModifier(isPresented: isPresented, overlayView: overlayView))
+            
     }
 }

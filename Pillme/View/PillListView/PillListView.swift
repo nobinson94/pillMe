@@ -25,12 +25,30 @@ struct PillListView: View {
                 })
             
             ScrollView {
-                VStack(spacing: 20) {
-                    ForEach($viewModel.pills, id: \.self) { pill in
+                VStack(spacing: 0) {
+                    VStack {
+                        HStack {
+                            Text("복용중인 약 개수").font(.system(size: 16, weight: .regular))
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
+                        .padding(.trailing, 20)
+                        HStack {
+                            Text("\(viewModel.pills.count)개").font(.system(size: 28, weight: .bold))
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
+                        .padding(.trailing, 20)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 30)
+                    .padding(.bottom, 30)
+                    
+                    ForEach($viewModel.pills, id: \.id) { pill in
                         PillInfoCell(pill: pill)
                     }
                 }
-                .padding(20)
             }
         }.onAppear {
             viewModel.fetch()
@@ -46,10 +64,24 @@ struct PillListView_Previews: PreviewProvider {
 
 class PillListViewModel: ObservableObject {
     
+    enum sortType: String {
+        case all
+        case pillType
+        case weekday
+        
+        var name: String {
+            switch self {
+            case .all: return "전체"
+            case .pillType: return "종류별"
+            case .weekday: return "요일별"
+            }
+        }
+    }
+    
     @Published var pills: [Pill] = []
     
     var title: String { "복용 중인 약" }
-
+    
     func fetch() {
         self.pills = PillMeDataManager.shared.getPills()
     }

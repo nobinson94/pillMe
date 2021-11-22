@@ -171,7 +171,7 @@ class PillMeDataManager {
     
     func getPills(for date: Date, takeTime: TakeTime) -> [Pill] {
         let pills = getPills(for: date)
-
+        print("##### getPills \(date.dateString) :: \(pills.count)")
         return pills.filter { pill in
             pill.doseMethods.contains { method in
                 method.time == takeTime
@@ -238,7 +238,7 @@ class PillMeDataManager {
         return !doseRecords.isEmpty
     }
 
-    func getDoseRecords(pillID: String?, takeTime: TakeTime?, date: Date?) -> [DoseRecord] {
+    func getDoseRecords(pillID: String? = nil, takeTime: TakeTime? = nil, date: Date? = nil) -> [DoseRecord] {
         let cdDoseRecords = self.getCDDoseRecords(pillID: pillID, takeTime: takeTime, date: date)
         
         return cdDoseRecords.map { DoseRecord(cdDoseRecord: $0) }

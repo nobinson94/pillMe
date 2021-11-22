@@ -49,6 +49,7 @@ struct TakePillInfoCell: View {
             Image("pillIcon")
                 .resizable()
                 .frame(width: 26, height: 26, alignment: .center)
+                .padding(.leading, 20)
             VStack(alignment: .leading, spacing: 5) {
                 if showSubTitle {
                     Text(subTitle)
@@ -70,7 +71,9 @@ struct TakePillInfoCell: View {
                         .frame(width: 70, height: 30)
                         .background(Color.tintColor.cornerRadius(5))
                         .foregroundColor(.backgroundColor)
-                }.disabled(self.takeButtonDisabled)
+                }
+                .disabled(self.takeButtonDisabled)
+                .padding(.trailing, 20)
             } else {
                 Button {
                     self.takeButtonDisabled = true
@@ -84,9 +87,14 @@ struct TakePillInfoCell: View {
                         .frame(width: 70, height: 30)
                         .background(Color.backgroundColor.cornerRadius(5).opacity(0.6))
                         .foregroundColor(.white)
-                }.disabled(self.takeButtonDisabled)
+                }
+                .disabled(self.takeButtonDisabled)
+                .padding(.trailing, 20)
             }
-        }.onAppear {
+        }
+        .padding(.top, 10)
+        .padding(.bottom, 10)
+        .onAppear {
             self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.id, takeTime: takeTime, date: takeDate)
         }
     }

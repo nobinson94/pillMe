@@ -53,7 +53,7 @@ struct ContentView: View {
                         .foregroundColor(.white)
                         .font(.system(size: 23, weight: .semibold))
                     Spacer()
-                    NavigationLink(destination: LazyView(PillInfoView())) {
+                    NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel()))) {
                         Image(systemName: "plus.circle.fill")
                             .foregroundColor(.white)
                             .frame(width: 33, height: 33, alignment: .trailing)

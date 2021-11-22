@@ -8,91 +8,136 @@
 import Combine
 import SwiftUI
 
+enum CalendarType: String {
+    case common
+    case doseGrade
+}
+
 struct CalendarView: View {
     
     @ObservedObject var calendarHelper: CalendarHelper
     
     var showChangeMonthButton: Bool = true
-    var width: CGFloat = UIScreen.main.bounds.size.width - 80
     var fontColor: Color = .black
     var selectable: Bool = false
     var showHeader: Bool = true
+    var type: CalendarType = .common
+    
     @Binding var selectedDate: Date
     
+    var height: CGFloat {
+        let endDayIndex = calendarHelper.days.endIndex
+        let rowCount: Int
+        if endDayIndex / 7 == 4 && endDayIndex % 7 == 0 {
+            rowCount = 4
+        } else if endDayIndex / 7 == 4 {
+            rowCount = 5
+        } else {
+            rowCount = 6
+        }
+        
+        if showHeader {
+            return CGFloat((rowCount+1)*45 + 70)
+        } else {
+            return CGFloat((rowCount+1)*45 + 20)
+        }
+    }
+    
     init(fixMonth: Bool = false,
-         width: CGFloat = UIScreen.main.bounds.size.width - 80,
          fontColor: Color = .white,
          selectable: Bool = false,
          showHeader: Bool = true,
-         selectedDate: Binding<Date> = .constant(Date())) {
+         selectedDate: Binding<Date> = .constant(Date()),
+         type: CalendarType = .common) {
         self._selectedDate = selectedDate
         self.showChangeMonthButton = !fixMonth
         self.fontColor = fontColor
-        self.width = width
         self.selectable = selectable
         self.showHeader = showHeader
         self.calendarHelper = CalendarHelper(date: selectedDate.wrappedValue)
+        self.type = type
     }
     
     var body: some View {
-        VStack {
-            if showHeader {
-                HStack {
-                    if showChangeMonthButton {
-                        Button(action: {
-                            calendarHelper.setPrevMonth()
-                        }, label: {
-                            Image(systemName: "chevron.left")
-                        }).padding(.leading, 20)
-                    }
-                    Spacer()
-                    Text(calendarHelper.title).fontWeight(.medium)
-                    Spacer()
-                    if showChangeMonthButton {
-                        Button(action: {
-                            calendarHelper.setNextMonth()
-                        }, label: {
-                            Image(systemName: "chevron.right")
-                        }).padding(.trailing, 20)
-                    }
-                }
-                .foregroundColor(.white)
-                .padding(.bottom, 20)
-                .padding(.top, 20)
-            } else {
-                Spacer(minLength: 20)
-            }
-            
+        GeometryReader { geometry in
             VStack {
-                HStack(alignment: .center, spacing: 0) {
-                    ForEach(WeekDay.allCases, id: \.self) { weekDay in
-                        WeekDayNameCellView(weekday: weekDay)
-                            .frame(width: width/7, height: 25, alignment: .center)
+                if showHeader {
+                    HStack {
+                        if showChangeMonthButton {
+                            Button(action: {
+                                calendarHelper.setPrevMonth()
+                            }, label: {
+                                Image(systemName: "chevron.left")
+                            }).padding(.leading, 20)
+                        }
+                        Spacer()
+                        Text(calendarHelper.title).fontWeight(.medium)
+                        Spacer()
+                        if showChangeMonthButton {
+                            Button(action: {
+                                calendarHelper.setNextMonth()
+                            }, label: {
+                                Image(systemName: "chevron.right")
+                            }).padding(.trailing, 20)
+                        }
                     }
+                    .frame(height: 30)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 20)
+                    .padding(.top, 20)
+                } else {
+                    Spacer(minLength: 20)
                 }
-                ForEach(0..<6) { row in
+                    
+                VStack {
                     HStack(alignment: .center, spacing: 0) {
-                        ForEach(1..<8) { weekDayIndex in
-                            if calendarHelper.days.count > row*7+weekDayIndex-1, let day = calendarHelper.days[row*7+weekDayIndex-1]  {
-                                DayCellView(day: day,
-                                            weekday: WeekDay(rawValue: weekDayIndex),
-                                            isToday: calendarHelper.isToday(day: day),
-                                            isSelected: isSelected(day: day) && selectable)
-                                    .onTapGesture() {
-                                        self.selectDate(day: day)
-                                    }
-                                    .frame(width: width/7, height: 45, alignment: .center)
-                            } else {
-                                DayCellView(day: nil)
-                                    .frame(width: width/7, height: 45, alignment: .center)
+                        ForEach(WeekDay.allCases, id: \.self) { weekDay in
+                            WeekDayNameCellView(weekday: weekDay)
+                                .frame(width: geometry.size.width/7, height: 25, alignment: .center)
+                        }
+                    }
+                    ForEach(0..<6) { row in
+                        HStack(alignment: .center, spacing: 0) {
+                            ForEach(1..<8) { weekDayIndex in
+                                if calendarHelper.days.count > row*7+weekDayIndex-1, let day = calendarHelper.days[row*7+weekDayIndex-1]  {
+                                    cell(day: day, weekDay: WeekDay(rawValue: weekDayIndex))
+                                        .frame(width: geometry.size.width/7, height: 45, alignment: .center)
+                                } else {
+                                    CommonDayCell(day: nil)
+                                        .frame(width: geometry.size.width/7, height: 45, alignment: .center)
+                                }
                             }
                         }
                     }
                 }
             }
-            
         }
+        .frame(maxWidth: .infinity, minHeight: self.height)
         .foregroundColor(fontColor)
+    }
+    
+    func cell(day: Int, weekDay: WeekDay?) -> AnyView {
+        if type == .doseGrade {
+            let date = calendarHelper.getDate(day: day)
+            let pills = PillMeDataManager.shared.getPills(for: date)
+            let schedulesCount = pills.reduce(0) { $0 + $1.doseMethods.count }
+            let doseRecordsCount = PillMeDataManager.shared.getDoseRecords(date: date).count
+            let doseGrade: Float? = schedulesCount == 0 ? nil : Float(doseRecordsCount) / Float(schedulesCount)
+            return AnyView(DoseInfoDayCell(day: day,
+                                           weekday: weekDay,
+                                           isFuture: calendarHelper.isFuture(day: day),
+                                           isToday: calendarHelper.isToday(day: day),
+                                           isSelected: isSelected(day: day) && selectable,
+                                           doseGrade: doseGrade))
+        } else {
+            return AnyView(CommonDayCell(day: day,
+                                 weekday: weekDay,
+                                 isToday: calendarHelper.isToday(day: day),
+                                 isSelected: isSelected(day: day) && selectable)
+                            .onTapGesture {
+                                self.selectDate(day: day)
+                            })
+        }
     }
     
     func isSelected(day: Int) -> Bool {
@@ -129,7 +174,63 @@ struct WeekDayNameCellView: View {
     }
 }
 
-struct DayCellView: View {
+protocol DayPresentableCell: View {
+    var day: Int? { get set }
+    var weekday: WeekDay? { get set }
+    var isToday: Bool { get set }
+    
+    var textColor: Color { get }
+    var backgroundColor: Color { get }
+}
+
+struct DoseInfoDayCell: DayPresentableCell {
+    var day: Int?
+    var weekday: WeekDay?
+    var isFuture: Bool = false
+    var isToday: Bool = false
+    var isSelected: Bool = false
+    var doseGrade: Float?
+
+    var textColor: Color {
+        if isToday && !isSelected { return .tintColor }
+        return isFuture ? .white.opacity(0.2) : .white
+    }
+
+    var backgroundColor: Color {
+        guard !isSelected else {
+            return .tintColor
+        }
+        return .clear
+    }
+
+    var body: some View {
+        if let day = day {
+            ZStack {
+                if !isFuture, let doseGrade = doseGrade {
+                    Circle()
+                        .stroke(style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round))
+                        .opacity(0.1)
+                        .foregroundColor(Color.tintColor)
+                        .padding(5)
+                    Circle()
+                        .trim(from: 0.0, to: CGFloat(min(doseGrade, 1.0)))
+                        .stroke(style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round))
+                        .foregroundColor(Color.tintColor)
+                        .rotationEffect(Angle(degrees: 270.0))
+                        .padding(5)
+                }
+                Text(String(day))
+                    .font(.system(size: 14, weight: isToday ? .bold : .light))
+                    .foregroundColor(textColor)
+            }
+        } else {
+            Text("")
+                .padding(0)
+        }
+    }
+}
+
+struct CommonDayCell: DayPresentableCell {
     var day: Int?
     var weekday: WeekDay?
     var isToday: Bool = false
@@ -158,18 +259,18 @@ struct DayCellView: View {
     var body: some View {
         if let day = day {
             ZStack {
-                backgroundColor
+                backgroundColor.cornerRadius(15)
                 Text(String(day))
                     .font(.system(size: 14, weight: isToday ? .bold : .light))
                     .foregroundColor(textColor)
             }
-            .cornerRadius(15)
         } else {
             Text("")
                 .padding(0)
         }
     }
 }
+
 
 enum WeekDay: Int, CaseIterable {
     case sun = 1
@@ -272,105 +373,17 @@ class CalendarHelper: ObservableObject {
     }
     
     func isToday(day: Int) -> Bool {
+        return Calendar.current.isDateInToday(self.getDate(day: day))
+    }
+    
+    func isFuture(day: Int) -> Bool {
+        return Calendar.current.startOfDay(for: Date().tommorrow) <= self.getDate(day: day)
+    }
+    
+    func getDate(day: Int) -> Date {
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = "\(year)-\(month)-\(day)"
-        return Calendar.current.isDateInToday(dateString.date)
-    }
-}
-
-extension Date {
-    var year: Int {
-        return Calendar.current.component(.year, from: self)
-    }
-    
-    var month: Int {
-        return Calendar.current.component(.month, from: self)
-    }
-    
-    var day: Int {
-        return Calendar.current.component(.day, from: self)
-    }
-    
-    var hour: Int {
-        return Calendar.current.component(.hour, from: self)
-    }
-    
-    var minute: Int {
-        return Calendar.current.component(.minute, from: self)
-    }
-    
-    var weekDay: WeekDay {
-        let weekDayIndex = Calendar.current.component(.weekday, from: self)
-        return WeekDay(rawValue: weekDayIndex) ?? .mon
-    }
-    
-    var isLeapYear: Bool {
-        self.year % 4 == 0 && self.year % 100 != 0
-    }
-    
-    var dateCountOfMonth: Int {
-        switch month {
-        case 2:
-            if isLeapYear {
-                return 29
-            } else {
-                return 28
-            }
-        case 1, 3, 5, 7, 8, 10, 12: return 31
-        default: return 30
-        }
-    }
-    
-    var dateString: String {
-        let formatter = DateFormatter()
-        if self.year == Date().year {
-            formatter.dateFormat = "M월 dd일"
-        } else {
-            formatter.dateFormat = "yyyy년 M월 dd일"
-        }
-        formatter.timeZone = TimeZone.autoupdatingCurrent
-        formatter.locale = Locale.current
         
-        if Calendar.current.isDateInToday(self) {
-            return "오늘 (\(formatter.string(from: self)))"
-        }
-        
-        return formatter.string(from: self)
+        return dateString.date
     }
-    
-    var timeString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        formatter.timeZone = TimeZone.autoupdatingCurrent
-        formatter.locale = Locale.current
-        
-        return formatter.string(from: self)
-    }
-    
-    func compareOnlyTime(_ other: Date) -> ComparisonResult {
-        guard self.hour != other.hour else {
-            if self.minute == other.minute {
-                return .orderedSame
-            } else if self.minute < other.minute {
-                return .orderedAscending
-            } else {
-                return .orderedDescending
-            }
-        }
-        
-        if self.hour < other.hour {
-            return .orderedAscending
-        } else {
-            return .orderedDescending
-        }
-    }
-    
-    var tommorrow: Date {
-        self.addingTimeInterval(86400)
-    }
-    
-    var yesterday: Date {
-        self.addingTimeInterval(-86400)
-    }
-    
 }

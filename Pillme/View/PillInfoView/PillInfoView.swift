@@ -12,17 +12,29 @@ struct PillInfoView: View {
     enum Field: Hashable {
         case pillName
     }
+    
+//    enum AlertType {
+//        case
+//    }
 
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject var viewModel: PillInfoViewModel = PillInfoViewModel()
+    @StateObject var viewModel: PillInfoViewModel
     @State private var showingAlert = false
     @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
             Color.backgroundColor.ignoresSafeArea()
-            
+                .pillMeNavigationBar(
+                    title: viewModel.title,
+                    backButtonAction: {
+                        guard viewModel.isEditMode else {
+                            presentationMode.wrappedValue.dismiss()
+                            return
+                        }
+                        showingAlert = true
+                    }, rightView: navigationRightView)
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
@@ -95,15 +107,6 @@ struct PillInfoView: View {
                 self.focusedField = nil
             }
         }
-        .pillMeNavigationBar(
-            title: viewModel.title,
-            backButtonAction: {
-                guard viewModel.isEditMode else {
-                    presentationMode.wrappedValue.dismiss()
-                    return
-                }
-                showingAlert = true
-            }, rightView: navigationRightView)
         .popup(isPresented: $showingAlert) {
             BottomPopup {
                 VStack(alignment: .leading, spacing: 15) {
@@ -125,11 +128,15 @@ struct PillInfoView: View {
                             self.showingAlert = false
                             self.presentationMode.wrappedValue.dismiss()
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
-
                     }
-                }.padding()
+                }
+                .padding()
             }
         }
+
+//        .popup(isPresented: $showingAlert) {
+//
+//        }
     }
     
     func getQuestionView(of step: DoseScheduleQuestion) -> AnyView {
@@ -412,7 +419,7 @@ struct PillInfoView: View {
 
 struct PillInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        PillInfoView()
+        PillInfoView(viewModel: PillInfoViewModel())
     }
 }
 

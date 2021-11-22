@@ -121,8 +121,8 @@ class PillInfoViewModel: ObservableObject {
             reset()
             return
         }
-        fetch(id: id)
-        self.isEditMode = false
+        self.fetch(id: id)
+        self.setEditMode(false)
         self.setTitle(self.name)
         self.currentQuestion = nil
         self.lastQuestion = nil

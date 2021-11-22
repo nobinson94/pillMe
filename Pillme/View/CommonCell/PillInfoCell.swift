@@ -16,12 +16,28 @@ struct PillInfoCell: View {
                 Image("pillIcon")
                     .resizable()
                     .frame(width: 26, height: 26, alignment: .center)
+                    .padding(.leading, 20)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 14))
                     Text("\(pill.name)").font(.system(size: 20, weight: .bold))
                 }
-                Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.trailing, 20)
+                
             }
-        }.foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 10)
+            .padding(.bottom, 10)
+        }
+        .buttonStyle(BlinkOnPressStyle())
+        .frame(maxWidth: .infinity)
+    }
+}
+
+struct BlinkOnPressStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .animation(.easeInOut, value: configuration.isPressed)
+            .background(configuration.isPressed ? Color.black.opacity(0.1) : Color.clear)
     }
 }
