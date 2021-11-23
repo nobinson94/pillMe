@@ -96,8 +96,6 @@ struct PillListView: View {
                             }
                         }
                     }
-                    .animation(.easeInOut, value: viewModel.sortType)
-                    .transition(.move(edge: .leading))
                 }
             }
         }.onAppear {
