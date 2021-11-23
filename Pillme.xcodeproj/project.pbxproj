@@ -48,6 +48,7 @@
 		CED458EF2742B13B0042B3AB /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458EE2742B13B0042B3AB /* ScheduleListView.swift */; };
 		CED458F12743AC8A0042B3AB /* BottomPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458F02743AC8A0042B3AB /* BottomPopup.swift */; };
 		CED458F3274BC7810042B3AB /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458F2274BC7810042B3AB /* Date+Extension.swift */; };
+		CED458F5274BE5C00042B3AB /* DoseRecordCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED458F4274BE5C00042B3AB /* DoseRecordCalendarView.swift */; };
 		CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */; };
 		CEE72BB226F0F0490051083E /* PillMeDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE72BB126F0F0490051083E /* PillMeDataStore.swift */; };
 /* End PBXBuildFile section */
@@ -117,6 +118,7 @@
 		CED458EE2742B13B0042B3AB /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
 		CED458F02743AC8A0042B3AB /* BottomPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomPopup.swift; sourceTree = "<group>"; };
 		CED458F2274BC7810042B3AB /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		CED458F4274BE5C00042B3AB /* DoseRecordCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseRecordCalendarView.swift; sourceTree = "<group>"; };
 		CEDF5E5826D7929C0078F6B4 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		CEE72BB126F0F0490051083E /* PillMeDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillMeDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,6 +273,7 @@
 				CE2B1B5C26FE2C0900AA962E /* NavigationBar.swift */,
 				CE6A672F270D8EC000C65BFF /* PillMeButton.swift */,
 				CED458F02743AC8A0042B3AB /* BottomPopup.swift */,
+				CED458F4274BE5C00042B3AB /* DoseRecordCalendarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				CE6A6730270D8EC000C65BFF /* PillMeButton.swift in Sources */,
 				CEACDDE826CF9CA30053A9E1 /* PillInfoViewModel.swift in Sources */,
 				CE822376271A5AA900D9A9D8 /* DoseRecord.swift in Sources */,
+				CED458F5274BE5C00042B3AB /* DoseRecordCalendarView.swift in Sources */,
 				CE6A675D27128E6C00C65BFF /* CDPill+CoreDataProperties.swift in Sources */,
 				CE9D9635270CAA040061BC1A /* DoseMethod.swift in Sources */,
 				CEDF5E5926D7929C0078F6B4 /* CalendarView.swift in Sources */,

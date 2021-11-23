@@ -25,7 +25,7 @@ struct PillInfoView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundColor.ignoresSafeArea()
+            Color.mainColor.ignoresSafeArea()
                 .pillMeNavigationBar(
                     title: viewModel.title,
                     backButtonAction: {
@@ -59,7 +59,7 @@ struct PillInfoView: View {
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.mainColor)
+                                .background(Color.backgroundColor)
                                 .cornerRadius(5)
                             }
                         }
@@ -188,7 +188,7 @@ struct PillInfoView: View {
                                 self.viewModel.type = type
                             }
                         }
-                        .buttonStyle(PillMeButton(style: .medium, color: isSelected ? .tintColor : .mainColor, textColor: isSelected ? .mainColor : .white))
+                        .buttonStyle(PillMeButton(style: .medium, color: isSelected ? .tintColor : .backgroundColor, textColor: isSelected ? .mainColor : .white))
                     }
                 }
                 .padding(10)
@@ -264,15 +264,15 @@ struct PillInfoView: View {
                             self.viewModel.cycle = 1
                             self.viewModel.doseDays = []
                             self.viewModel.confirm()
-                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == 1 ? .tintColor : .mainColor, textColor: viewModel.cycle == 1 ? .mainColor : .white))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == 1 ? .tintColor : .backgroundColor, textColor: viewModel.cycle == 1 ? .backgroundColor : .white))
                         Button("요일별로") {
                             self.viewModel.cycle = -1
                             self.viewModel.doseDays = []
-                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == -1 ? .tintColor : .mainColor, textColor: viewModel.cycle == -1 ? .mainColor : .white))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle == -1 ? .tintColor : .backgroundColor, textColor: viewModel.cycle == -1 ? .backgroundColor : .white))
                         Button("주기에 따라") {
                             self.viewModel.cycle = 2
                             self.viewModel.doseDays = []
-                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle >= 2 ? .tintColor : .mainColor, textColor: viewModel.cycle >= 2 ? .mainColor : .white))
+                        }.buttonStyle(PillMeButton(style: .small, color: viewModel.cycle >= 2 ? .tintColor : .backgroundColor, textColor: viewModel.cycle >= 2 ? .backgroundColor : .white))
                     }.padding(10)
                 }
                 if viewModel.cycle >= 1 {
@@ -283,6 +283,7 @@ struct PillInfoView: View {
                                 .keyboardType(.numberPad)
                                 .accentColor(.tintColor)
                                 .foregroundColor(.tintColor)
+                                .multilineTextAlignment(.trailing)
                             Text("일 마다")
                                 .padding(.trailing, 20)
                         }
@@ -301,7 +302,7 @@ struct PillInfoView: View {
                                     Button(doseDay.shortKor) {
                                         self.viewModel.doseDays.append(doseDay)
                                     }
-                                    .buttonStyle(PillMeButton(style: .small, color: .mainColor, textColor: .white))
+                                    .buttonStyle(PillMeButton(style: .small, color: .backgroundColor, textColor: .white))
                                 }
                             }
                         }.padding(10)
@@ -364,7 +365,7 @@ struct PillInfoView: View {
                                     .opacity(isAdded ? 0.4 : 1)
                             }
                             .frame(maxWidth: .infinity, minHeight: 40)
-                            .background(Color.mainColor)
+                            .background(Color.backgroundColor)
                             .cornerRadius(5)
                             .disabled(isAdded)
                         }
@@ -432,7 +433,7 @@ struct QuestionView<Content: View>: View {
             Text(question)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.system(size: 32, weight: .ultraLight))
+                .font(.system(size: 28, weight: .bold))
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
                 .allowsTightening(true)

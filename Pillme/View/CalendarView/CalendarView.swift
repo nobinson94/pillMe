@@ -35,9 +35,8 @@ struct CalendarView: View {
         } else {
             rowCount = 6
         }
-        
         if showHeader {
-            return CGFloat((rowCount+1)*45 + 70)
+            return CGFloat((rowCount+1)*45 + 70 + 45)
         } else {
             return CGFloat((rowCount+1)*45 + 20)
         }
@@ -66,6 +65,9 @@ struct CalendarView: View {
                         if showChangeMonthButton {
                             Button(action: {
                                 calendarHelper.setPrevMonth()
+                                if type == .doseGrade {
+                                    self.selectDate(day: 1)
+                                }
                             }, label: {
                                 Image(systemName: "chevron.left")
                             }).padding(.leading, 20)
@@ -76,9 +78,16 @@ struct CalendarView: View {
                         if showChangeMonthButton {
                             Button(action: {
                                 calendarHelper.setNextMonth()
+                                if type == .doseGrade {
+                                    self.selectDate(day: 1)
+                                }
+
                             }, label: {
                                 Image(systemName: "chevron.right")
-                            }).padding(.trailing, 20)
+                                    .foregroundColor((type == .doseGrade && calendarHelper.isThisMonth) ? .white.opacity(0.2) : .white)
+                            })
+                            .padding(.trailing, 20)
+                            .disabled(type == .doseGrade && calendarHelper.isThisMonth)
                         }
                     }
                     .frame(height: 30)
@@ -123,20 +132,27 @@ struct CalendarView: View {
             let schedulesCount = pills.reduce(0) { $0 + $1.doseMethods.count }
             let doseRecordsCount = PillMeDataManager.shared.getDoseRecords(date: date).count
             let doseGrade: Float? = schedulesCount == 0 ? nil : Float(doseRecordsCount) / Float(schedulesCount)
+            let isFuture = calendarHelper.isFuture(day: day)
             return AnyView(DoseInfoDayCell(day: day,
                                            weekday: weekDay,
-                                           isFuture: calendarHelper.isFuture(day: day),
+                                           isFuture: isFuture,
                                            isToday: calendarHelper.isToday(day: day),
                                            isSelected: isSelected(day: day) && selectable,
-                                           doseGrade: doseGrade))
+                                           doseGrade: doseGrade)
+                            .onTapGesture {
+                if !isFuture {
+                    self.selectDate(day: day)
+                }
+            })
+            
         } else {
             return AnyView(CommonDayCell(day: day,
-                                 weekday: weekDay,
-                                 isToday: calendarHelper.isToday(day: day),
-                                 isSelected: isSelected(day: day) && selectable)
+                                         weekday: weekDay,
+                                         isToday: calendarHelper.isToday(day: day),
+                                         isSelected: isSelected(day: day) && selectable)
                             .onTapGesture {
-                                self.selectDate(day: day)
-                            })
+                self.selectDate(day: day)
+            })
         }
     }
     
@@ -145,6 +161,7 @@ struct CalendarView: View {
     }
     
     func selectDate(day: Int) {
+        guard selectable else { return }
         self.selectedDate = "\(calendarHelper.year)-\(calendarHelper.month)-\(day)".date
     }
 }
@@ -192,6 +209,7 @@ struct DoseInfoDayCell: DayPresentableCell {
     var doseGrade: Float?
 
     var textColor: Color {
+        if isSelected { return .mainColor }
         if isToday && !isSelected { return .tintColor }
         return isFuture ? .white.opacity(0.2) : .white
     }
@@ -202,20 +220,27 @@ struct DoseInfoDayCell: DayPresentableCell {
         }
         return .clear
     }
+    
+    var circleStrokeColor: Color {
+        return .tintColor
+    }
 
     var body: some View {
         if let day = day {
             ZStack {
+                Circle()
+                    .padding(10)
+                    .foregroundColor(backgroundColor)
                 if !isFuture, let doseGrade = doseGrade {
                     Circle()
                         .stroke(style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round))
-                        .opacity(0.1)
-                        .foregroundColor(Color.tintColor)
+                        .opacity(0.2)
+                        .foregroundColor(circleStrokeColor)
                         .padding(5)
                     Circle()
                         .trim(from: 0.0, to: CGFloat(min(doseGrade, 1.0)))
                         .stroke(style: StrokeStyle(lineWidth: 2.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.tintColor)
+                        .foregroundColor(circleStrokeColor)
                         .rotationEffect(Angle(degrees: 270.0))
                         .padding(5)
                 }
@@ -238,7 +263,7 @@ struct CommonDayCell: DayPresentableCell {
     
     var textColor: Color {
         guard !isSelected else {
-            return .white
+            return .mainColor
         }
         guard !isToday else {
             return .tintColor
@@ -322,6 +347,11 @@ class CalendarHelper: ObservableObject {
     
     var firstWeekDayOfThisMonth: WeekDay {
         firstDateOfThisMonth.weekDay
+    }
+    
+    var isThisMonth: Bool {
+        let today = Date()
+        return today.year == year && today.month == month
     }
     
     init(date: Date? = nil) {

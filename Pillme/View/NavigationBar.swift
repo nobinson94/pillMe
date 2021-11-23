@@ -14,7 +14,7 @@ struct PillMeNavigationBar: ViewModifier {
         let appearance = UINavigationBarAppearance()
         
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.backgroundColor
+        appearance.backgroundColor = UIColor.mainColor
         appearance.titleTextAttributes = [.foregroundColor: tintColor, .font: UIFont.systemFont(ofSize: 18, weight: .bold)]
         appearance.largeTitleTextAttributes = [.foregroundColor: tintColor, .font: UIFont.systemFont(ofSize: 18, weight: .bold)]
         appearance.setBackIndicatorImage(UIImage(named: "chevron.backward"), transitionMaskImage: nil)

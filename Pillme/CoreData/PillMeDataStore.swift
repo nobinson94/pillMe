@@ -171,7 +171,6 @@ class PillMeDataManager {
     
     func getPills(for date: Date, takeTime: TakeTime) -> [Pill] {
         let pills = getPills(for: date)
-        print("##### getPills \(date.dateString) :: \(pills.count)")
         return pills.filter { pill in
             pill.doseMethods.contains { method in
                 method.time == takeTime

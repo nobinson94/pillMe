@@ -21,7 +21,7 @@ struct SettingView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundColor.ignoresSafeArea()
+            Color.mainColor.ignoresSafeArea()
                 .pillMeNavigationBar(
                     title: viewModel.title,
                     backButtonAction: {
@@ -53,9 +53,8 @@ struct SettingView: View {
                     
                     infoView(title: UserInfo.name.title) {
                         if isEditMode {
-                            VStack {
-                                TextField("이름을 입력해주세요.", text: $viewModel.name)
-                            }
+                            TextField("이름을 입력해주세요.", text: $viewModel.name)
+                                .multilineTextAlignment(.trailing)
                         } else {
                             if viewModel.name.isEmpty {
                                 Text("-").foregroundColor(.gray)
@@ -70,6 +69,7 @@ struct SettingView: View {
                             TextField("나이를 입력해주세요",
                                       value: $viewModel.age,
                                       formatter: NumberFormatter())
+                                .multilineTextAlignment(.trailing)
                                 .keyboardType(.asciiCapableNumberPad)
                         } else {
                             if let age = viewModel.age, age > 0 {
@@ -138,15 +138,16 @@ struct SettingView: View {
     }
     
     private func infoView<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 5) {
+        HStack {
             Text(title)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(.gray)
+            Spacer()
             content()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 45, alignment: .leading)
         .padding()
-        .background(Color.mainColor)
+        .background(Color.backgroundColor)
         .cornerRadius(5)
     }
 }

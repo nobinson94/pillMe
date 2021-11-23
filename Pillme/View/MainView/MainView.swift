@@ -66,7 +66,9 @@ struct MainView: View {
                     }
                 }
                 
-                SectionView(title: "\(viewModel.date.month)월 복용도", showMoreButton: false) {
+                SectionView(title: "\(viewModel.date.month)월 복용도", showMoreButton: true) {
+                    DoseRecordCalendarView()
+                } content: {
                     CalendarView(fontColor: .white,
                                  selectable: false,
                                  showHeader: false,
