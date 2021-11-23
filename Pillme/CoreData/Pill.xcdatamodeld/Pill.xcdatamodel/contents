@@ -12,15 +12,15 @@
     </entity>
     <entity name="CDPill" representedClassName="CDPill" syncable="YES">
         <attribute name="cycle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="doseDays" optional="YES" attributeType="Transformable" customClassName="[Int]"/>
+        <attribute name="doseDays" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[Int]"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" customClassName="TakableType"/>
-        <relationship name="doseMethods" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CDDoseMethod" inverseName="pill" inverseEntity="CDDoseMethod"/>
-        <relationship name="doseRecords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDDoseRecord" inverseName="pill" inverseEntity="CDDoseRecord"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDUser" inverseName="pills" inverseEntity="CDUser"/>
+        <relationship name="doseMethods" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CDDoseMethod" inverseName="pill" inverseEntity="CDDoseMethod"/>
+        <relationship name="doseRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDDoseRecord" inverseName="pill" inverseEntity="CDDoseRecord"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="CDUser" inverseName="pills" inverseEntity="CDUser"/>
     </entity>
     <entity name="CDUser" representedClassName="CDUser" syncable="YES">
         <attribute name="gender" optional="YES" attributeType="String"/>
