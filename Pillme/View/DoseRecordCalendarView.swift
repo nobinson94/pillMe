@@ -29,14 +29,15 @@ struct DoseRecordCalendarView: View {
                                 .padding(.trailing, 20)
                             Spacer()
                         }
-                        Spacer(minLength: 5)
+                        Spacer(minLength: 20)
                         if viewModel.totalScheduleCount > 0 {
                             HStack {
                                 Group {
-                                    Text("\(viewModel.doseGrade ?? "0")%").foregroundColor(.tintColor) +
+                                    Text("\(viewModel.doseGrade ?? "0")%").foregroundColor(.tintColor)
+                                        .font(.system(size: 24, weight: .bold)) +
                                     Text(" 복용했어요")
+                                        .font(.system(size: 24, weight: .semibold))
                                 }
-                                .font(.system(size: 24, weight: .semibold))
                                 .padding(.leading, 20)
                                 Spacer(minLength: 20)
                             }
@@ -96,6 +97,11 @@ struct DoseRecordCalendarView: View {
                                                 .foregroundColor(.green)
                                                 .font(.system(size: 15))
                                                 .padding(.trailing, 20)
+                                        } else if !Calendar.current.isDateInToday(schedule.date) {
+                                            Image(systemName: "xmark")
+                                                .foregroundColor(.red)
+                                                .font(.system(size: 15))
+                                                .padding(.trailing, 20)
                                         }
                                     }.frame(height: 45)
                                 }
@@ -141,12 +147,10 @@ class DoseRecordCalendarViewModel: ObservableObject {
     var doseGradeMessage: String? {
         guard totalScheduleCount > 0 else { return nil }
         let doseGradeRate = Float(takenScheduleCount) / Float(totalScheduleCount)
-        if doseGradeRate > 0.8 {
+        if doseGradeRate > 0.7 {
             return "훌륭해요!"
-        } else if doseGradeRate > 0.6 {
+        } else if doseGradeRate > 0.4 {
             return "조금만 더 노력해요!"
-        } else if doseGradeRate > 0.3 {
-            return "건강은 습관입니다"
         } else {
             return "건강을 위해서 제 때 약을 먹는 습관을 들여요"
         }
