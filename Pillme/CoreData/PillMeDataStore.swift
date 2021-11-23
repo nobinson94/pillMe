@@ -177,7 +177,12 @@ class PillMeDataManager {
         if let date = date {
             return pills.filter { date.isTakeDay(of: $0) }
         }
-        return pills
+        return pills.filter {
+            guard let endDate = $0.endDate else {
+                return true
+            }
+            return endDate > Date()
+        }
     }
     
     func getPills(for date: Date, takeTime: TakeTime) -> [Pill] {

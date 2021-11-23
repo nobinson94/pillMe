@@ -153,7 +153,9 @@ struct PillInfoView: View {
                         }.buttonStyle(PillMeButton(style: .medium, color: .backgroundColor, textColor: .white))
                         Button("복용기록 보관") {
                             self.showingDeleteAlert = false
-                            self.presentationMode.wrappedValue.dismiss()
+                            viewModel.finishDosePill {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
                         Button("모두 삭제") {
                             self.showingDeleteAlert = false

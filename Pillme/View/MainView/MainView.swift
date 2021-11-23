@@ -34,6 +34,8 @@ struct MainView: View {
                                 Text("지금은 복용할 약이 없습니다")
                                     .lineSpacing(5)
                                     .padding(.leading, 20)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.gray)
                                 Spacer(minLength: 20)
                             }
                         }
@@ -78,11 +80,11 @@ struct MainView: View {
                                 Text("복용하시는 약이 없어요.\n건강을 위해 영양제를 추가해보세요!")
                                     .lineSpacing(5)
                                     .padding(.leading, 20)
+                                    .font(.system(size: 14, weight: .semibold))
                                 Spacer(minLength: 20)
                             }
                             Spacer(minLength: 10)
                         }
-                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     } else {

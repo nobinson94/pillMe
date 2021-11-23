@@ -284,7 +284,9 @@ struct CommonDayCell: DayPresentableCell {
     var body: some View {
         if let day = day {
             ZStack {
-                backgroundColor.cornerRadius(15)
+                Circle()
+                    .padding(10)
+                    .foregroundColor(backgroundColor)
                 Text(String(day))
                     .font(.system(size: 14, weight: isToday ? .bold : .light))
                     .foregroundColor(textColor)
