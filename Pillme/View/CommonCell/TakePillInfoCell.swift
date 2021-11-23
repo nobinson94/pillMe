@@ -41,8 +41,6 @@ struct TakePillInfoCell: View {
         self._takeDate = takeDate
         self._isTaken = isTaken
         self.showSubTitle = showSubTitle
-//        self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.wrappedValue.id, takeTime: takeTime.wrappedValue, date: takeDate.wrappedValue)
-//        print("##### isTaken \(isTaken)")
     }
     
     var body: some View {

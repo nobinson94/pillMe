@@ -46,8 +46,10 @@ extension View {
         self.modifier(PillMeNavigationBar())
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: Button(action: backButtonAction ?? { }, label: {
-                Image(systemName: "chevron.backward").imageScale(.large).accentColor(.white).padding(.trailing, 20)
-            }))
+                HStack {
+                    Image(systemName: "chevron.backward").imageScale(.large).accentColor(.white)
+                }.frame(width: 50, alignment: .leading)
+            }).frame(width: 50))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarTitle(title)
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PillInfoCell: View {
     @Binding var pill: Pill
-    
+    var subTitle: String = ""
     var body: some View {
         NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
             HStack(spacing: 10) {
@@ -18,12 +18,13 @@ struct PillInfoCell: View {
                     .frame(width: 44, height: 44, alignment: .center)
                     .padding(.leading, 20)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 14))
+                    Text(subTitle.isEmpty ? pill.type.name : subTitle).foregroundColor(.gray).font(.system(size: 14))
                     Text("\(pill.name)").font(.system(size: 20, weight: .bold))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.trailing, 20)
             }
+            .contentShape(Rectangle())
             .frame(maxWidth: .infinity)
             .padding(.top, 10)
             .padding(.bottom, 10)

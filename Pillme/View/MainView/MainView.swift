@@ -95,9 +95,9 @@ struct MainView: View {
                             if viewModel.allPills.count > 5 {
                                 NavigationLink(destination: LazyView(PillListView())) {
                                     VStack {
-                                        Spacer(minLength: 10)
-                                        Rectangle().frame(height: 0.4, alignment: .top).foregroundColor(.white.opacity(0.3))
                                         Spacer(minLength: 20)
+                                        Rectangle().frame(height: 0.4, alignment: .top).foregroundColor(.white.opacity(0.2))
+                                        Spacer(minLength: 25)
                                         Text("\(viewModel.allPills.count-5)개 더보기").foregroundColor(.white).font(.system(size: 16, weight: .semibold))
                                         Spacer(minLength: 10)
                                     }
