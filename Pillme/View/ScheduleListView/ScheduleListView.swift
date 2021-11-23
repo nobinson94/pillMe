@@ -71,7 +71,7 @@ struct ScheduleListView: View {
                         ) {
                             VStack(spacing: 20) {
                                 ForEach(section.items, id: \.self) { schedule in
-                                    TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, showSubTitle: false)
+                                    TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, isTaken: schedule.isTaken, showSubTitle: false)
                                 }
                             }
                             .padding(.bottom, 20)

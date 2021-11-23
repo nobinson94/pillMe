@@ -25,38 +25,66 @@ struct MainView: View {
                     .foregroundColor(.white)
                 }
                 
-                if !viewModel.schedules.isEmpty {
+                if !viewModel.allPills.isEmpty {
                     SectionView(title: "복용 관리", showMoreButton: true) {
                         ScheduleListView()
                     } content: {
+                        if viewModel.schedules.isEmpty {
+                            HStack {
+                                Text("지금은 복용할 약이 없습니다")
+                                    .lineSpacing(5)
+                                    .padding(.leading, 20)
+                                Spacer(minLength: 20)
+                            }
+                        }
                         ForEach($viewModel.prevSchedules, id: \.self) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, isTaken: schedule.isTaken)
                         }
                         ForEach($viewModel.currentSchedules, id: \.self) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, isTaken: schedule.isTaken)
                         }
                         ForEach($viewModel.nextSchedules, id: \.self) { schedule in
-                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date)
+                            TakePillInfoCell(pill: schedule.pill, takeTime: schedule.takeTime, takeDate: schedule.date, isTaken: schedule.isTaken)
                         }
                     }
                 }
                 
-                SectionView(title: "복용 중인 약", showMoreButton: true) {
+                SectionView(title: "복용 중인 약", showMoreButton: viewModel.allPills.isEmpty ? false : true) {
                     PillListView()
                 } content: {
                     if viewModel.allPills.isEmpty {
                         VStack(spacing: 0) {
-                            Text("복용하시는 약이 없네요.\n건강을 위해 영양제를 추가해보세요!").lineSpacing(10)
                             NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel()))) {
                                 HStack(spacing: 10) {
-                                    Image(systemName: "plus.circle.fill")
-                                    Text("새로운 약 추가하기").font(.system(size: 15, weight: .semibold))
-                                }.frame(height: 100)
+                                    Image("pillIcon")
+                                        .resizable()
+                                        .frame(width: 44, height: 44, alignment: .center)
+                                        .padding(.leading, 20)
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text("새로운 약 추가하기").font(.system(size: 20, weight: .bold))
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.trailing, 20)
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 10)
+                                .padding(.bottom, 10)
                             }
+                            .buttonStyle(BlinkOnPressStyle())
+                            .frame(maxWidth: .infinity)
+                            Spacer(minLength: 20)
+                            HStack {
+                                Text("복용하시는 약이 없어요.\n건강을 위해 영양제를 추가해보세요!")
+                                    .lineSpacing(5)
+                                    .padding(.leading, 20)
+                                Spacer(minLength: 20)
+                            }
+                            Spacer(minLength: 10)
                         }
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, minHeight: 150, alignment: .center)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         VStack(spacing: 0) {
                             ForEach($viewModel.allPills, id: \.id) { pill in
@@ -120,18 +148,26 @@ struct SectionView<Link: View, Content: View>: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            NavigationLink(destination: LazyView(link)) {
-                HStack {
-                    Text(title).foregroundColor(.white).font(.title2).fontWeight(.bold)
-                    Spacer()
-                    if showMoreButton {
+            if showMoreButton {
+                NavigationLink(destination: LazyView(link)) {
+                    HStack {
+                        Text(title).foregroundColor(.white).font(.title2).fontWeight(.bold)
+                        Spacer(minLength: 5)
                         Image(systemName: "chevron.forward")
                     }
                 }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+                .foregroundColor(.white)
+            } else {
+                HStack {
+                    Text(title).foregroundColor(.white).font(.title2).fontWeight(.bold)
+                    Spacer(minLength: 10)
+                }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+                .foregroundColor(.white)
             }
-            .padding(.leading, 20)
-            .padding(.trailing, 20)
-            .foregroundColor(.white)
             content
         }
         .padding(.top, 20)

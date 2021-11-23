@@ -20,7 +20,8 @@ struct PillInfoView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @StateObject var viewModel: PillInfoViewModel
-    @State private var showingAlert = false
+    @State private var showingDismissAlert = false
+    @State private var showingDeleteAlert = false
     @FocusState private var focusedField: Field?
     
     var body: some View {
@@ -29,11 +30,11 @@ struct PillInfoView: View {
                 .pillMeNavigationBar(
                     title: viewModel.title,
                     backButtonAction: {
-                        guard viewModel.isEditMode else {
+                        guard viewModel.isEditMode && viewModel.lastQuestion != .pillType else {
                             presentationMode.wrappedValue.dismiss()
                             return
                         }
-                        showingAlert = true
+                        showingDismissAlert = true
                     }, rightView: navigationRightView)
             VStack(spacing: 0) {
                 ScrollView {
@@ -107,7 +108,7 @@ struct PillInfoView: View {
                 self.focusedField = nil
             }
         }
-        .popup(isPresented: $showingAlert) {
+        .popup(isPresented: $showingDismissAlert) {
             BottomPopup {
                 VStack(alignment: .leading, spacing: 15) {
                     HStack {
@@ -117,15 +118,15 @@ struct PillInfoView: View {
                     }
                     HStack {
                         Text("지금까지의 변경사항은 저장되지 않습니다. 정말 나가시겠습니까?")
-                            .font(.system(size: 16, weight: .bold))
+                            .font(.system(size: 16, weight: .semibold))
                         Spacer()
                     }
                     HStack(spacing: 10) {
                         Button("취소") {
-                            self.showingAlert = false
+                            self.showingDismissAlert = false
                         }.buttonStyle(PillMeButton(style: .medium, color: .backgroundColor, textColor: .white))
                         Button("나가기") {
-                            self.showingAlert = false
+                            self.showingDismissAlert = false
                             self.presentationMode.wrappedValue.dismiss()
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
                     }
@@ -133,10 +134,38 @@ struct PillInfoView: View {
                 .padding()
             }
         }
-
-//        .popup(isPresented: $showingAlert) {
-//
-//        }
+        .popup(isPresented: $showingDeleteAlert) {
+            BottomPopup {
+                VStack(alignment: .leading, spacing: 15) {
+                    HStack {
+                        Text("삭제하기")
+                            .font(.system(size: 22, weight: .bold))
+                        Spacer()
+                    }
+                    HStack {
+                        Text("지금까지의 \(viewModel.name) 복용기록도 삭제하시겠어요? 복용기록을 보관하시면 오늘이 마지막 복용일이 되고 내일부터는 복용 알림이 없습니다.")
+                            .font(.system(size: 16, weight: .semibold))
+                        Spacer()
+                    }
+                    HStack(spacing: 10) {
+                        Button("취소") {
+                            self.showingDeleteAlert = false
+                        }.buttonStyle(PillMeButton(style: .medium, color: .backgroundColor, textColor: .white))
+                        Button("복용기록 보관") {
+                            self.showingDeleteAlert = false
+                            self.presentationMode.wrappedValue.dismiss()
+                        }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
+                        Button("모두 삭제") {
+                            self.showingDeleteAlert = false
+                            viewModel.deletePill {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
+                    }
+                }
+                .padding()
+            }
+        }
     }
     
     func getQuestionView(of step: DoseScheduleQuestion) -> AnyView {
@@ -163,9 +192,7 @@ struct PillInfoView: View {
             return AnyView(EmptyView())
         } else {
             return AnyView(Button {
-                viewModel.deletePill {
-                    presentationMode.wrappedValue.dismiss()
-                }
+                self.showingDeleteAlert = true
             } label: {
                 Text("삭제").foregroundColor(.white)
             })

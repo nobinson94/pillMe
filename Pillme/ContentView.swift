@@ -49,7 +49,10 @@ struct ContentView: View {
                 .frame(maxHeight: .infinity)
 
                 HStack {
-                    Text("💊 PillMe")
+                    Image("pillIcon")
+                        .resizable()
+                        .frame(width: 40, height: 40, alignment: .center)
+                    Text("PillMe")
                         .foregroundColor(.white)
                         .font(.system(size: 23, weight: .semibold))
                     Spacer()

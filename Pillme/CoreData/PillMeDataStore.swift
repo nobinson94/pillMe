@@ -141,6 +141,17 @@ class PillMeDataManager {
         })
     }
     
+    func finishDose(pillID: String, completion: (() -> Void)? = nil) {
+        guard let cdPill = getCDPill(id: pillID) else { return }
+        
+        dataStore.update {
+            cdPill.endDate = Date()
+        } completion: {
+//            self.notiCenter.setNextNotification(for: pill)
+            completion?()
+        }
+    }
+    
     func getPill(id: String) -> Pill? {
         guard let cdPill = getCDPill(id: id) else { return nil }
         

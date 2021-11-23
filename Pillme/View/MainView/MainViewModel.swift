@@ -55,15 +55,19 @@ class MainViewModel: ObservableObject {
     }
     
     func fetch() {
-        self.currentSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: currentTime)
+        let todayPills = PillMeDataManager.shared.getPills(for: date)
+        self.currentSchedules = todayPills
+            .filter { $0.doseMethods.contains { $0.time == currentTime } }
             .map { DoseSchedule(pill: $0, date: date, takeTime: currentTime) }
         
         if let nextTime = nextTime {
-            nextSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: nextTime)
+            nextSchedules = todayPills
+                .filter { $0.doseMethods.contains { $0.time == nextTime } }
                 .map { DoseSchedule(pill: $0, date: date, takeTime: nextTime) }
         }
         if let prevTime = prevTime {
-            prevSchedules = PillMeDataManager.shared.getPills(for: date, takeTime: prevTime)
+            prevSchedules = todayPills
+                .filter { $0.doseMethods.contains { $0.time == prevTime } }
                 .map { DoseSchedule(pill: $0, date: date, takeTime: prevTime) }
         }
         

@@ -127,13 +127,16 @@ extension Pill: Hashable {
 
 extension Date {
     func isTakeDay(of pill: Pill) -> Bool {
+        let startOfDay = Calendar.current.startOfDay(for: self)
         let startDate = Calendar.current.startOfDay(for: pill.startDate)
-        guard startDate <= self else { return false }
+        guard startDate <= startOfDay else { return false }
+        
+        if let endDate = pill.endDate, Calendar.current.startOfDay(for: endDate) < startOfDay { return false }
         
         if pill.cycle == 1 {
             return true
         } else if pill.cycle > 1 {
-            guard let distanceOfDay = Calendar.current.dateComponents([.day], from: startDate, to: Calendar.current.startOfDay(for: self)).day else { return false }
+            guard let distanceOfDay = Calendar.current.dateComponents([.day], from: startDate, to: startOfDay).day else { return false }
             return (distanceOfDay + 1)%pill.cycle == 0
         } else if !pill.doseDays.isEmpty {
             return pill.doseDays.contains(self.weekDay)

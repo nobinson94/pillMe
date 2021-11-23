@@ -12,10 +12,10 @@ struct PillInfoCell: View {
     
     var body: some View {
         NavigationLink(destination: LazyView(PillInfoView(viewModel: PillInfoViewModel(id: pill.id)))) {
-            HStack(spacing: 20) {
+            HStack(spacing: 10) {
                 Image("pillIcon")
                     .resizable()
-                    .frame(width: 26, height: 26, alignment: .center)
+                    .frame(width: 44, height: 44, alignment: .center)
                     .padding(.leading, 20)
                 VStack(alignment: .leading, spacing: 5) {
                     Text("\(pill.type.name)").foregroundColor(.gray).font(.system(size: 14))
@@ -23,7 +23,6 @@ struct PillInfoCell: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.trailing, 20)
-                
             }
             .frame(maxWidth: .infinity)
             .padding(.top, 10)

@@ -11,6 +11,7 @@ struct TakePillInfoCell: View {
     @Binding var pill: Pill
     @Binding var takeTime: TakeTime
     @Binding var takeDate: Date
+    @Binding var isTaken: Bool
     
     var doseMethod: DoseMethod? {
         self.pill.doseMethods.first(where: { $0.time == takeTime })
@@ -27,28 +28,28 @@ struct TakePillInfoCell: View {
         guard let doseMethod = doseMethod else {
             return pill.name
         }
-
         return showSubTitle ? pill.name : "\(pill.name) (\(doseMethod.num)정)"
     }
     
     private var showSubTitle: Bool = true
-    
-    @State private var isTaken: Bool = false
+
     @State private var takeButtonDisabled: Bool = false
     
-    
-    init(pill: Binding<Pill>, takeTime: Binding<TakeTime>, takeDate: Binding<Date> = .constant(Date()), showSubTitle: Bool = true) {
+    init(pill: Binding<Pill>, takeTime: Binding<TakeTime>, takeDate: Binding<Date> = .constant(Date()), isTaken: Binding<Bool>, showSubTitle: Bool = true) {
         self._pill = pill
         self._takeTime = takeTime
         self._takeDate = takeDate
+        self._isTaken = isTaken
         self.showSubTitle = showSubTitle
+//        self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.wrappedValue.id, takeTime: takeTime.wrappedValue, date: takeDate.wrappedValue)
+//        print("##### isTaken \(isTaken)")
     }
     
     var body: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 10) {
             Image("pillIcon")
                 .resizable()
-                .frame(width: 26, height: 26, alignment: .center)
+                .frame(width: 44, height: 44, alignment: .center)
                 .padding(.leading, 20)
             VStack(alignment: .leading, spacing: 5) {
                 if showSubTitle {
@@ -94,8 +95,5 @@ struct TakePillInfoCell: View {
         }
         .padding(.top, 10)
         .padding(.bottom, 10)
-        .onAppear {
-            self.isTaken = PillMeDataManager.shared.isTaken(pillID: pill.id, takeTime: takeTime, date: takeDate)
-        }
     }
 }

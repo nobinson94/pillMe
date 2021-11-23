@@ -39,7 +39,7 @@ struct PillMeButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(textColor)
-            .font(.system(size: fontSize))
+            .font(.system(size: fontSize, weight: .semibold))
             .frame(maxWidth: .infinity, minHeight: height)
             .background(color)
             .opacity(configuration.isPressed ? 0.7 : 1)

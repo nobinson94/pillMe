@@ -24,7 +24,7 @@ struct DoseRecordCalendarView: View {
                     Spacer(minLength: 20)
                     VStack {
                         HStack {
-                            Text("\(viewModel.selectedDate.month)월").font(.system(size: 28, weight: .bold))
+                            Text("\(viewModel.selectedDate.month)월").font(.system(size: 32, weight: .bold))
                                 .padding(.leading, 20)
                                 .padding(.trailing, 20)
                             Spacer()

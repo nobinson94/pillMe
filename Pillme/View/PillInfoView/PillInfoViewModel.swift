@@ -163,4 +163,11 @@ class PillInfoViewModel: ObservableObject {
             completion?()
         }
     }
+    
+    func finishDosePill(_ completion: (() -> Void)? = nil) {
+        guard !isNewpill else { return }
+        PillMeDataManager.shared.finishDose(pillID: id) {
+            completion?()
+        }
+    }
 }
