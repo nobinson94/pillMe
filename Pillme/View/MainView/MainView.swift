@@ -34,7 +34,7 @@ struct MainView: View {
                                 Text("지금은 복용할 약이 없습니다")
                                     .lineSpacing(5)
                                     .padding(.leading, 20)
-                                    .font(.system(size: 14, weight: .semibold))
+                                    .font(.system(size: 15, weight: .semibold))
                                     .foregroundColor(.gray)
                                 Spacer(minLength: 20)
                             }
@@ -80,7 +80,7 @@ struct MainView: View {
                                 Text("복용하시는 약이 없어요.\n건강을 위해 영양제를 추가해보세요!")
                                     .lineSpacing(5)
                                     .padding(.leading, 20)
-                                    .font(.system(size: 14, weight: .semibold))
+                                    .font(.system(size: 15, weight: .semibold))
                                 Spacer(minLength: 20)
                             }
                             Spacer(minLength: 10)
@@ -89,8 +89,19 @@ struct MainView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     } else {
                         VStack(spacing: 0) {
-                            ForEach($viewModel.allPills, id: \.id) { pill in
-                                PillInfoCell(pill: pill)
+                            ForEach((0..<min(5, viewModel.allPills.count)), id: \.self) { index in
+                                PillInfoCell(pill: $viewModel.allPills[index])
+                            }
+                            if viewModel.allPills.count > 5 {
+                                NavigationLink(destination: LazyView(PillListView())) {
+                                    VStack {
+                                        Spacer(minLength: 10)
+                                        Rectangle().frame(height: 0.4, alignment: .top).foregroundColor(.white.opacity(0.3))
+                                        Spacer(minLength: 20)
+                                        Text("\(viewModel.allPills.count-5)개 더보기").foregroundColor(.white).font(.system(size: 16, weight: .semibold))
+                                        Spacer(minLength: 10)
+                                    }
+                                }
                             }
                         }
                     }
