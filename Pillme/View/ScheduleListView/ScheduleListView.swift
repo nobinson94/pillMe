@@ -24,7 +24,7 @@ struct ScheduleListView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     Spacer(minLength: 20)
-                    HStack {
+                    HStack(alignment: .bottom) {
                         Text("\(viewModel.currentDateTitle) \(viewModel.currentDateString)")
                             .font(.system(size: 28, weight: .bold))
                             .foregroundColor(.white)
@@ -33,7 +33,7 @@ struct ScheduleListView: View {
                         Button {
                             viewModel.switchDate()
                         } label: {
-                            HStack {
+                            HStack(alignment: .bottom) {
                                 Text(viewModel.otherDateTitle)
                                 Image(systemName: "chevron.right")
                                     .padding(.trailing, 20)
@@ -54,7 +54,7 @@ struct ScheduleListView: View {
                     
                     if viewModel.schedules.isEmpty {
                         VStack {
-                            Text("복용할 약이 없습니다")
+                            Text("복용할 약이 없습니다").foregroundColor(.white).font(.system(size: 17, weight: .semibold))
                         }
                         .frame(maxWidth: .infinity)
                         .padding()

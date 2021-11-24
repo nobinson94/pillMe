@@ -50,6 +50,7 @@ struct PillInfoView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     if viewModel.isEditMode {
                                         Image(systemName: "pencil")
+                                            .foregroundColor(.white)
                                             .frame(width: 44, alignment: .trailing)
                                             .onTapGesture {
                                                 self.viewModel.currentQuestion = question
@@ -131,6 +132,7 @@ struct PillInfoView: View {
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
                     }
                 }
+                .foregroundColor(.white)
                 .padding()
             }
         }
@@ -165,6 +167,7 @@ struct PillInfoView: View {
                         }.buttonStyle(PillMeButton(style: .medium, color: .tintColor, textColor: .backgroundColor))
                     }
                 }
+                .foregroundColor(.white)
                 .padding()
             }
         }

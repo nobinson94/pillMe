@@ -77,6 +77,7 @@ struct ContentView: View {
             .background(Color.backgroundColor.ignoresSafeArea())
             .navigationBarHidden(true)
         }
+        .preferredColorScheme(.dark)
         .pillMeNavigationBar()
     }
 }

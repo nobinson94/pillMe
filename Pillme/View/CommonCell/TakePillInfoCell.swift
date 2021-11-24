@@ -54,7 +54,7 @@ struct TakePillInfoCell: View {
                     Text(subTitle)
                         .foregroundColor(.gray).font(.system(size: 14))
                 }
-                Text(title).font(.system(size: 20, weight: .bold))
+                Text(title).font(.system(size: 20, weight: .bold)).foregroundColor(.white)
             }
             Spacer()
             if isTaken {

@@ -54,6 +54,7 @@ struct SettingView: View {
                     infoView(title: UserInfo.name.title) {
                         if isEditMode {
                             TextField("이름을 입력해주세요.", text: $viewModel.name)
+                                .colorScheme(.dark)
                                 .multilineTextAlignment(.trailing)
                         } else {
                             if viewModel.name.isEmpty {
@@ -69,6 +70,7 @@ struct SettingView: View {
                             TextField("나이를 입력해주세요",
                                       value: $viewModel.age,
                                       formatter: NumberFormatter())
+                                .colorScheme(.dark)
                                 .multilineTextAlignment(.trailing)
                                 .keyboardType(.asciiCapableNumberPad)
                         } else {
@@ -85,6 +87,7 @@ struct SettingView: View {
                             DatePicker("", selection: $viewModel.wakeUpTime,
                                        in: ...viewModel.breakfastTime,
                                        displayedComponents: .hourAndMinute)
+                                .colorScheme(.dark)
                                 .labelsHidden()
                         } else {
                             Text(viewModel.wakeUpTime.timeString).fontWeight(.bold)
@@ -95,6 +98,7 @@ struct SettingView: View {
                         if isEditMode {
                             DatePicker("", selection: $viewModel.breakfastTime,
                                        displayedComponents: .hourAndMinute)
+                                .colorScheme(.dark)
                                 .labelsHidden()
                         } else {
                             Text(viewModel.breakfastTime.timeString).fontWeight(.bold)
@@ -105,6 +109,7 @@ struct SettingView: View {
                         if isEditMode {
                             DatePicker("", selection: $viewModel.lunchTime,
                                        displayedComponents: .hourAndMinute)
+                                .colorScheme(.dark)
                                 .labelsHidden()
                         } else {
                             Text(viewModel.lunchTime.timeString).fontWeight(.bold)
@@ -115,6 +120,7 @@ struct SettingView: View {
                         if isEditMode {
                             DatePicker("", selection: $viewModel.dinnerTime,
                                        displayedComponents: .hourAndMinute)
+                                .colorScheme(.dark)
                                 .labelsHidden()
                         } else {
                             Text(viewModel.dinnerTime.timeString).fontWeight(.bold)
@@ -125,6 +131,7 @@ struct SettingView: View {
                         if isEditMode {
                             DatePicker("", selection: $viewModel.sleepTime,
                                        displayedComponents: .hourAndMinute)
+                                .colorScheme(.dark)
                                 .labelsHidden()
                         } else {
                             Text(viewModel.sleepTime.timeString).fontWeight(.bold)
@@ -147,6 +154,7 @@ struct SettingView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 45, alignment: .leading)
         .padding()
+        .foregroundColor(.white)
         .background(Color.backgroundColor)
         .cornerRadius(5)
     }

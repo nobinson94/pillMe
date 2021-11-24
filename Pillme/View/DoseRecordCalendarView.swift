@@ -111,9 +111,10 @@ struct DoseRecordCalendarView: View {
                             .padding()
                         }
                     }
-                    
                 }
-            }.animation(.easeIn(duration: 0.3), value: viewModel.selectedDate)
+            }
+            .animation(.easeIn(duration: 0.3), value: viewModel.selectedDate)
+            .foregroundColor(.white)
         }
         .onAppear {
             viewModel.fetch()

@@ -19,7 +19,7 @@ struct PillInfoCell: View {
                     .padding(.leading, 20)
                 VStack(alignment: .leading, spacing: 5) {
                     Text(subTitle.isEmpty ? pill.type.name : subTitle).foregroundColor(.gray).font(.system(size: 14))
-                    Text("\(pill.name)").font(.system(size: 20, weight: .bold))
+                    Text("\(pill.name)").font(.system(size: 20, weight: .bold)).foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.trailing, 20)
